@@ -1,0 +1,303 @@
+<resources>
+    <string name="app_name">PrinterDemo</string>
+    <string name="main_tab">Main Page</string>
+    <string name="function_test">Function Test</string>
+    <string name="function_all">All Test</string>
+    <string name="function_qrcode">QR Code Test</string>
+    <string name="function_barcode">Barcode Test</string>
+    <string name="function_text">Text print test</string>
+    <string name="function_text_pic">Text bitmap test print</string>
+    <string name="function_tab">Table chart test print</string>
+    <string name="function_pic">Bitmap test print</string>
+    <string name="function_line">Blank line test print</string>
+    <string name="function_buffer">Transaction printing</string>
+    <string name="function_API">API printing</string>
+    <string name="function_set">Global configuration</string>
+    <string name="function_black_line">Black line printing</string>
+    <string name="function_label">Label printing</string>
+    <string name="function_cash">Cashbox test</string>
+    <string name="function_lcd">Customer display test</string>
+    <string name="function_multi">Multithreading test</string>
+    <string name="function_multi_app">Multiprocessing test</string>
+    <string name="function_bug">Customer\'s feedback</string>
+    <string name="function_log">SDKLog settings</string>
+    <string name="function_cmd">Command printing</string>
+    <string name="function_example_ticket">Single receipt print test</string>
+
+    <string name="function_net_print">Network printing</string>
+    <string name="function_blue_print">Bluetooth printing</string>
+
+    <string name="qr_title1">Qr code content：</string>
+    <string name="qr_title2">Qr code size：</string>
+    <string name="qr_title3">QR code error correction level：</string>
+    <string name="qr_title4">Qr code alignment：</string>
+    <string name="print">Print</string>
+    <string name="input_print">Input print</string>
+    <string name="print_file">Print file</string>
+    <string name="great_qr_pic">Generate QR code bitmap</string>
+    <string name="bar_title1">Barcode content：</string>
+    <string name="bar_title2">Barcode encoding：</string>
+    <string name="bar_title3">Barcode content text position：</string>
+    <string name="bar_title4">Barcode height：</string>
+    <string name="bar_title5">Barcode width：</string>
+    <string name="great_bar_pic">Generate barcode bitmap</string>
+    <string name="text_title1"> Please insert the text you would like to print：</string>
+    <string name="text_title2">Character set：</string>
+    <string name="text_title3">Font size：</string>
+    <string name="text_title4">Font double height：</string>
+    <string name="text_title5">Font double width：</string>
+    <string name="text_title6">Line spacing：</string>
+    <string name="text_title7">Alignment：</string>
+    <string name="text_title8">Cut mode：</string>
+    <string name="text_title9">Character rotation：</string>
+    <string name="text_title12">Font direction：</string>
+    <string name="text_checkbox1">Italic</string>
+    <string name="text_checkbox2">Bold</string>
+    <string name="text_checkbox3">Underline:</string>
+    <string name="text_white">Anti-white</string>
+    <string name="white_print">Anti-white printing</string>
+    <string name="text_pic_title5">Select font：</string>
+    <string name="set_table_column"> Set number of table columns(1~4)：</string>
+    <string name="add_table">Add a row</string>
+    <string name="item_table_content">Table content：</string>
+    <string name="item_table_weight">Content weight：</string>
+    <string name="table_lable">Table%s</string>
+    <string name="set_feed_column"> Feed blank units (0~250)</string>
+    <string name="front_print">Normal printing</string>
+    <string name="back_print">Reverse printing</string>
+    <string name="pic_print_amount"> Number of bitmap ：</string>
+    <string name="pic_print_time"> Bitmap printing time interval(s)：</string>
+    <string name="pic_checkbox1">Whether to cut the paper after a complete print</string>
+    <string name="pic_select">Select local image</string>
+    <string name="start_trans">Enable transaction printing </string>
+    <string name="trans_example1">Print receipt1</string>
+    <string name="trans_example2">Print receipt2</string>
+    <string name="trans_example3">Print receipt3</string>
+    <string name="trans_commit">Submit transaction</string>
+    <string name="cmd_title1">Insert command/txt（Only hexadecimal commands are supported）:</string>
+    <string name="cmd_select_file"> Select cmd .txt file</string>
+    <string name="select_file">Select file</string>
+    <string name="file_name">File name：</string>
+    <string name="set_text1">Print density settings：</string>
+    <string name="set_text2">Print speed settings：</string>
+    <string name="set_text3">Character encoding settings：</string>
+    <string name="set_text4">Paper measurement settings：</string>
+    <string name="lcd_show_text">Display single line text</string>
+    <string name="lcd_show_tow_text">Display two lines text</string>
+    <string name="lcd_show_pic">Display image</string>
+    <string name="print_onec_label">Print single label</string>
+    <string name="print_more_label">Print multiple label</string>
+    <string name="print_baidu">Baidu receipt</string>
+    <string name="print_elme">Ele.me receipt</string>
+    <string name="print_jd">JD.com receipt</string>
+    <string name="print_sf">SF Express receipt</string>
+    <string name="print_jdhk">Print intermittent black blocks</string>
+    <string name="print_hk"> Print full black block</string>
+    <string name="print_self">Firmware Self test page</string>
+    <string name="print_select_ticket">Select receipt to print</string>
+    <string name="cancel">Cancel</string>
+    <string name="sure">Confirm</string>
+    <string name="printer_test">Print test</string>
+    <string name="cut_print_test"> Paper cut test</string>
+    <string name="printer_message">Deivce printer information：</string>
+    <string name="blue_test">Bluetooth printing test</string>
+    <string name="net_test">Network printing test</string>
+    //<!--<string name="printer_message_content">Print service version:%s,\n Printer model:%s,\n Firmware version：%s,\n,\n USB model name：%s</string>-->
+    <string name="printer_serial_number">Printer serial number：%s </string>
+    <string name="printer_model_name">Printer model：%s</string>
+    <string name="printer_thermal_head">Printer head model：%s</string>
+    <string name="printer_firmware_version">Firmware version：%s</string>
+    <string name="printer_service_version">Print service version：%s</string>
+    <string name="input_text">Input text</string>
+    <string name="bar_title6">1D barcode alignment：</string>
+    <string name="text_title10">Country code:</string>
+    <string name="text_title13">Set Chinese character printing mode：</string>
+    <string name="text_title14"> Set character line spacing：</string>
+    <string name="text_title15">Set Chinese chacracter line spacing(Left)：</string>
+    <string name="text_title16">Set Chinese chacracter line spacing(right)：</string>
+    <string name="text_check4">Double height（valid/invalid）</string>
+    <string name="text_check5">Double width（valid/invalid）</string>
+    <string name="text_check6">Underline(valid/invalid)</string>
+    <string name="text_check7">Font type（24*24/16*16）</string>
+    <string name="text_check7_asc11">Font type （12*24/9*17）</string>
+    <string name="text_pic_delete_line">Strikethrough</string>
+    <string name="text_pic_title8">Text spacing ：</string>
+    <string name="print1">Print1</string>
+    <string name="pic_example">Image example：</string>
+    <string name="print_example_pic">Print image example</string>
+    <string name="customize_pic">Customised print image</string>
+    <string name="print_and_line">Feed a line </string>
+    <string name="set_text5">Set global alignment</string>
+    <string name="double_qrcode">Double QR code test</string>
+    <string name="qr_title0">QR1:</string>
+    <string name="qr_title00">QR2：</string>
+    <string name="dqr_title4">QR1 version</string>
+    <string name="dqr_title44">QR2 version</string>
+    <string name="dqr_title2">QR1 left margin</string>
+    <string name="dqr_title22">QR2 left margin</string>
+    <string name="dqr_title">Double QR code size</string>
+    <string name="dqr_title3">QR1 error:</string>
+    <string name="dqr_title33">QR2 error:</string>
+    <string name="start_trans_clear"> Start transaction printing and clear data</string>
+    <string name="clear_data">Confirm to clear data</string>
+    <string name="trans_commit_cache"> Submit transaction and print</string>
+    <string name="exit_commit">Exit transaction printing mode（true print buffer，false Don\'t print)</string>
+    <string name="print_mt">Meituan receipt</string>
+    <string name="print_kb">koubei receipt</string>
+    <string name="cmd_check1">hexadecimal</string>
+    <string name="cmd_check2">Cut paper</string>
+    <string name="clear">Clear data</string>
+    <string name="set_text6">Set printer mode</string>
+    <string name="print_all">Print all receipt</string>
+    <string name="set_text7">Set test mode</string>
+    <string name="blue_printer">Bluetooth printer</string>
+    <string name="prints_number">Number of print</string>
+    <string name="intervals"> Time interval(ms)</string>
+    <string name="aging_test">Aging test</string>
+    <string name="number_of_print"> Page %s </string>
+    <string name="update">Enable update</string>
+    <string name="printer_file_path">Obtain local bin file address</string>
+    <string name="print_status">Printer status:%s</string>
+    <string name="print_color_chart">Pixel point processing printing</string>
+    <string name="set_text8">Update printer information</string>
+    <string name="set_text9"> Release SDKUSB to reconnect</string>
+    <string name="text_content8">Do not cut</string>
+    <string name="knife_reset">Reset cutter</string>
+    <string name="clear_old_data">Clear previous transaction queue buffer when enabling transaction printing</string>
+    <string name="print_trans_data"> Print transaction data when submitting transaction</string>
+    <string name="print_trans_cache_data">Print transaction queue buffer cache data when exiting transaction printing</string>
+    <string name="switch_connect_printer">Switch built-in printer connection</string>
+
+    <!--toast string-->
+    <string name="toast_table_num_tip">Please set the number of table columns1~4</string>
+    <string name="toast_cmd_input_tip">This column cannot be blank, please re-enter</string>
+
+    <!-- edit widget -->
+    <string name="edit_pls_input_hint">Please enter a whole number (s)</string>
+    <string name="paper_feed">Feed paper</string>
+
+    <string name="api_data_adapter">Application API interface and data adaption layer</string>
+    <string name="behavior_control_module">Application behaviour control module</string>
+    <string name="data_manage_config_adapter">Data management and configuration adaption layer</string>
+    <string name="data_manage_model">Data library management module</string>
+    <string name="exce_manage_model">Exception management module</string>
+    <string name="hardware_adapter_layer">Hardware interface adaption layer</string>
+    <string name="status_manage_model">Status management module</string>
+    <string name="printer_business_model">Print business module</string>
+    <string name="upgrade_manage_model">Upgrade management module</string>
+    <string name="bluetooth_service_model">Bluetooth service module</string>
+    <string name="printer_status_service">Printer status service</string>
+    <string name="printer_upgrade_model"> Printer upgrade module</string>
+    <string name="js_printer_model">JS printing module</string>
+    <string name="web_printer_model">Web printing module</string>
+    <string name="connect_bluetooth_service">please connect bluetooth service</string>
+    <string name="bluetooth_connected">bluetooth connected</string>
+    <string name="log_status">Log status</string>
+    <string name="log_level">Log level:</string>
+
+    <!--arrays string-->
+    <string name="default_str">Default</string>
+    <string name="align_left">Align left</string>
+    <string name="align_center">Center</string>
+    <string name="align_right">Align Right</string>
+
+    <string name="rotate_180_degree">Rotate 180 degree</string>
+    <string name="underline1">Underline1</string>
+    <string name="underline2">Underline2</string>
+    <string name="cancel_underline">Cancel underline</string>
+
+    <string name="set_italic">Set Italic</string>
+    <string name="cancel_italic">Cancel Italic</string>
+    <string name="bold_">Bold</string>
+    <string name="cancel_bold">Cancel Bold</string>
+
+    <string name="set_anti_white">Set anti-white</string>
+    <string name="cancel_anti_white">Cancel anti-white</string>
+
+    <string name="double_times">Double</string>
+    <string name="twice_times">Twice</string>
+    <string name="four_times">Four times</string>
+    <string name="six_times">Six times</string>
+
+    <string name="chinese_character_printing">Chinese character printing</string>
+    <string name="mixed_printing">Mixed printing</string>
+
+    <string name="n_united_state">0 United State</string>
+    <string name="n_france">1 France</string>
+    <string name="n_germany">2 Germany</string>
+    <string name="n_united_kingdom">3 United Kingdom</string>
+    <string name="n_denmark">4 Denmark I</string>
+    <string name="n_sweden">5 Sweden</string>
+    <string name="n_italy">6 Italy</string>
+    <string name="n_spain">7 Spain</string>
+    <string name="n_japan">8 Japan</string>
+    <string name="n_norway">9 Norway</string>
+    <string name="n_denmark_ii">10 Denmark II</string>
+
+
+    <string name="monospaced_font">Monospaced font</string>
+    <string name="boldface">Boldface</string>
+    <string name="sans_serif">Sans Serif</string>
+    <string name="serif">Serif</string>
+
+    <string name="set_underline">Set underline</string>
+    <string name="set_strikethrough">Set strikethrough</string>
+    <string name="cancel_strikethrough">Cancel strikethrough</string>
+
+    <string name="bold">Bold</string>
+    <string name="italic">Italic</string>
+    <string name="bold_italic_">Bold Italic</string>
+
+    <string name="upc_a_">UPC_A Require 12 digits between 0-9（last digit is the check-bit)</string>
+    <string name="upc_e_">UPC_E First digit as 0, require 12 digits between 0-9（last digit is the check-bit)</string>
+    <string name="jan13">JAN13(EAN13) Valid length is 13 digits between 0-9，the last digit as check-bit</string>
+    <string name="jan8">JAN8(EAN8) Require 8 digits between 0-9（last digit as check-bit），valid length is 8 digits</string>
+    <string name="code39">CODE39 Require number between 0-9，captial letter A-Z and 7 special characters(space $ % + - . /)</string>
+    <string name="itf_">ITF Required to enter number between 0-9，it must be even bits，If odd bit，the last bit will be ignored</string>
+    <string name="code_bar">CODABAR Required number between 0-9,capital letter A,B,C,D and six special characters($ + - . / :)</string>
+    <string name="code93">CODE93 Required length must be larger than 1</string>
+    <string name="code128">Code128 SDK has identified A code，B code，C code，don\'t need to add“{A”、“{B”、“{C”</string>
+
+    <string name="none">None</string>
+    <string name="above">Above</string>
+    <string name="below">Below</string>
+    <string name="above_and_below">Above and below</string>
+    <string name="left">Left</string>
+    <string name="center">Center</string>
+    <string name="right">Right</string>
+
+    <string name="don_cut">Don\'t cut</string>
+    <string name="complete_cut">Complete cut</string>
+    <string name="half_cut">Half cut</string>
+
+    <string name="normal">Normal</string>
+    <string name="bold_italic">Bold Italic</string>
+    <string name="monospaced">Monospaced</string>
+
+    <string name="don_print_text">Don\'t print text</string>
+    <string name="text_above_barcode">Text is printed above the barcode</string>
+    <string name="text_below_barcode">Text is printed below the barcode</string>
+    <string name="text_above_below_barcode">Text is printed above and below the barcode</string>
+
+    <string name="terminate_rotation_mode">Terminate rotation mode</string>
+    <string name="clockwise_rotation_90">90°clockwise rotation</string>
+    <string name="left_to_right">Left to right</string>
+    <string name="rotate_180">Rotate 180°</string>
+    <string name="light_underline">Light underline</string>
+    <string name="dark_underline">Dark underline</string>
+
+    <string name="chinese_character_mode">Enter Chinese character mode</string>
+    <string name="cancel_chinese_character_mode">Cancel Chinese character mode</string>
+    <string name="black_and_white_image">Black-and-white image with 200 threshold</string>
+    <string name="grayscale_image">Grayscale image</string>
+
+    <string name="cut_paper">Cut paper</string>
+    <string name="open_cashdrawer">Open cashdrawer</string>
+    <string name="normal_printing">Normal printing</string>
+    <string name="label_printing">Label printing</string>
+    <string name="black_mark_printing">Black mark printing</string>
+
+    <string name="edit_input_empty_tip">Print times cannot be empty</string>
+    <string name="edit_input_correct_num">Please enter the correct number</string>
+
+</resources>

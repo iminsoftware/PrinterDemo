@@ -1,0 +1,34 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.NewPrinterDemo" parent="Theme.Design.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/transparent</item>
+        <item name="colorPrimaryVariant">@color/transparent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+<!--        <item name="android:statusBarColor" tools:ignore="DuplicateDefinition">?attr/colorPrimaryVariant</item>-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+<!--        <item name="android:statusBarColor" tools:ignore="DuplicateDefinition">@color/transparent</item>-->
+        <item name="windowNoTitle">true</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="select_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <!--        <item name="android:background">@android:color/transparent</item>-->
+        <!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+        <item name="android:windowFrame">@null</item> <!--Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item><!-- 是否漂现在activity上-->
+        <item name="android:windowIsTranslucent">true</item><!-- 是否半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item><!-- dim:模糊的 阴影效果 -->
+        <!-- 遮罩层 -->
+        <item name="android:backgroundDimAmount">0.5</item>
+    </style>
+
+</resources>

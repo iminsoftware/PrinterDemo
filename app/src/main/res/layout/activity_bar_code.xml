@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".BarCodeActivity">
+
+    <com.imin.newprinterdemo.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:back="true"
+        app:leftVisible="true"
+        app:title="@string/function_barcode" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/barTitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title1"
+                android:textColor="@color/color_666666"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/barContent1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"
+                android:gravity="center|left"
+                android:text="123456"
+                android:textColor="@color/color_3333333"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barTitle1" />
+
+            <View
+                android:id="@+id/lin1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_999999"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barContent1" />
+
+            <TextView
+                android:id="@+id/barTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title2"
+                android:textColor="@color/color_666666"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin1" />
+
+            <TextView
+                android:id="@+id/barTitle20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title2"
+                android:textColor="@color/text"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toRightOf="@+id/barTitle2"
+                app:layout_constraintTop_toBottomOf="@+id/lin1" />
+
+            <TextView
+                android:id="@+id/barContent2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"
+                android:gravity="center|left"
+                android:text="4 CODE39"
+                android:textColor="@color/color_3333333"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barTitle2" />
+
+            <View
+                android:id="@+id/lin2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_999999"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barContent2" />
+
+            <TextView
+                android:id="@+id/barTitle3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title3"
+                android:textColor="@color/color_666666"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin2" />
+
+            <TextView
+                android:id="@+id/barContent3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"
+                android:gravity="center|left"
+                android:text="@string/don_print_text"
+                android:textColor="@color/color_3333333"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barTitle3" />
+
+            <View
+                android:id="@+id/lin3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_999999"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barContent3" />
+
+            <TextView
+                android:id="@+id/barTitle4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title4"
+                android:textColor="@color/color_666666"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin3" />
+
+            <TextView
+                android:id="@+id/barContent4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"
+                android:gravity="center|left"
+                android:text="70"
+                android:textColor="@color/color_3333333"
+                android:textSize="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/barTitle4" />
+
+            <View
+                android:id="@+id/lin4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_999999"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barContent4" />
+
+            <TextView
+                android:id="@+id/barTitle5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title5"
+                android:textColor="@color/color_666666"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin4" />
+
+            <TextView
+                android:id="@+id/barContent5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"
+                android:gravity="center|left"
+                android:text="2"
+                android:textColor="@color/color_3333333"
+                android:textSize="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/barTitle5" />
+
+            <View
+                android:id="@+id/lin5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_999999"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barContent5" />
+
+            <TextView
+                android:id="@+id/barTitle6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bar_title6"
+                android:textColor="@color/color_666666"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin5" />
+
+            <TextView
+                android:id="@+id/barContent6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"
+                android:gravity="center|left"
+                android:text="@string/left"
+                android:textColor="@color/color_3333333"
+                android:textSize="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/barTitle6" />
+
+            <View
+                android:id="@+id/lin6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_999999"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barContent6" />
+
+            <TextView
+                android:id="@+id/tvPrint"
+                android:layout_width="250dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/dra_corner_8"
+                android:gravity="center"
+                android:text="@string/print"
+                android:textColor="@color/white"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin6" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.appcompat.widget.LinearLayoutCompat>

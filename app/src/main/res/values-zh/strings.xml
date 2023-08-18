@@ -1,0 +1,302 @@
+<resources>
+    <string name="app_name">PrinterDemo</string>
+    <string name="main_tab">主页面</string>
+    <string name="function_test">功能测试</string>
+    <string name="function_all">综合测试</string>
+    <string name="function_qrcode">二维码测试</string>
+    <string name="function_barcode">条形码测试</string>
+    <string name="function_text">文字测试</string>
+    <string name="function_text_pic">文字图片打印测试</string>
+    <string name="function_tab">表格测试</string>
+    <string name="function_pic">图片测试</string>
+    <string name="function_line">空打印测试</string>
+    <string name="function_buffer">事务打印</string>
+    <string name="function_API">API打印</string>
+    <string name="function_set">全局配置</string>
+    <string name="function_black_line">黑标打印</string>
+    <string name="function_label">标签打印</string>
+    <string name="function_cash">钱箱测试</string>
+    <string name="function_lcd">客显测试</string>
+    <string name="function_multi">多线程测试</string>
+    <string name="function_multi_app">多进程测试</string>
+    <string name="function_bug">客户反馈问题</string>
+    <string name="function_log">SDKLog设置</string>
+    <string name="function_cmd">指令打印</string>
+    <string name="function_example_ticket">单个小票打印测试</string>
+
+    <string name="function_net_print">网络打印</string>
+    <string name="function_blue_print">蓝牙打印</string>
+
+    <string name="qr_title1">二维码内容：</string>
+    <string name="qr_title2">二维码大小：</string>
+    <string name="qr_title3">二维码纠错等级：</string>
+    <string name="qr_title4">二维码对齐方式：</string>
+    <string name="print">打印</string>
+    <string name="input_print">输入打印</string>
+    <string name="print_file">打印文件</string>
+    <string name="great_qr_pic">生成二维码图片</string>
+    <string name="bar_title1">条形码内容：</string>
+    <string name="bar_title2">条形码编码：</string>
+    <string name="bar_title3">条形码内容文字位置：</string>
+    <string name="bar_title4">条形码高度：</string>
+    <string name="bar_title5">条形码宽度：</string>
+    <string name="great_bar_pic">生成条形码图片</string>
+    <string name="text_title1">请输入要打印的文字：</string>
+    <string name="text_title2">字符集：</string>
+    <string name="text_title3">字体大小：</string>
+    <string name="text_title4">字体倍高：</string>
+    <string name="text_title5">字体倍宽：</string>
+    <string name="text_title6">行间距：</string>
+    <string name="text_title7">对齐方式：</string>
+    <string name="text_title8">切刀模式：</string>
+    <string name="text_title9">字符旋转：</string>
+    <string name="text_title12">字体方向：</string>
+    <string name="text_checkbox1">斜体</string>
+    <string name="text_checkbox2">加粗</string>
+    <string name="text_checkbox3">下划线:</string>
+    <string name="text_white">反白</string>
+    <string name="white_print">反白打印</string>
+    <string name="text_pic_title5">选择字体：</string>
+    <string name="set_table_column">设置表格列数(1~4)：</string>
+    <string name="add_table">新增一行</string>
+    <string name="item_table_content">表格内容：</string>
+    <string name="item_table_weight">内容权重：</string>
+    <string name="table_lable">表格%s</string>
+    <string name="set_feed_column">设置空打印单位 (0~250)</string>
+    <string name="front_print">正向打印</string>
+    <string name="back_print">反向打印</string>
+    <string name="pic_print_amount">图片打印次数：</string>
+    <string name="pic_print_time">打印图片时间间隔(s)：</string>
+    <string name="pic_checkbox1">打印完是否切纸</string>
+    <string name="pic_select">选择本地图片</string>
+    <string name="start_trans">开启事务打印</string>
+    <string name="trans_example1">打印小票1</string>
+    <string name="trans_example2">打印小票2</string>
+    <string name="trans_example3">打印小票3</string>
+    <string name="trans_commit">提交事务</string>
+    <string name="cmd_title1">输入指令/文本（指令仅支持输入16进制指令）:</string>
+    <string name="cmd_select_file">选择cmd的.txt文件</string>
+    <string name="select_file">选择文件</string>
+    <string name="file_name">文件名称：</string>
+    <string name="set_text1">打印浓度设置：</string>
+    <string name="set_text2">打印速度设置：</string>
+    <string name="set_text3">字符编码设置：</string>
+    <string name="set_text4">纸张规格设置：</string>
+    <string name="lcd_show_text">显示一行文本</string>
+    <string name="lcd_show_tow_text">显示两行文字</string>
+    <string name="lcd_show_pic">显示图片</string>
+    <string name="print_onec_label">打印一张标签</string>
+    <string name="print_more_label">打印多张标签</string>
+    <string name="print_baidu">百度小票</string>
+    <string name="print_elme">饿了么小票</string>
+    <string name="print_jd">京东小票</string>
+    <string name="print_sf">顺丰小票</string>
+    <string name="print_jdhk">打印间断黑块</string>
+    <string name="print_hk">打印全黑块</string>
+    <string name="print_self">固件自检页</string>
+    <string name="print_select_ticket">选择小票混合打印</string>
+    <string name="cancel">取消</string>
+    <string name="sure">确定</string>
+    <string name="printer_test">打印测试</string>
+    <string name="cut_print_test">切刀测试</string>
+    <string name="printer_message">本机打印机信息：</string>
+    <string name="blue_test">蓝牙打印测试</string>
+    <string name="net_test">网口打印测试</string>
+    //<!--<string name="printer_message_content">打印服务版本号:%s,\n 打印机型号:%s,\n固件版本号：%s,\n,\n USB设备名称：%s</string>-->
+    <string name="printer_serial_number">打印机序列号：%s </string>
+    <string name="printer_model_name">打印机型号：%s</string>
+    <string name="printer_thermal_head">打印头型号：%s</string>
+    <string name="printer_firmware_version">固件版本号：%s</string>
+    <string name="printer_service_version">打印服务版本号：%s</string>
+    <string name="input_text">设置内容</string>
+    <string name="bar_title6">一维码对齐方式：</string>
+    <string name="text_title10">国家码:</string>
+    <string name="text_title13">设定汉字打印模式：</string>
+    <string name="text_title14">设置字符间距：</string>
+    <string name="text_title15">设置中文字符间距(左)：</string>
+    <string name="text_title16">设置中文字符间距(右)：</string>
+    <string name="text_check4">倍高（有效/无效）</string>
+    <string name="text_check5">倍宽（有效/无效）</string>
+    <string name="text_check6">下划线(有效/无效)</string>
+    <string name="text_check7">字形（24*24/16*16）</string>
+    <string name="text_check7_asc11">字形（12*24/9*17）</string>
+    <string name="text_pic_delete_line">删除线</string>
+    <string name="text_pic_title8">文本字间距：</string>
+    <string name="print1">打印1</string>
+    <string name="pic_example">示例图片：</string>
+    <string name="print_example_pic">打印示例图片</string>
+    <string name="customize_pic">自定义打印图片</string>
+    <string name="print_and_line">走纸一行</string>
+    <string name="set_text5">设置全局对齐方式</string>
+    <string name="double_qrcode">双二维码测试</string>
+    <string name="qr_title0">QR1:</string>
+    <string name="qr_title00">QR2：</string>
+    <string name="dqr_title4">QR1版本</string>
+    <string name="dqr_title44">QR2版本</string>
+    <string name="dqr_title2">QR1左边距</string>
+    <string name="dqr_title22">QR2左边距</string>
+    <string name="dqr_title">双QR大小</string>
+    <string name="dqr_title3">QR1误差:</string>
+    <string name="dqr_title33">QR2误差:</string>
+    <string name="start_trans_clear">开始事务打印并清除数据</string>
+    <string name="clear_data">是否清除数据</string>
+    <string name="trans_commit_cache">提交事务并打印</string>
+    <string name="exit_commit">退出事务打印（true 打印缓存，false 不打印）</string>
+    <string name="print_mt">美团小票</string>
+    <string name="print_kb">口碑外卖小票</string>
+    <string name="cmd_check1">16进制</string>
+    <string name="cmd_check2">切纸</string>
+    <string name="clear">清空内容</string>
+    <string name="set_text6">设置打印机模式</string>
+    <string name="print_all">综合小票打印</string>
+    <string name="set_text7">设置测试类型</string>
+    <string name="blue_printer">蓝牙打印机</string>
+    <string name="prints_number">打印次数</string>
+    <string name="intervals">间隔时间 (ms)</string>
+    <string name="aging_test">老化测试</string>
+    <string name="number_of_print">第 %s 张</string>
+    <string name="update">开启升级</string>
+    <string name="printer_file_path">获取本地bin文件的地址</string>
+    <string name="print_status">打印机状态:%s</string>
+    <string name="print_color_chart">像素点处理打印</string>
+    <string name="set_text8">更新打印机信息</string>
+    <string name="set_text9">释放SDKUSB重连</string>
+    <string name="text_content8">不切</string>
+    <string name="knife_reset">切刀复位</string>
+    <string name="clear_old_data">开启事务打印是否清除之前事务打印队列的缓存</string>
+    <string name="print_trans_data">提交事务是否打印事务数据</string>
+    <string name="print_trans_cache_data">退出事务打印是否打印事务队列缓冲区的数据</string>
+    <string name="switch_connect_printer">内外置打印机切换连接</string>
+
+    <!--toast string-->
+    <string name="toast_table_num_tip">请设置表格列数 1~4</string>
+    <string name="toast_cmd_input_tip">"不能未空, 请重新输入"</string>
+
+    <!-- edit控件 -->
+    <string name="edit_pls_input_hint">请输入整数 (s)</string>
+    <string name="paper_feed">走纸</string>
+
+    <string name="api_data_adapter">应用API接口与数据适配层</string>
+    <string name="behavior_control_module">应用行为管控模块</string>
+    <string name="data_manage_config_adapter">数据管理和配置适配层</string>
+    <string name="data_manage_model">数据库管理模块</string>
+    <string name="exce_manage_model">异常管控模块</string>
+    <string name="hardware_adapter_layer">硬件接口适配层</string>
+    <string name="status_manage_model">状态管理模块</string>
+    <string name="printer_business_model">打印业务模块</string>
+    <string name="upgrade_manage_model">升级管理模块</string>
+    <string name="bluetooth_service_model">蓝牙服务模块</string>
+    <string name="printer_status_service">打印机状态服务</string>
+    <string name="printer_upgrade_model">打印机升级模块</string>
+    <string name="js_printer_model">JS打印模块</string>
+    <string name="web_printer_model">Web打印模块</string>
+    <string name="connect_bluetooth_service">请连接蓝牙服务</string>
+    <string name="bluetooth_connected">蓝牙已连接</string>
+    <string name="log_status">Log状态</string>
+    <string name="log_level">Log等级:</string>
+
+    <!--arrays string-->
+    <string name="default_str">默认</string>
+    <string name="align_left">靠左</string>
+    <string name="align_center">居中</string>
+    <string name="align_right">靠右</string>
+
+    <string name="rotate_180_degree">旋转180度</string>
+    <string name="underline1">下划线1</string>
+    <string name="underline2">下划线2</string>
+    <string name="cancel_underline">取消下划线</string>
+
+    <string name="set_italic">设置斜体</string>
+    <string name="cancel_italic">取消斜体</string>
+    <string name="bold_">加粗</string>
+    <string name="cancel_bold">不加粗</string>
+
+    <string name="set_anti_white">设置反白</string>
+    <string name="cancel_anti_white">取消反白</string>
+
+    <string name="double_times">1倍</string>
+    <string name="twice_times">2倍</string>
+    <string name="four_times">4倍</string>
+    <string name="six_times">6倍</string>
+
+    <string name="chinese_character_printing">汉字打印</string>
+    <string name="mixed_printing">混合打印</string>
+
+    <string name="n_united_state">0 美国</string>
+    <string name="n_france">1 法国</string>
+    <string name="n_germany">2 德国</string>
+    <string name="n_united_kingdom">3 英国</string>
+    <string name="n_denmark">4 丹麦 I</string>
+    <string name="n_sweden">5 瑞典</string>
+    <string name="n_italy">6 意大利</string>
+    <string name="n_spain">7 西班牙</string>
+    <string name="n_japan">8 日本</string>
+    <string name="n_norway">9 挪威</string>
+    <string name="n_denmark_ii">10 丹麦 II</string>
+
+    <string name="monospaced_font">等宽字体</string>
+    <string name="boldface">黑体</string>
+    <string name="sans_serif">无衬线字体</string>
+    <string name="serif">衬线字体</string>
+
+    <string name="set_underline">设置下划线</string>
+    <string name="set_strikethrough">设置删除线</string>
+    <string name="cancel_strikethrough">取消删除线</string>
+
+    <string name="italic">斜体</string>
+    <string name="bold_italic_">加粗斜体</string>
+
+    <string name="upc_a_">加粗UPC_A  要求12位数字0-9（最后⼀位校验位)斜体</string>
+    <string name="upc_e_">UPC_E  第一位必须为0,要求12位数字0-9（最后⼀位校验位)</string>
+    <string name="jan13">JAN13(EAN13)  有效⻓度13个数字0-9，其中最后⼀位为校验位</string>
+    <string name="jan8">JAN8(EAN8)  要求8位数字0-9（最后⼀位校验位），有效⻓度8个数字</string>
+    <string name="code39">CODE39  要求数字0-9，大写字母A-Z 和7个特殊字符(空格 $ % + - . /)</string>
+    <string name="itf_">ITF  要求输⼊数字0-9，必须是偶数位，若为单数位，最后⼀个将忽略</string>
+    <string name="code_bar">CODABAR  要求数字0-9,大写字母A,B,C,D及6个特殊字符($ + - . / :)</string>
+    <string name="code93">CODE93  要求长度大于1</string>
+    <string name="code128">Code128 SDK已经对A码，B码，C码做识别，不需要添加 “{A”、“{B”、“{C”</string>
+
+    <string name="none">无</string>
+    <string name="above">上方</string>
+    <string name="below">下方</string>
+    <string name="above_and_below">上下方</string>
+    <string name="left">左</string>
+    <string name="center">中</string>
+    <string name="right">右</string>
+
+    <string name="don_cut">不切</string>
+    <string name="complete_cut">全切</string>
+    <string name="half_cut">半切</string>
+
+    <string name="normal">正常</string>
+    <string name="bold">粗体</string>
+    <string name="bold_italic">粗斜体</string>
+    <string name="monospaced">等宽</string>
+
+    <string name="don_print_text">不打印文字</string>
+    <string name="text_above_barcode">文字在条码上方</string>
+    <string name="text_below_barcode">文字在条码下方</string>
+    <string name="text_above_below_barcode">条码上下方均打印文字</string>
+
+    <string name="terminate_rotation_mode">解除旋转模式</string>
+    <string name="clockwise_rotation_90">90°顺时针旋转</string>
+    <string name="left_to_right">左至右</string>
+    <string name="rotate_180">旋转180°</string>
+    <string name="light_underline">轻下划线</string>
+    <string name="dark_underline">重下划线</string>
+
+    <string name="chinese_character_mode">进入汉字模式</string>
+    <string name="cancel_chinese_character_mode">取消汉字模式</string>
+    <string name="black_and_white_image">阈值200的黑白化图片</string>
+    <string name="grayscale_image">灰度图片</string>
+
+    <string name="cut_paper">切纸</string>
+    <string name="open_cashdrawer">开钱箱</string>
+    <string name="normal_printing">普通打印</string>
+    <string name="label_printing">标签打印</string>
+    <string name="black_mark_printing">黑标打印</string>
+
+    <string name="edit_input_empty_tip">打印次数不能为空</string>
+    <string name="edit_input_correct_num">请输入合适数字</string>
+
+</resources>
