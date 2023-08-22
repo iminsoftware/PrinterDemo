@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PrinterDemo</string>
+    <string name="app_name">iMinPrinterDemo</string>
     <string name="main_tab">主页面</string>
     <string name="function_test">功能测试</string>
     <string name="function_all">综合测试</string>

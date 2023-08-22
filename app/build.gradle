@@ -8,7 +8,7 @@ android {
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             def date = new Date().format("yyMMddHHmm", TimeZone.getTimeZone("GMT+08"))
-            outputFileName = "NewPrinterDemo-"+versionCode+"_V"+versionName+"_"+date+".apk"
+            outputFileName = "iMinPrinterDemo-"+versionCode+"_V"+versionName+"_"+date+".apk"
         }
     }
     defaultConfig {
@@ -16,7 +16,7 @@ android {
         minSdk 28
         targetSdk 32
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

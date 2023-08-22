@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PrinterDemo</string>
+    <string name="app_name">iMinPrinterDemo</string>
     <string name="main_tab">Main Page</string>
     <string name="function_test">Function Test</string>
     <string name="function_all">All Test</string>
