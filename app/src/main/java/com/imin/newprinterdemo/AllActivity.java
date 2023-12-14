@@ -25,7 +25,7 @@ public class AllActivity extends BaseActivity {
     private void initView() {
         //综合小票打印
         binding.tvPrintTicket0.setOnClickListener(v -> {
-            PrinterHelper.getInstance().sendRAWData(BytesUtils.customData(), new INeoPrinterCallback() {
+            PrinterHelper.getInstance().printerSelfChecking(new INeoPrinterCallback() {
                 @Override
                 public void onRunResult(boolean isSuccess) throws RemoteException {
 
@@ -197,33 +197,6 @@ public class AllActivity extends BaseActivity {
 
                 }
             });
-            PrinterHelper.getInstance().printAndFeedPaper(70);
-        });
-
-        //self check
-        binding.tvPrintTicket7.setOnClickListener(v -> {
-            PrinterHelper.getInstance().sendRAWData(BytesUtils.PrintSelfcheck(), new INeoPrinterCallback() {
-                @Override
-                public void onRunResult(boolean isSuccess) throws RemoteException {
-
-                }
-
-                @Override
-                public void onReturnString(String result) throws RemoteException {
-
-                }
-
-                @Override
-                public void onRaiseException(int code, String msg) throws RemoteException {
-
-                }
-
-                @Override
-                public void onPrintResult(int code, String msg) throws RemoteException {
-
-                }
-            });
-
             PrinterHelper.getInstance().printAndFeedPaper(70);
         });
 
