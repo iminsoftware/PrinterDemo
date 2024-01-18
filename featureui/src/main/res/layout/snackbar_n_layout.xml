@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.snackbar.SnackbarContentLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_margin="@dimen/dp_2"
+    android:background="@drawable/shadow_8dp_bg">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/snackbar_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left|start"
+            android:layout_weight="1"
+            android:lineSpacingExtra="1dp"
+            android:padding="0dp"
+            android:textColor="@color/xui_config_color_black"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toStartOf="@id/snackbar_action"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="可操作提示文案，最多不超过3行，你的操作想清楚了吗？弹出4-10S后自动消失，或向两边大幅度滑动删除" />
+
+        <Button
+            android:id="@+id/snackbar_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right|end"
+            android:layout_marginStart="@dimen/dp_10"
+            android:background="@null"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:textColor="@color/xui_config_color_main"
+            android:textSize="@dimen/sp_16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/snackbar_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/snackbar_text"
+            app:layout_constraintTop_toTopOf="@id/snackbar_text"
+            tools:text="@string/xui_revoke" />
+
+        <Button
+            android:id="@+id/snackbar_bottom_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@null"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="@string/xui_revoke"
+            android:textColor="@color/xui_config_color_main"
+            android:textSize="@dimen/sp_16"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/snackbar_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.snackbar.SnackbarContentLayout>

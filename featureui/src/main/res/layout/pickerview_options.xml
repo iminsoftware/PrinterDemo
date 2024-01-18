@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:minHeight="@dimen/dp_150"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_20"
+    android:paddingEnd="@dimen/dp_20"
+    android:paddingBottom="@dimen/dp_20">
+
+
+    <com.feature.tui.widget.pickerview.view.WheelView
+        android:id="@+id/options1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <com.feature.tui.widget.pickerview.view.WheelView
+        android:id="@+id/options2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <com.feature.tui.widget.pickerview.view.WheelView
+        android:id="@+id/options3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+
+</LinearLayout>

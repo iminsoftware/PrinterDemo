@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_18"
+    android:paddingBottom="@dimen/dp_18">
+
+    <ImageView
+        android:id="@+id/btn_menu"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:scaleType="centerInside"
+        android:layout_marginStart="@dimen/dp_20"
+        android:src="@drawable/ic_common_ic_menu"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_64"
+        android:text="标题"
+        android:textColor="@color/xui_config_color_black"
+        android:textSize="@dimen/sp_18" />
+
+    <ImageView
+        android:id="@+id/iv_icon1"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@color/color_1a08c5ab" />
+
+    <ImageView
+        android:id="@+id/iv_icon0"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/dp_64"
+        android:background="@color/color_1a08c5ab" />
+
+</FrameLayout>

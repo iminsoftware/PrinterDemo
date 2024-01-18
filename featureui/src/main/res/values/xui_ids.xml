@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- dialog -->
+    <item name="xui_dialog_layout" type="id"/>
+    <item name="xui_dialog_title" type="id"/>
+    <item name="xui_dialog_operator_layout" type="id"/>
+    <item name="xui_dialog_content" type="id"/>
+    <item name="dialog_progress_view" type="id"/>
+</resources>

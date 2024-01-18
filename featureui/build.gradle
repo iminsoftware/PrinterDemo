@@ -1,0 +1,83 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+def cfg = rootProject.ext.android
+
+android {
+    namespace 'com.feature.tui'
+    compileSdkVersion cfg.compileSdkVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion cfg.minSdkVersion
+        targetSdkVersion cfg.targetSdkVersion
+        versionCode cfg.versionCode
+        versionName cfg.versionName
+    }
+
+    viewBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+dependencies {
+
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.databinding:databinding-common:4.1.1"
+    implementation "androidx.databinding:databinding-adapters:4.1.1"
+    implementation "androidx.databinding:databinding-runtime:4.1.1"
+    implementation "androidx.viewpager:viewpager:1.0.0"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+
+
+}
+
+////打包main目录下代码和资源的 task
+//task androidSourcesJar(type: Jar) {
+////    classifier = 'sources'
+////    from android.sourceSets.main.java.srcDirs
+//}
+
+//task to delete the old jar
+//task deleteOldJar(type: Delete) {
+//    delete 'release/AndroidPlugin.jar'
+//}
+//
+////task to export contents as jar
+//task exportJar(type: Copy) {
+//    from('build/intermediates/bundles/release/')
+//    into('release/')
+//    include('classes.jar')
+//    ///Rename the jar
+//    rename('classes.jar', 'AndroidPlugin.jar')
+//}
+
+//exportJar.dependsOn(deleteOldJar, build)
+
+//配置需要上传到maven仓库的文件
+//artifacts {
+//    archives androidSourcesJar
+//}

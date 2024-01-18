@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="XUI.BaseDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
+        <item name="xui_dialog_root_layout_style">@style/DialogRootView</item>
+        <item name="xui_dialog_action_style">@style/DialogAction</item>
+        <item name="xui_dialog_title_style">@style/DialogTitle</item>
+        <item name="xui_dialog_content_message_style">@style/DialogContentMessage</item>
+        <item name="xui_dialog_content_checkbox_style">@style/DialogContentCheckbox</item>
+    </style>
+
+    <style name="dialog_animation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/xui_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/xui_dialog_exit</item>
+    </style>
+
+    <style name="DialogRootView">
+        <item name="android:background">@drawable/xui_dialog_bg</item>
+    </style>
+
+    <style name="DialogAction">
+        <item name="android:textColor">@color/main_color_selector</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:gravity">center</item>
+        <item name="android:height">@dimen/dp_48</item>
+        <item name="android:paddingBottom">@dimen/dp_8</item>
+        <item name="xui_dialog_positive_action_text_color">@color/main_color_selector</item>
+        <item name="xui_dialog_negative_action_text_color">@color/error_color_selector</item>
+        <item name="xui_dialog_neutral_action_text_color">@color/neutral_color_selector</item>
+    </style>
+
+    <style name="DialogTitle">
+        <item name="android:textColor">@color/xui_config_color_black</item>
+        <item name="android:textSize">@dimen/sp_20</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/dp_20</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="DialogContentMessage">
+        <item name="android:textColor">@color/xui_config_color_title</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingTop">@dimen/dp_8</item>
+        <item name="android:paddingBottom">@dimen/dp_20</item>
+        <item name="android:paddingLeft">@dimen/dp_20</item>
+        <item name="android:paddingRight">@dimen/dp_20</item>
+        <item name="android:lineSpacingExtra">@dimen/dp_3</item>
+        <item name="android:drawablePadding">@dimen/dp_20</item>
+    </style>
+
+    <style name="DialogContentCheckbox">
+        <item name="android:textColor">@color/xui_config_color_999999</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/dp_8</item>
+        <item name="android:paddingRight">@dimen/dp_20</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="Animation.PopUpMenu" parent="@android:style/Animation" />
+
+    <style name="Animation.PopUpMenu.Center">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_top</item>
+    </style>
+
+    <style name="Animation.PopUpMenu.Left">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+    </style>
+
+    <style name="Animation.PopUpMenu.Right">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+    </style>
+
+    <style name="Animation.PopDownMenu" parent="@android:style/Animation" />
+
+    <style name="Animation.PopDownMenu.Center">
+        <item name="android:windowEnterAnimation">@anim/grow_from_top</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottom</item>
+    </style>
+
+    <style name="Animation.PopDownMenu.Left">
+        <item name="android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+    </style>
+
+    <style name="Animation.PopDownMenu.Right">
+        <item name="android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+    </style>
+
+    <style name="XUI.BottomSheet" parent="XUI.BaseDialog">
+        <item name="android:backgroundDimAmount">?attr/qxui_bottom_sheet_background_dim_amount
+        </item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>

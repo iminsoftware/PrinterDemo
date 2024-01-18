@@ -1,21 +1,26 @@
 <resources>
-    <string name="app_name">iMinPrinterDemo</string>
+    <string name="app_name">PrinterDemo</string>
     <string name="main_tab">主页面</string>
     <string name="function_test">功能测试</string>
+    <string name="setting">设置</string>
     <string name="function_all">综合测试</string>
-    <string name="function_qrcode">二维码测试</string>
-    <string name="function_barcode">条形码测试</string>
-    <string name="function_text">文字测试</string>
-    <string name="function_text_pic">文字图片打印测试</string>
-    <string name="function_tab">表格测试</string>
-    <string name="function_pic">图片测试</string>
+    <string name="function_qrcode">二维码</string>
+    <string name="function_barcode">条形码</string>
+<!--    <string name="function_text">文字</string>-->
+    <string name="function_text_pic">文字图片</string>
+    <string name="function_tab">表格打印</string>
+    <string name="add_tab_line">新增一行</string>
+    <string name="function_pic">图片</string>
     <string name="function_line">空打印测试</string>
     <string name="function_buffer">事务打印</string>
+    <string name="trans_print_success">事务打印成功</string>
+    <string name="trans_print_fail">事务打印失败</string>
+    <string name="get_it">知道了</string>
     <string name="function_API">API打印</string>
     <string name="function_set">全局配置</string>
     <string name="function_black_line">黑标打印</string>
     <string name="function_label">标签打印</string>
-    <string name="function_cash">钱箱测试</string>
+    <string name="function_cash">钱箱</string>
     <string name="function_lcd">客显测试</string>
     <string name="function_multi">多线程测试</string>
     <string name="function_multi_app">多进程测试</string>
@@ -27,46 +32,50 @@
     <string name="function_net_print">网络打印</string>
     <string name="function_blue_print">蓝牙打印</string>
 
-    <string name="qr_title1">二维码内容：</string>
-    <string name="qr_title2">二维码大小：</string>
-    <string name="qr_title3">二维码纠错等级：</string>
-    <string name="qr_title4">二维码对齐方式：</string>
+    <string name="qr_title1">二维码内容:</string>
+    <string name="qr_title2">二维码大小:</string>
+    <string name="qr_title2_">设置二维码大小</string>
+    <string name="qr_title3">二维码纠错等级:</string>
+    <string name="qr_title4">二维码对齐方式:</string>
+    <string name="double_qr_print">双二维码打印</string>
     <string name="print">打印</string>
     <string name="input_print">输入打印</string>
     <string name="print_file">打印文件</string>
     <string name="great_qr_pic">生成二维码图片</string>
-    <string name="bar_title1">条形码内容：</string>
-    <string name="bar_title2">条形码编码：</string>
-    <string name="bar_title3">条形码内容文字位置：</string>
-    <string name="bar_title4">条形码高度：</string>
-    <string name="bar_title5">条形码宽度：</string>
+    <string name="bar_title1">条形码内容:</string>
+    <string name="bar_title2">条形码编码:</string>
+    <string name="bar_title3">条形码内容文字位置:</string>
+    <string name="bar_title4">条形码高度:</string>
+    <string name="bar_title5">条形码宽度:</string>
+
+
     <string name="great_bar_pic">生成条形码图片</string>
-    <string name="text_title1">请输入要打印的文字：</string>
-    <string name="text_title2">字符集：</string>
-    <string name="text_title3">字体大小：</string>
-    <string name="text_title4">字体倍高：</string>
-    <string name="text_title5">字体倍宽：</string>
-    <string name="text_title6">行间距：</string>
-    <string name="text_title7">对齐方式：</string>
-    <string name="text_title8">切刀模式：</string>
-    <string name="text_title9">字符旋转：</string>
-    <string name="text_title12">字体方向：</string>
+    <string name="text_title1">请输入要打印的文字:</string>
+    <string name="text_title2">字符集:</string>
+    <string name="text_size">字体大小</string>
+    <string name="text_title4">字体倍高:</string>
+    <string name="text_title5">字体倍宽:</string>
+    <string name="line_space">行间距:</string>
+    <string name="text_title7">对齐方式:</string>
+    <string name="cut_mode">切刀模式:</string>
+    <string name="text_title9">字符旋转:</string>
+    <string name="text_title12">字体方向:</string>
     <string name="text_checkbox1">斜体</string>
     <string name="text_checkbox2">加粗</string>
     <string name="text_checkbox3">下划线:</string>
     <string name="text_white">反白</string>
     <string name="white_print">反白打印</string>
-    <string name="text_pic_title5">选择字体：</string>
-    <string name="set_table_column">设置表格列数(1~4)：</string>
+    <string name="select_font">选择字体:</string>
+    <string name="set_table_column">设置表格列数(1~4):</string>
     <string name="add_table">新增一行</string>
-    <string name="item_table_content">表格内容：</string>
-    <string name="item_table_weight">内容权重：</string>
+    <string name="item_table_content">表格内容</string>
+    <string name="item_table_weight">内容权重</string>
     <string name="table_lable">表格%s</string>
     <string name="set_feed_column">设置空打印单位 (0~250)</string>
     <string name="front_print">正向打印</string>
     <string name="back_print">反向打印</string>
-    <string name="pic_print_amount">图片打印次数：</string>
-    <string name="pic_print_time">打印图片时间间隔(s)：</string>
+    <string name="pic_print_amount">图片打印次数:</string>
+    <string name="pic_print_time">打印图片时间间隔(s):</string>
     <string name="pic_checkbox1">打印完是否切纸</string>
     <string name="pic_select">选择本地图片</string>
     <string name="start_trans">开启事务打印</string>
@@ -77,11 +86,11 @@
     <string name="cmd_title1">输入指令/文本（指令仅支持输入16进制指令）:</string>
     <string name="cmd_select_file">选择cmd的.txt文件</string>
     <string name="select_file">选择文件</string>
-    <string name="file_name">文件名称：</string>
-    <string name="set_text1">打印浓度设置：</string>
-    <string name="set_text2">打印速度设置：</string>
-    <string name="set_text3">字符编码设置：</string>
-    <string name="set_text4">纸张规格设置：</string>
+    <string name="file_name">文件名称:</string>
+    <string name="set_text1">打印浓度设置:</string>
+    <string name="set_text2">打印速度设置:</string>
+    <string name="set_text3">字符编码设置:</string>
+    <string name="set_text4">纸张规格设置:</string>
     <string name="lcd_show_text">显示一行文本</string>
     <string name="lcd_show_tow_text">显示两行文字</string>
     <string name="lcd_show_pic">显示图片</string>
@@ -93,44 +102,52 @@
     <string name="print_sf">顺丰小票</string>
     <string name="print_jdhk">打印间断黑块</string>
     <string name="print_hk">打印全黑块</string>
-    <string name="print_self">固件自检页</string>
+    <string name="test_page">测试页</string>
     <string name="print_select_ticket">选择小票混合打印</string>
-    <string name="cancel">取消</string>
-    <string name="sure">确定</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_confirm">确定</string>
+    <string name="close">关闭</string>
     <string name="printer_test">打印测试</string>
     <string name="cut_print_test">切刀测试</string>
-    <string name="printer_message">本机打印机信息：</string>
+    <string name="printer_message">本机打印机信息:</string>
     <string name="blue_test">蓝牙打印测试</string>
     <string name="net_test">网口打印测试</string>
-    //<!--<string name="printer_message_content">打印服务版本号:%s,\n 打印机型号:%s,\n固件版本号：%s,\n,\n USB设备名称：%s</string>-->
-    <string name="printer_serial_number">打印机序列号：%s </string>
-    <string name="printer_model_name">打印机型号：%s</string>
-    <string name="printer_thermal_head">打印头型号：%s</string>
-    <string name="printer_firmware_version">固件版本号：%s</string>
-    <string name="printer_service_version">打印服务版本号：%s</string>
+    <string name="printer_serial_number_">打印机序列号:%s </string>
+    <string name="printer_model_name_">打印机型号:%s</string>
+    <string name="printer_thermal_head_">打印头型号:%s</string>
+    <string name="printer_firmware_version_">固件版本号:%s</string>
+    <string name="printer_service_version_">打印服务版本号:%s</string>
+    <string name="printer_serial_number">打印机序列号</string>
+    <string name="printer_model_name">打印机型号</string>
+    <string name="printer_thermal_head">打印头型号</string>
+    <string name="printer_firmware_version">固件版本号</string>
+    <string name="printer_service_version">打印服务版本号</string>
+    <string name="printer_thermal_head_type">打印头尺寸</string>
+    <string name="printer_distance">打印距离</string>
+
     <string name="input_text">设置内容</string>
-    <string name="bar_title6">一维码对齐方式：</string>
+    <string name="bar_title6">一维码对齐方式:</string>
     <string name="text_title10">国家码:</string>
-    <string name="text_title13">设定汉字打印模式：</string>
-    <string name="text_title14">设置字符间距：</string>
-    <string name="text_title15">设置中文字符间距(左)：</string>
-    <string name="text_title16">设置中文字符间距(右)：</string>
+    <string name="text_title13">设定汉字打印模式:</string>
+    <string name="text_title14">设置字符间距:</string>
+    <string name="text_title15">设置中文字符间距(左):</string>
+    <string name="text_title16">设置中文字符间距(右):</string>
     <string name="text_check4">倍高（有效/无效）</string>
     <string name="text_check5">倍宽（有效/无效）</string>
     <string name="text_check6">下划线(有效/无效)</string>
     <string name="text_check7">字形（24*24/16*16）</string>
     <string name="text_check7_asc11">字形（12*24/9*17）</string>
     <string name="text_pic_delete_line">删除线</string>
-    <string name="text_pic_title8">文本字间距：</string>
+    <string name="text_space">文本字间距:</string>
     <string name="print1">打印1</string>
-    <string name="pic_example">示例图片：</string>
+    <string name="pic_example">示例图片:</string>
     <string name="print_example_pic">打印示例图片</string>
     <string name="customize_pic">自定义打印图片</string>
     <string name="print_and_line">走纸一行</string>
     <string name="set_text5">设置全局对齐方式</string>
     <string name="double_qrcode">双二维码测试</string>
     <string name="qr_title0">QR1:</string>
-    <string name="qr_title00">QR2：</string>
+    <string name="qr_title00">QR2:</string>
     <string name="dqr_title4">QR1版本</string>
     <string name="dqr_title44">QR2版本</string>
     <string name="dqr_title2">QR1左边距</string>
@@ -171,9 +188,12 @@
     <!--toast string-->
     <string name="toast_table_num_tip">请设置表格列数 1~4</string>
     <string name="toast_cmd_input_tip">"不能未空, 请重新输入"</string>
+    <string name="table_col_num">第%s行</string>
+    <string name="table_limit_tip">* 只支持1-4</string>
+    <string name="table_limit_col">设置表格列数</string>
 
     <!-- edit控件 -->
-    <string name="edit_pls_input_hint">请输入整数 (s)</string>
+    <string name="edit_pls_input_hint">请输入整数(s)</string>
     <string name="paper_feed">走纸</string>
 
     <string name="api_data_adapter">应用API接口与数据适配层</string>
@@ -197,9 +217,9 @@
 
     <!--arrays string-->
     <string name="default_str">默认</string>
-    <string name="align_left">靠左</string>
+    <string name="align_left">居左</string>
     <string name="align_center">居中</string>
-    <string name="align_right">靠右</string>
+    <string name="align_right">居右</string>
 
     <string name="rotate_180_degree">旋转180度</string>
     <string name="underline1">下划线1</string>
@@ -246,7 +266,12 @@
     <string name="italic">斜体</string>
     <string name="bold_italic_">加粗斜体</string>
 
-    <string name="upc_a_">加粗UPC_A  要求12位数字0-9（最后⼀位校验位)斜体</string>
+    <string name="bar_encoding">编码:</string>
+    <string name="bar_position">文字位置:</string>
+    <string name="bar_height">高度:</string>
+    <string name="bar_width">宽度:</string>
+
+    <string name="upc_a_">加粗UPC_A  要求12位数字0-9（最后⼀位校验位)</string>
     <string name="upc_e_">UPC_E  第一位必须为0,要求12位数字0-9（最后⼀位校验位)</string>
     <string name="jan13">JAN13(EAN13)  有效⻓度13个数字0-9，其中最后⼀位为校验位</string>
     <string name="jan8">JAN8(EAN8)  要求8位数字0-9（最后⼀位校验位），有效⻓度8个数字</string>
@@ -298,5 +323,31 @@
 
     <string name="edit_input_empty_tip">打印次数不能为空</string>
     <string name="edit_input_correct_num">请输入合适数字</string>
+
+    <string name="print_test">打印测试</string>
+    <string name="printer_status">打印机状态</string>
+    <string name="printer_uncap">开盖</string>
+    <string name="printer_lower_power">电量低</string>
+    <string name="printer_over_heat">过热</string>
+    <string name="printer_cutting_error">卡切刀</string>
+    <string name="printer_paper_out">缺纸</string>
+    <string name="printer_unknown">未知</string>
+
+    <string name="content">内容:</string>
+    <string name="block_size">块大小</string>
+    <string name="error_correction_level">纠错等级</string>
+    <string name="alignment_mode">对齐方式</string>
+    <string name="set_qr_content">设置二维码内容</string>
+    <string name="set_qr_pls_content">请设置二维码内容</string>
+    <string name="set_pls_content">请輸入内容</string>
+
+    <string name="list_empty_tips">暂时没有内容哦~</string>
+    <string name="connect_mode">连接方式</string>
+    <string name="printer_parameter">打印机参数</string>
+    <string name="about">关于</string>
+    <string name="about_printer_demo">iMinPrinterDemo适用于iMin系列内置打印机POS设备，iMinPrinterDemo集成了AIDL和Bluetooth两种连接方式，并且提供了一系列打印测试模块，帮助开发者更快的接入打印功能</string>
+
+    <string name="connect_aidl">AIDL</string>
+    <string name="connect_bluetooth">Bluetooth</string>
 
 </resources>

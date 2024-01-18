@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.feature.tui.modle.DialogItemDescription" />
+
+        <variable
+            name="index"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/list_item_selector"
+        android:paddingTop="@dimen/dp4"
+        android:paddingBottom="@dimen/dp4"
+        >
+
+        <View
+            android:id="@+id/center_line"
+            android:layout_width="1dp"
+            android:layout_height="5dp"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="{data.title}"
+            android:textColor="@color/color_777784"
+            android:textSize="13sp"
+            android:layout_toStartOf="@+id/center_line"
+            android:layout_marginEnd="@dimen/dp10"
+            />
+
+        <TextView
+            android:id="@+id/tv_item_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="@dimen/dp80"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="13sp"
+            android:layout_toEndOf="@+id/center_line"
+            android:text="{data.description}"
+            />
+
+    </RelativeLayout>
+</layout>

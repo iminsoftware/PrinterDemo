@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.imin.newprinter.demo.MainActivity"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.imin.newprinter.demo.viewmodel.FragmentCommonViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color_eff1f7"
+        android:orientation="vertical"
+
+        >
+
+        <com.imin.newprinter.demo.view.TitleLayout
+            android:id="@+id/view_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:back="true"
+            app:leftVisible="true"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            app:title="@string/function_buffer"
+            tools:ignore="MissingClass" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_title"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="@drawable/shape_item_normal"
+            >
+
+            <TextView
+                android:id="@+id/tv_print_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="@string/start_trans"
+                android:textColor="@color/color_1D1D1F"
+                android:textSize="@dimen/sp7"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_color_eff1f7"
+                android:layout_marginTop="@dimen/dp2"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_print_test"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="-10dp"
+                android:layout_marginEnd="-10dp"
+                android:layout_marginBottom="15dp"
+                android:overScrollMode="never" />
+
+        </LinearLayout>
+
+        <com.feature.tui.widget.buttonview.ButtonView
+            android:id="@+id/enter_trans"
+            android:layout_width="@dimen/dp_240"
+            android:layout_height="@dimen/dp_44"
+            android:layout_above="@+id/commit_trans"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp10"
+
+            android:background="@drawable/button_08c5ac_solid_selector"
+            app:bv_icon_visibility="false"
+            app:bv_text_content="@string/start_trans"
+            app:bv_text_content_color="@color/xui_config_color_white" />
+
+        <com.feature.tui.widget.buttonview.ButtonView
+            android:id="@+id/commit_trans"
+            android:layout_width="@dimen/dp_240"
+            android:layout_height="@dimen/dp_44"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp10"
+            android:background="@drawable/common_btn_white_selector"
+            app:bv_icon_visibility="false"
+            app:bv_text_content="@string/trans_commit"
+            app:bv_text_content_color="@color/xui_color_1D1D1F" />
+
+
+    </RelativeLayout>
+
+</layout>

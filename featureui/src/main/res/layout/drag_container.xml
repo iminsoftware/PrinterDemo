@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <com.feature.tui.widget.drag.DragContainer
+        android:id="@+id/qs_customizer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/drag_bg_main" />
+
+    <com.feature.tui.widget.drag.DragMoveView
+        android:id="@+id/view_move"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/drag_bg_main_move"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <include layout="@layout/drag_item"/>
+
+        </LinearLayout>
+
+    </com.feature.tui.widget.drag.DragMoveView>
+
+</RelativeLayout>

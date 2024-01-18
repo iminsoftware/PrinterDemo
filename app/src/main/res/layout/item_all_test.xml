@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.imin.newprinter.demo.bean.FunctionTestBean" />
+
+        <variable
+            name="index"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/list_item_selector"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@{data.title}"
+            android:layout_marginStart="@dimen/dp5"
+            android:layout_marginEnd="@dimen/dp5"
+            android:gravity="center"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="20sp"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_item_all_test_print"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tv_title"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@drawable/rv_item_print_selector"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/print"
+            android:textColor="@color/color_g_01CA86"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+</layout>

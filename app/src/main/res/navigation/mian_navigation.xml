@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_main"
+        android:name="com.imin.newprinter.demo.fragment.FunctionTestFragment"
+        tools:layout="@layout/fragment_function_test" />
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_esc"-->
+<!--        android:name="com.imin.testtools.ui.fragment.EscCommandFragment"-->
+<!--        tools:layout="@layout/fragment_esc_command" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_debug"-->
+<!--        android:name="com.imin.testtools.ui.fragment.DebugFragment"-->
+<!--        tools:layout="@layout/fragment_debug" />-->
+
+</navigation>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="QXUILinearLayout">
+        <attr name="qxui_bottomDividerHeight" />
+        <attr name="qxui_bottomDividerColor" />
+        <attr name="qxui_bottomDividerInsetLeft" />
+        <attr name="qxui_bottomDividerInsetRight" />
+        <attr name="qxui_topDividerHeight" />
+        <attr name="qxui_topDividerColor" />
+        <attr name="qxui_topDividerInsetLeft" />
+        <attr name="qxui_topDividerInsetRight" />
+        <attr name="qxui_leftDividerWidth" />
+        <attr name="qxui_leftDividerColor" />
+        <attr name="qxui_leftDividerInsetTop" />
+        <attr name="qxui_leftDividerInsetBottom" />
+        <attr name="qxui_rightDividerWidth" />
+        <attr name="qxui_rightDividerColor" />
+        <attr name="qxui_rightDividerInsetTop" />
+        <attr name="qxui_rightDividerInsetBottom" />
+        <attr name="qxui_radius" />
+        <attr name="qxui_borderColor" />
+        <attr name="qxui_borderWidth" />
+        <attr name="qxui_outerNormalColor" />
+        <attr name="qxui_hideRadiusSide" />
+        <attr name="qxui_showBorderOnlyBeforeL" />
+        <attr name="qxui_shadowElevation" />
+        <attr name="qxui_useThemeGeneralShadowElevation" />
+        <attr name="qxui_shadowAlpha" />
+        <attr name="qxui_outlineInsetTop" />
+        <attr name="qxui_outlineInsetLeft" />
+        <attr name="qxui_outlineInsetRight" />
+        <attr name="qxui_outlineInsetBottom" />
+        <attr name="qxui_outlineExcludePadding" />
+    </declare-styleable>
+
+    <declare-styleable name="QXUIPriorityLinearLayout">
+        <attr name="qxui_bottomDividerHeight" />
+        <attr name="qxui_bottomDividerColor" />
+        <attr name="qxui_bottomDividerInsetLeft" />
+        <attr name="qxui_bottomDividerInsetRight" />
+        <attr name="qxui_topDividerHeight" />
+        <attr name="qxui_topDividerColor" />
+        <attr name="qxui_topDividerInsetLeft" />
+        <attr name="qxui_topDividerInsetRight" />
+        <attr name="qxui_leftDividerWidth" />
+        <attr name="qxui_leftDividerColor" />
+        <attr name="qxui_leftDividerInsetTop" />
+        <attr name="qxui_leftDividerInsetBottom" />
+        <attr name="qxui_rightDividerWidth" />
+        <attr name="qxui_rightDividerColor" />
+        <attr name="qxui_rightDividerInsetTop" />
+        <attr name="qxui_rightDividerInsetBottom" />
+        <attr name="qxui_radius" />
+        <attr name="qxui_borderColor" />
+        <attr name="qxui_borderWidth" />
+        <attr name="qxui_outerNormalColor" />
+        <attr name="qxui_hideRadiusSide" />
+        <attr name="qxui_showBorderOnlyBeforeL" />
+        <attr name="qxui_shadowElevation" />
+        <attr name="qxui_useThemeGeneralShadowElevation" />
+        <attr name="qxui_shadowAlpha" />
+        <attr name="qxui_outlineInsetTop" />
+        <attr name="qxui_outlineInsetLeft" />
+        <attr name="qxui_outlineInsetRight" />
+        <attr name="qxui_outlineInsetBottom" />
+        <attr name="qxui_outlineExcludePadding" />
+    </declare-styleable>
+
+    <declare-styleable name="QXUIRelativeLayout">
+        <attr name="qxui_bottomDividerHeight" />
+        <attr name="qxui_bottomDividerColor" />
+        <attr name="qxui_bottomDividerInsetLeft" />
+        <attr name="qxui_bottomDividerInsetRight" />
+        <attr name="qxui_topDividerHeight" />
+        <attr name="qxui_topDividerColor" />
+        <attr name="qxui_topDividerInsetLeft" />
+        <attr name="qxui_topDividerInsetRight" />
+        <attr name="qxui_leftDividerWidth" />
+        <attr name="qxui_leftDividerColor" />
+        <attr name="qxui_leftDividerInsetTop" />
+        <attr name="qxui_leftDividerInsetBottom" />
+        <attr name="qxui_rightDividerWidth" />
+        <attr name="qxui_rightDividerColor" />
+        <attr name="qxui_rightDividerInsetTop" />
+        <attr name="qxui_rightDividerInsetBottom" />
+        <attr name="qxui_radius" />
+        <attr name="qxui_borderColor" />
+        <attr name="qxui_borderWidth" />
+        <attr name="qxui_outerNormalColor" />
+        <attr name="qxui_hideRadiusSide" />
+        <attr name="qxui_showBorderOnlyBeforeL" />
+        <attr name="qxui_shadowElevation" />
+        <attr name="qxui_useThemeGeneralShadowElevation" />
+        <attr name="qxui_shadowAlpha" />
+        <attr name="qxui_outlineInsetTop" />
+        <attr name="qxui_outlineInsetLeft" />
+        <attr name="qxui_outlineInsetRight" />
+        <attr name="qxui_outlineInsetBottom" />
+        <attr name="qxui_outlineExcludePadding" />
+    </declare-styleable>
+</resources>

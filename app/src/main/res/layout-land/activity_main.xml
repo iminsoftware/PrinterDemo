@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.imin.newprinter.demo.viewmodel.MainViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color_eff1f7"
+        android:orientation="horizontal"
+        tools:context="com.imin.newprinter.demo.MainActivity">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8sp"
+                android:text="@string/print_test"
+                android:textColor="@color/color_1D1D1F"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/rl_print_status"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/tv_print_test"
+
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_printer_normal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="59dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="@string/printer_status"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_printer_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="59dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/normal"
+                    android:textColor="@color/white"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_item_normal"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginBottom="@dimen/dp10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_function_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    android:layout_below="@+id/rl_print_status"
+                    android:drawablePadding="@dimen/dp2"
+                    android:gravity="center"
+                    android:text="@string/printer_parameter"
+                    android:textColor="@color/color_1D1D1F"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_parameter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="1"
+                    android:overScrollMode="never"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_D1D1D1" />
+
+        <FrameLayout
+            android:id="@+id/fl_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+</layout>

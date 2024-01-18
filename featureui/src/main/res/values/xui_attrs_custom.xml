@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="XUIDialogRootLayoutStyle">
+        <attr name="android:background" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingLeft" />
+        <attr name="android:paddingRight" />
+        <attr name="android:paddingBottom" />
+        <attr name="android:minWidth" />
+        <attr name="android:minHeight" />
+    </declare-styleable>
+
+    <declare-styleable name="XUIDialogActionStyle">
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:background" />
+        <attr name="android:gravity" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingLeft" />
+        <attr name="android:paddingRight" />
+        <attr name="android:paddingBottom" />
+        <attr name="android:minWidth" />
+        <attr name="android:minHeight" />
+        <attr name="android:width" />
+        <attr name="android:height" />
+        <attr name="android:textStyle" />
+        <attr name="xui_dialog_positive_action_text_color" format="color|reference" />
+        <attr name="xui_dialog_negative_action_text_color" format="color|reference" />
+        <attr name="xui_dialog_neutral_action_text_color" format="color|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="XUITextCommonStyle">
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:background" />
+        <attr name="android:gravity" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingLeft" />
+        <attr name="android:paddingRight" />
+        <attr name="android:paddingBottom" />
+        <attr name="android:singleLine" />
+        <attr name="android:ellipsize" />
+        <attr name="android:maxLines" />
+        <attr name="android:lineSpacingExtra" />
+        <attr name="android:drawablePadding" />
+        <attr name="android:drawableBottom" />
+        <attr name="android:drawableTop" />
+        <attr name="android:drawableLeft" />
+        <attr name="android:drawableRight" />
+        <attr name="android:textColorHint" />
+        <attr name="android:textStyle" />
+        <attr name="android:minWidth" />
+        <attr name="android:maxWidth" />
+        <attr name="android:minHeight" />
+        <attr name="android:maxHeight" />
+        <attr name="android:width" />
+        <attr name="android:height" />
+    </declare-styleable>
+
+    <declare-styleable name="pickerview">
+        <attr name="wheelview_gravity">
+            <enum name="center" value="17"/>
+            <enum name="left" value="3"/>
+            <enum name="right" value="5"/>
+        </attr>
+        <attr name="wheelview_textSize" format="dimension"/>
+        <attr name="wheelview_textColorOut" format="color"/>
+        <attr name="wheelview_textColorCenter" format="color"/>
+        <attr name="wheelview_dividerColor" format="color"/>
+        <attr name="wheelview_dividerWidth" format="dimension"/>
+    </declare-styleable>
+
+</resources>

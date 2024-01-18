@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.imin.newprinter.demo.bean.TableBean" />
+
+        <variable
+            name="index"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/list_item_selector"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/dp2"
+        >
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="@dimen/dp90"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:layout_marginTop="@dimen/dp1"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/color_1D1D1F"
+            android:background="@drawable/bg_edit_corner_stroke"
+            android:padding="@dimen/dp3"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_weight"
+            android:layout_width="@dimen/dp90"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:layout_marginTop="@dimen/dp3"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:ellipsize="end"
+            android:textColor="@color/color_1D1D1F"
+            android:background="@drawable/bg_edit_corner_stroke"
+            android:padding="@dimen/dp3"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_pop"
+            android:layout_width="@dimen/dp90"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp3"
+
+            android:text="@string/align_left"
+            android:textColor="@color/color_1D1D1F"
+            android:background="@drawable/bg_edit_corner_stroke"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:padding="@dimen/dp3"
+            android:textSize="16sp" />
+
+
+        <EditText
+            android:id="@+id/et_size"
+            android:layout_width="@dimen/dp90"
+            android:layout_height="wrap_content"
+            android:text="24"
+            android:layout_marginTop="@dimen/dp3"
+            android:maxLines="1"
+            android:maxLength="3"
+            android:ellipsize="end"
+            android:inputType="number"
+            android:textColor="@color/color_1D1D1F"
+            android:background="@drawable/bg_edit_corner_stroke"
+            android:padding="@dimen/dp3"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</layout>

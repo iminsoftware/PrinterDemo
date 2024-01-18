@@ -20,4 +20,20 @@
     <color name="item_press">#C1D0DB</color>
     <color name="light_blue">#A8E3FA</color>
     <color name="color_e6333f" tools:ignore="MissingDefaultResource">#E6333F</color>
+    <color name="color_1D1D1F">#1D1D1F</color>
+    <color name="color_3363FF">#3363FF</color>
+    <color name="bg_color_eff1f7">#EFF1F7</color>
+<!--    <color name="bg_color_FAF9FA">#FAF9FA</color>-->
+    <color name="bg_color_fafafa">#FAFAFA</color>
+    <color name="color_g_01CA86">#01CA86</color>
+    <color name="color_777784">#777784</color>
+    <color name="color_F2F2F2">#F2F2F2</color>
+    <color name="color_F6F7FA">#F6F7FA</color>
+    <color name="color_ff01ca86">#ff01ca86</color>
+    <color name="color_00a16b">#00a16b</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_D1D1D1">#D1D1D1</color>
+    <color name="color_01CA86">#01CA86</color>
+    <color name="color_FF2929">#FF2929</color>
+
 </resources>

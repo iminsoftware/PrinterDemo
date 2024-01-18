@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--dialog-->
+    <attr name="xui_dialog_root_layout_style" format="reference" />
+    <attr name="xui_dialog_action_style" format="reference" />
+    <attr name="xui_dialog_title_style" format="reference" />
+    <attr name="xui_dialog_content_message_style" format="reference" />
+    <attr name="xui_dialog_content_checkbox_style" format="reference" />
+
+    <attr name="qxui_alpha_pressed" format="float" />
+    <attr name="qxui_alpha_disabled" format="float" />
+    <attr name="qxui_bottom_sheet_radius" format="dimension" />
+    <attr name="qxui_bottom_sheet_use_percent_min_height" format="dimension" />
+    <attr name="qxui_bottom_sheet_background_dim_amount" format="float" />
+</resources>

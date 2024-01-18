@@ -1,7 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string-array name="all_test_item_content">
+        <item>@string/test_page</item>
+        <item>@string/print_elme</item>
+        <item>@string/print_baidu</item>
+        <item>@string/print_mt</item>
+        <item>@string/print_jdhk</item>
+        <item>@string/print_hk</item>
+    </string-array>
+
+    <string-array name="qr_code_list">
+        <item>@string/content</item>
+        <item>@string/block_size</item>
+        <item>@string/error_correction_level</item>
+        <item>@string/alignment_mode</item>
+    </string-array>
+
+    <string-array name="double_qr_code_list">
+        <item>@string/content</item>
+        <item>@string/dqr_title2</item>
+        <item>@string/dqr_title3</item>
+        <item>@string/content</item>
+        <item>@string/dqr_title22</item>
+        <item>@string/dqr_title33</item>
+        <item>@string/dqr_title</item>
+    </string-array>
+
+    <string-array name="bar_code_list">
+        <item>@string/content</item>
+        <item>@string/bar_encoding</item>
+        <item>@string/bar_position</item>
+        <item>@string/bar_height</item>
+        <item>@string/bar_width</item>
+        <item>@string/alignment_mode</item>
+<!--        <item>@string/cut_mode</item>-->
+    </string-array>
+
+
+    <string-array name="text_list">
+        <item>@string/content</item>
+        <item>@string/text_size</item>
+        <item>@string/line_space</item>
+        <item>@string/select_font</item>
+        <item>@string/alignment_mode</item>
+        <!--        <item>@string/cut_mode</item>-->
+        <item>@string/text_space</item>
+    </string-array>
+
+    <string-array name="line_test_list">
+        <item>@string/set_feed_column</item>
+    </string-array>
+
+    <string-array name="pic_list">
+        <item>@string/alignment_mode</item>
+        <item>@string/pic_print_amount</item>
+        <item>@string/pic_print_time</item>
+    </string-array>
+
+    <string-array name="settings_list">
+        <item>@string/connect_mode</item>
+        <item>@string/printer_parameter</item>
+        <item>@string/about</item>
+    </string-array>
+
+    <string-array name="settings_list_land">
+        <item>@string/connect_mode</item>
+        <item>@string/about</item>
+    </string-array>
+
     <string-array name="text_align">
-        <item>@string/default_str</item>
         <item>@string/align_left</item>
         <item>@string/align_center</item>
         <item>@string/align_right</item>
@@ -233,15 +301,15 @@
 
     <string-array name="barcode_type">
 <!-- <item>@string/default_str</item>-->
-        <item>0 UPC-A</item>
-        <item>1 UPC-E</item>
-        <item>2 JAN13（EAN13）</item>
-        <item>3 JAN8（EAN8）</item>
-        <item>4 CODE39</item>
-        <item>5 ITF</item>
-        <item>6 CODABAR</item>
-        <item>7 CODE93</item>
-        <item>8 CODE128</item>
+        <item>UPC-A</item>
+        <item>UPC-E</item>
+        <item>JAN13(EAN13)</item>
+        <item>JAN8(EAN8)</item>
+        <item>CODE39</item>
+        <item>ITF</item>
+        <item>CODABAR</item>
+        <item>CODE93</item>
+        <item>CODE128</item>
     </string-array>
 
 
@@ -260,14 +328,23 @@
 
     <string-array name="barcode_content">
         <item>123456789012</item>
-        <item>01234567890</item>
-        <item>123456789012</item>
-        <item>1234567</item>
+        <item>012345678910</item>
+        <item>1234567890128</item>
+        <item>12345670</item>
         <item>12345678A</item>
         <item>12345678</item>
         <item>A123456D</item>
         <item>!AZ19az&amp;@~</item>
-        <item>1 23456</item>
+        <item>123456</item>
+    </string-array>
+
+    <string-array name="barcode_def_value">
+        <item>123456789012</item>
+        <item>UPC-A</item>
+        <item>@string/don_print_text</item>
+        <item>80</item>
+        <item>2</item>
+        <item>@string/left</item>
     </string-array>
 
     <string-array name="barcode_height">
@@ -301,19 +378,19 @@
         <item>@string/align_right</item>
     </string-array>
 
-    <string-array name="qrcode_size">
-        <item>@string/default_str</item>
-        <item>4</item>
-        <item>6</item>
-        <item>11</item>
-    </string-array>
+<!--    <string-array name="qrcode_size">-->
+<!--        <item>@string/default_str</item>-->
+<!--        <item>4</item>-->
+<!--        <item>6</item>-->
+<!--        <item>11</item>-->
+<!--    </string-array>-->
 
     <string-array name="qrcode_error">
-        <item>@string/default_str</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+<!--        <item>@string/default_str</item>-->
+        <item>7%</item>
+        <item>15%</item>
+        <item>25%</item>
+        <item>30%</item>
     </string-array>
 
     <string-array name="qrcode_left">
@@ -328,6 +405,18 @@
         <item>@string/align_left</item>
         <item>@string/align_center</item>
         <item>@string/align_right</item>
+    </string-array>
+
+    <string-array name="qrcode_size">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
     </string-array>
 
     <string-array name="duoble_qrcode_size">
@@ -423,10 +512,37 @@
         <item>140</item>
     </string-array>
 
+    <string-array name="connecting_mode">
+        <item>@string/connect_aidl</item>
+        <item>@string/connect_bluetooth</item>
+    </string-array>
+
+    <string-array name="printer_parameter_list">
+        <item>@string/printer_serial_number</item>
+        <item>@string/printer_model_name</item>
+        <item>@string/printer_thermal_head</item>
+        <item>@string/printer_firmware_version</item>
+        <item>@string/printer_service_version</item>
+        <item>@string/printer_thermal_head_type</item>
+        <item>@string/printer_distance</item>
+    </string-array>
+
+    <string-array name="trans_print_list">
+        <item>@string/trans_example1</item>
+        <item>@string/trans_example2</item>
+        <item>@string/trans_example3</item>
+    </string-array>
+
     <string-array name="alignment">
         <item>@string/left</item>
         <item>@string/center</item>
         <item>@string/right</item>
+    </string-array>
+
+    <string-array name="align_ment">
+        <item>@string/align_left</item>
+        <item>@string/align_center</item>
+        <item>@string/align_right</item>
     </string-array>
 
     <string-array name="cut">
@@ -435,7 +551,7 @@
         <item>@string/half_cut</item>
     </string-array>
 
-    <string-array name="text_type">
+    <string-array name="text_font">
         <item>@string/normal</item>
         <item>@string/bold</item>
         <item>@string/italic</item>
@@ -443,7 +559,7 @@
         <item>@string/monospaced</item>
     </string-array>
 
-    <string-array name="barcode_text">
+    <string-array name="barcode_position">
         <item>@string/don_print_text</item>
         <item>@string/text_above_barcode</item>
         <item>@string/text_below_barcode</item>
@@ -461,7 +577,7 @@
     </string-array>
 
     <string-array name="under_line">
-        <item>@string/cancel</item>
+        <item>@string/action_cancel</item>
         <item>@string/light_underline</item>
         <item>@string/dark_underline</item>
     </string-array>
@@ -492,5 +608,26 @@
     <string-array name="print_api">
         <item>AIDL</item>
         <item>API</item>
+    </string-array>
+
+    <string-array name="qr_block_size">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+    <string-array name="router_choice_entry">
+        <item>路线一: 南京->上海->杭州</item>
+        <item>路线二: 南京->武汉->长沙</item>
+        <item>路线三: 南京->济南->天津</item>
+        <item>路线四: 南京->合肥->重庆</item>
+        <item>路线五: 南京->徐州->北京</item>
+        <item>路线六: 南京->郑州->成都</item>
     </string-array>
 </resources>

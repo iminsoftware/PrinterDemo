@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_5">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_42"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="标题"
+        android:textColor="@color/xui_config_color_black"
+        android:textSize="@dimen/sp_18" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="取消"
+        android:textColor="@color/xui_config_color_main"
+        android:textSize="@dimen/sp_16" />
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:text="保存"
+        android:textColor="@color/xui_config_color_main"
+        android:textSize="@dimen/sp_16" />
+
+</FrameLayout>

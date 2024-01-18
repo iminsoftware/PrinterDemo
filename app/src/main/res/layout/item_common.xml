@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.imin.newprinter.demo.bean.FunctionTestBean" />
+
+        <variable
+            name="index"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/list_item_selector"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.title}"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="16sp"
+            android:layout_marginStart="@dimen/dp6"
+            />
+
+        <TextView
+            android:id="@+id/tv_item_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/iv_more"
+            android:maxWidth="@dimen/dp68"
+            android:layout_marginEnd="@dimen/dp5"
+            android:text="@{data.value}"
+            android:maxLines="6"
+            android:ellipsize="end"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="16sp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_more"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp6"
+            />
+
+    </RelativeLayout>
+</layout>

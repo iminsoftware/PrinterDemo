@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_20"
+    android:paddingBottom="@dimen/dp_20">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minHeight="@dimen/dp_150"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/dp_17">
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/year"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4" />
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/month"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/day"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/twelve"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:visibility="gone" />
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/hour"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/min"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <com.feature.tui.widget.pickerview.view.WheelView
+            android:id="@+id/second"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+    <ToggleButton
+        android:id="@+id/calendar_toggle_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_28"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@null"
+        android:checked="false"
+        android:drawableEnd="@drawable/xui_toggle_bg"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/xui_color_666666"
+        android:textOff="@string/pickerview_lunar_calendar"
+        android:textOn="@string/pickerview_lunar_calendar"
+        android:textSize="@dimen/sp_16" />
+
+</LinearLayout>
