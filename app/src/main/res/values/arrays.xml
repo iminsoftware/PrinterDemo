@@ -514,7 +514,7 @@
 
     <string-array name="connecting_mode">
         <item>@string/connect_aidl</item>
-        <item>@string/connect_bluetooth</item>
+        <!--<item>@string/connect_bluetooth</item>-->
     </string-array>
 
     <string-array name="printer_parameter_list">
