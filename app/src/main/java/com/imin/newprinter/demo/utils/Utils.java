@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider;
 
 import com.imin.newprinter.demo.IminApplication;
 import com.imin.newprinter.demo.R;
+import com.imin.printer.PrinterHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -611,5 +612,22 @@ public class Utils {
         }
 
         return IminApplication.mContext.getString(resStatus);
+    }
+
+
+    public enum PrinterFirmwareBy {
+        SELF_DEVELOP,
+        MEI_SONG,
+        JIMMY
+    }
+    public static PrinterFirmwareBy getPrinterType() {
+        String usbPrinterVidPid = PrinterHelper.getInstance().getUsbPrinterVidPid();
+        if (!TextUtils.isEmpty(usbPrinterVidPid) && usbPrinterVidPid.contains("10473,653")){
+            return PrinterFirmwareBy.JIMMY;
+        }else if(!TextUtils.isEmpty(usbPrinterVidPid) && usbPrinterVidPid.contains("8213,1305")){
+            return PrinterFirmwareBy.MEI_SONG;
+        }else {
+            return PrinterFirmwareBy.SELF_DEVELOP;
+        }
     }
 }

@@ -22,6 +22,7 @@ import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.adapter.CustomDividerItemDecoration;
 import com.imin.newprinter.demo.adapter.PrinterParameterAdapter;
 import com.imin.newprinter.demo.databinding.FragmentPrinterParameterBinding;
+import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.view.TitleLayout;
 import com.imin.newprinter.demo.viewmodel.FragmentCommonViewModel;
 import com.imin.printer.INeoPrinterCallback;
@@ -95,34 +96,36 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
     public void initViewObservable() {
         super.initViewObservable();
 
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY){
+            PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-        PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+                }
 
-            }
+                @Override
+                public void onReturnString(String result) throws RemoteException {
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterSerialNumber: " + result);
+                    updateParameterList(0, result);
 
-                Log.d(TAG, "getPrinterSerialNumber: " + result);
-                updateParameterList(0, result);
+                    getActivity().runOnUiThread(()-> {
+                        getRvAdapter().notifyItemChanged(0);
+                    });
+                }
 
-                getActivity().runOnUiThread(()-> {
-                    getRvAdapter().notifyItemChanged(0);
-                });
-            }
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                }
 
-            }
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                }
+            });
+        }
 
-            }
-        });
 
         PrinterHelper.getInstance().getPrinterModelName(new INeoPrinterCallback() {
             @Override
@@ -133,9 +136,9 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
             @Override
             public void onReturnString(String result) throws RemoteException {
                 Log.d(TAG, "getPrinterModelName: " + result);
-                updateParameterList(1, result);
+                updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?1:0, result);
                 getActivity().runOnUiThread(()-> {
-                    getRvAdapter().notifyItemChanged(1);
+                    getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?1:0);
                 });
             }
 
@@ -150,31 +153,34 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
             }
         });
 
-        PrinterHelper.getInstance().getPrinterThermalHead(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY){
+            PrinterHelper.getInstance().getPrinterThermalHead(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
-                Log.d(TAG, "getPrinterThermalHead: " + result);
-                updateParameterList(2, result);
-                getActivity().runOnUiThread(()-> {
-                    getRvAdapter().notifyItemChanged(2);
-                });
-            }
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterThermalHead: " + result);
+                    updateParameterList(2, result);
+                    getActivity().runOnUiThread(()-> {
+                        getRvAdapter().notifyItemChanged(2);
+                    });
+                }
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            }
-        });
+                }
+            });
+        }
+
 
         PrinterHelper.getInstance().getPrinterFirmwareVersion(new INeoPrinterCallback() {
             @Override
@@ -185,9 +191,9 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
             @Override
             public void onReturnString(String result) throws RemoteException {
                 Log.d(TAG, "getPrinterFirmwareVersion: " + result);
-                updateParameterList(3, result);
+                updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?3:1, result);
                 getActivity().runOnUiThread(()-> {
-                    getRvAdapter().notifyItemChanged(3);
+                    getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?3:1);
                 });
             }
 
@@ -203,41 +209,42 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
         });
 
         String serviceVersion = PrinterHelper.getInstance().getServiceVersion();
-        updateParameterList(4, serviceVersion);
-        getRvAdapter().notifyItemChanged(4);
+        updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?4:2, serviceVersion);
+        getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?4:2);
         String paperType = PrinterHelper.getInstance().getPrinterPaperType() + "";
-        updateParameterList(5, paperType);
-        getRvAdapter().notifyItemChanged(5);
+        updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?5:3, paperType);
+        getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?5:3);
         Log.d(TAG, "initViewObservable version: " + serviceVersion + ", type= " + paperType);
 
-        PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY){
+            PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
-                Log.d(TAG, "getPrinterPaperDistance: " + result);
-                updateParameterList(6, result);
-                SystemClock.sleep(500);
-                getActivity().runOnUiThread(()->{
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterPaperDistance: " + result);
+                    updateParameterList(6, result);
+                    SystemClock.sleep(500);
+                    getActivity().runOnUiThread(()->{
 
-                    getRvAdapter().notifyItemChanged(6);
-                });
-            }
+                        getRvAdapter().notifyItemChanged(6);
+                    });
+                }
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            }
-        });
-
+                }
+            });
+        }
 
     }
 
@@ -256,7 +263,7 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
     }
 
     private String[] getParameterArray() {
-        String[] array = getActivity().getResources().getStringArray(R.array.printer_parameter_list);
+        String[] array = getActivity().getResources().getStringArray(Utils.getPrinterType() == Utils.PrinterFirmwareBy.JIMMY?R.array.printer_parameter_list_ms115:R.array.printer_parameter_list);
         return array;
     }
 
