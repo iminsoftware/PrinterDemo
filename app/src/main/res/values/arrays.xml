@@ -527,6 +527,13 @@
         <item>@string/printer_distance</item>
     </string-array>
 
+    <string-array name="printer_parameter_list_ms115">
+        <item>@string/printer_model_name</item>
+        <item>@string/printer_firmware_version</item>
+        <item>@string/printer_service_version</item>
+        <item>@string/printer_thermal_head_type</item>
+    </string-array>
+
     <string-array name="trans_print_list">
         <item>@string/trans_example1</item>
         <item>@string/trans_example2</item>
