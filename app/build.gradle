@@ -5,12 +5,13 @@ plugins {
 android {
     namespace 'com.imin.newprinter.demo'
     compileSdk 33
+    def versioncode = 4
 
     def date = new Date().format("yyMMdd_HHmm", TimeZone.getTimeZone("GMT+08"))
-    def versionNames = "2.1_" + date
+    def versionNames = "2.1_"+versioncode+"_" + date
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "Newprinterdemo-" + versionCode + "_V" + versionName + ".apk"
+            outputFileName = "Newprinterdemo-" + versioncode + "_V" + versionName + ".apk"
         }
     }
 
@@ -18,7 +19,7 @@ android {
         applicationId "com.imin.newprinter.demo"
         minSdk 25
         targetSdk 33
-        versionCode 3
+        versionCode versioncode
         versionName versionNames
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -69,6 +70,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.4.2'
     implementation 'androidx.navigation:navigation-ui:2.4.2'
 
-    implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.12'
+    implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.14'
 
 }
