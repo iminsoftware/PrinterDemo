@@ -39,6 +39,7 @@ import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -60,11 +61,14 @@ public class TextFragment extends BaseListFragment<FragmentTextTestBinding, Frag
     private int font = 0;
     private int mAlignment = 0;
     private int textSpace = 0;
+    private int carrierFont = 0;
+    private String carrierFontStr = "";
 
     private List<DialogItemDescription> fontList;
     private List<DialogItemDescription> barcodePositionList;
 
     private List<DialogItemDescription> qrAlignmentList;
+    private List<DialogItemDescription> carrierFontList;
 
     @Override
     public int initContentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,12 +91,13 @@ public class TextFragment extends BaseListFragment<FragmentTextTestBinding, Frag
         contentList = getResources().getStringArray(R.array.text_list);
         values = new String[]{content, String.valueOf(fontSize),
                 String.valueOf(lineSpace), getFontArray()[font],
-                getAlignmentArray()[mAlignment], String.valueOf(textSpace)};
+                getAlignmentArray()[mAlignment], String.valueOf(textSpace),getCarrierFontArray()[carrierFont]};
 
         super.initData();
         fontList = getFontList(font);
 
         qrAlignmentList = getAlignmentList(mAlignment);
+        carrierFontList = getCarrierFontList(carrierFont);
 
     }
 
@@ -247,6 +252,27 @@ public class TextFragment extends BaseListFragment<FragmentTextTestBinding, Frag
                     XUiDialog xuiDialog = builder.create();
                     xuiDialog.show();
 
+                }else if (position == 6) {
+                    SingleChoiceDialogBuilder singleBuilder = new SingleChoiceDialogBuilder(getContext(), false);
+
+                    XUiDialog mSelectDialog = singleBuilder.setTitle(item.getTitle())
+                            .setItems(carrierFontList, (dialog, i) -> {
+                                carrierFontList = getCarrierFontList(i);
+                                        carrierFont = i;
+                                        String[] array = getCarrierFontArray();
+                                        if (array != null) {
+                                            tvValue.setText(array[i]);
+                                            carrierFontStr = array[i];
+                                        }
+                                        dialog.dismiss();
+                                    }
+                            ).addAction(getString(R.string.action_cancel), ((dialog, i) -> {
+
+                                dialog.dismiss();
+                            }))
+                            .create();
+                    mSelectDialog.show();
+
                 }
 
             }
@@ -290,6 +316,7 @@ public class TextFragment extends BaseListFragment<FragmentTextTestBinding, Frag
             PrinterHelper.getInstance().setTextBitmapLineSpacing(lineSpace);
 
             PrinterHelper.getInstance().setTextBitmapStyle(font);
+            PrinterHelper.getInstance().setTextBitmapTypeface(carrierFontStr);
 
             PrinterHelper.getInstance().setTextBitmapLetterSpacing((float) (textSpace/80));
 
@@ -328,6 +355,25 @@ public class TextFragment extends BaseListFragment<FragmentTextTestBinding, Frag
 
     private List<DialogItemDescription> getFontList(int checkIndex) {
         String[] array = getFontArray();
+        List<DialogItemDescription> list = new ArrayList<>();
+        for (int i = 0; i < array.length; i++) {
+            DialogItemDescription item = new DialogItemDescription(array[i]);
+            if (checkIndex == i) {
+                item.setChecked(true);
+            }
+            list.add(item);
+        }
+
+        return list;
+    }
+
+    public String[] getCarrierFontArray() {
+        String[] strings = getActivity().getResources().getStringArray(R.array.text_carrier_font);
+        return strings;
+    }
+
+    private List<DialogItemDescription> getCarrierFontList(int checkIndex) {
+        String[] array = getCarrierFontArray();
         List<DialogItemDescription> list = new ArrayList<>();
         for (int i = 0; i < array.length; i++) {
             DialogItemDescription item = new DialogItemDescription(array[i]);

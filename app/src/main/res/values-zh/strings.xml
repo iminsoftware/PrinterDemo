@@ -139,6 +139,8 @@
     <string name="text_check7_asc11">字形（12*24/9*17）</string>
     <string name="text_pic_delete_line">删除线</string>
     <string name="text_space">文本字间距:</string>
+    <string name="text_carrier_font">矢量字体：</string>
+
     <string name="print1">打印1</string>
     <string name="pic_example">示例图片:</string>
     <string name="print_example_pic">打印示例图片</string>

@@ -46,6 +46,7 @@
         <item>@string/alignment_mode</item>
         <!--        <item>@string/cut_mode</item>-->
         <item>@string/text_space</item>
+        <item>@string/text_carrier_font</item>
     </string-array>
 
     <string-array name="line_test_list">
@@ -564,6 +565,13 @@
         <item>@string/italic</item>
         <item>@string/bold_italic</item>
         <item>@string/monospaced</item>
+    </string-array>
+
+    <string-array name="text_carrier_font">
+        <item>Typeface.DEFAULT</item>
+        <item>gh.ttf</item>
+        <item>pht.ttf</item>
+        <item>kaltin.ttf</item>
     </string-array>
 
     <string-array name="barcode_position">

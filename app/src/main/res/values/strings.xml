@@ -136,6 +136,8 @@
     <string name="text_check7_asc11">Font style（12*24/9*17）</string>
     <string name="text_pic_delete_line">Strikethrough</string>
     <string name="text_space">Text character spacing:</string>
+    <string name="text_carrier_font">Carrier font：</string>
+
     <string name="print1">Print1</string>
     <string name="pic_example">Sample image:</string>
     <string name="print_example_pic">Print sample image</string>
