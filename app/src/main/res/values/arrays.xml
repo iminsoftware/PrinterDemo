@@ -571,7 +571,6 @@
         <item>Typeface.DEFAULT</item>
         <item>gh.ttf</item>
         <item>pht.ttf</item>
-        <item>kaltin.ttf</item>
     </string-array>
 
     <string-array name="barcode_position">
