@@ -569,8 +569,8 @@
 
     <string-array name="text_carrier_font">
         <item>Typeface.DEFAULT</item>
-        <item>gh.ttf</item>
-        <item>pht.ttf</item>
+        <item>minijianxiuti.ttf</item>
+        <item>zhangcao.ttf</item>
     </string-array>
 
     <string-array name="barcode_position">
