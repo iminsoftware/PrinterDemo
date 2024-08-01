@@ -143,7 +143,7 @@ public class BarcodeFragment extends BaseListFragment<FragmentBarcodeTestBinding
                                             dialog.dismiss();
                                         }
                                     }))
-                            .setEditTextCount(barcodeContent[mBarCodeType].length())
+                            .setEditTextCount(30)
                             .setCanceledOnTouchOutside(false)
 //                            .isShowLengthOverTips(true)
                             .setCancelable(false)
