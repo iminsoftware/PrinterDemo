@@ -8,10 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
@@ -59,15 +56,13 @@ import me.goldze.mvvmhabit.base.BaseActivity;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> implements SwitchFragmentListener, TitleLayout.LeftCallback , IBinder.DeathRecipient{
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "PrintDemoMainActivity";
     private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
-    private static final int PRINTER_UPDATE_STATUS = 200;
-    private static final int PRINTER_GET_PARAMETER = 201;
-    private static final int PRINTER_UPDATE_PARAMETER = 202;
-    private static final int PRINTER_UPDATE_DELAY = 1000;
+
+
     private static final String ACTION_PRITER_STATUS = "status";
 
-    private FunctionTestHandler functionTestHandler;
+
 
 
     private FragmentManager fragmentManager;
@@ -98,16 +93,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         super.registorUIChangeLiveDataCallBack();
 
         rvParameter = binding.getRoot().findViewById(R.id.rv_parameter);
-        Log.d(TAG, "registorUIChangeLiveDataCallBack: ");
+        Log.d(TAG, "registorUIChangeLiveDataCallBack:===== "+PrinterHelper.getInstance().getPrinterSupplierName());
     }
 
     public void initData() {
         super.initData();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
+        registerReceiver(mReceiver, intentFilter);
+        initViewData();
+    }
+
+    //初始化页面以及数据
+    public void initViewData(){
         int screenWidth = XUiDisplayHelper.getScreenWidth(getContext());
         int screenHeight = XUiDisplayHelper.getScreenHeight(getContext());
 
 
-        Log.d(TAG, "initData: screenWidth= " + screenWidth + ", h= " + screenHeight);
+        Log.d(TAG, "initData: screenWidth= " + screenWidth + ", h= " + screenHeight+"       "+PrinterHelper.getInstance().getPrinterSupplierName());
         if (screenWidth > screenHeight) {
 
             contentArray = getParameterArray();
@@ -132,22 +135,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
         }
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
-        registerReceiver(mReceiver, intentFilter);
-
-        functionTestHandler = new FunctionTestHandler(Looper.myLooper());
-        functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_STATUS, PRINTER_UPDATE_DELAY);
-
         fragmentManager = getSupportFragmentManager();
+
         updateFragment(-1);
-
-        if (screenWidth > screenHeight) {
-
-            functionTestHandler.sendEmptyMessageDelayed(PRINTER_GET_PARAMETER, PRINTER_UPDATE_DELAY + PRINTER_UPDATE_DELAY/2);
-            functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_PARAMETER, PRINTER_UPDATE_DELAY * 3);
-        }
-
+        getPrinterParameter();
     }
 
     @Override
@@ -164,6 +155,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         if (position == -1) {
+            if (Utils.isNingzLabel()){
+                functionTestFragment = null;
+            }
             if (functionTestFragment == null) {
                 functionTestFragment = new FunctionTestFragment();
                 functionTestFragment.setCallback(this);
@@ -171,6 +165,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 transaction.show(functionTestFragment);
                 transaction.commit();
             }
+
         } else {
 
             transaction.hide(functionTestFragment);
@@ -284,31 +279,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
 
-    class FunctionTestHandler extends Handler {
-        public FunctionTestHandler(Looper looper) {
-            super(looper);
-        }
 
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            Log.d(TAG, "handleMessage: " + msg.what);
 
-            switch (msg.what) {
-                case PRINTER_UPDATE_STATUS:
-                    updateStatus(PrinterHelper.getInstance().getPrinterStatus());
-
-                    break;
-
-                case PRINTER_GET_PARAMETER:
-                    getPrinterParameter();
-                    break;
-                case PRINTER_UPDATE_PARAMETER:
-                    parameterLandAdapter.setNewInstance(list);
-                    rvParameter.setAdapter(parameterLandAdapter);
-                    break;
-            }
-        }
-    }
 
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -324,7 +296,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         }
     };
 
-    private void updateStatus(int value) {
+    public void updateStatus(int value) {
         boolean isNormal = (value == Utils.PRINTER_NORMAL);
         Log.d(TAG, "updateStatus: " + value);
         runOnUiThread(new Runnable() {
@@ -352,15 +324,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
 
     private String[] getParameterArray() {
-        String[] array = this.getResources().getStringArray(R.array.printer_parameter_list);
+
+        String[] array = this.getResources().getStringArray(Utils.isNingzLabel()?R.array.printer_parameter_list_ds2_label:R.array.printer_parameter_list);
         return array;
     }
 
     private List<DialogItemDescription> getParameterList(int checkIndex, String value) {
         String[] array = contentArray;
-        if (list == null) {
-            list = new ArrayList<DialogItemDescription>();
-        }
+        list = new ArrayList<>();
         for (int i = 0; i < array.length; i++) {
             DialogItemDescription item = new DialogItemDescription(array[i]);
             if (checkIndex == i && !TextUtils.isEmpty(value)) {
@@ -372,78 +343,85 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         return list;
     }
 
-    private void getPrinterParameter() {
-        PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+    public void getPrinterParameter() {
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()){
+            PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
+                @Override
+                public void onReturnString(String result) throws RemoteException {
 
-                Log.d(TAG, "getPrinterSerialNumber: " + result);
-                updateParameterList(0, result);
+                    Log.d(TAG, "getPrinterSerialNumber: " + result);
+                    updateParameterList(0, result);
 
-            }
+                }
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            }
-        });
+                }
+            });
+        }
 
-        PrinterHelper.getInstance().getPrinterModelName(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+//        if (!Utils.isNingzLabel()){
+            PrinterHelper.getInstance().getPrinterModelName(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
-                Log.d(TAG, "getPrinterModelName: " + result);
-                updateParameterList(1, result);
-            }
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterModelName: " + result);
+                    updateParameterList(Utils.isNingzLabel()?0:1, result);
+                }
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            }
-        });
+                }
+            });
+//        }
 
-        PrinterHelper.getInstance().getPrinterThermalHead(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()){
+            PrinterHelper.getInstance().getPrinterThermalHead(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
-                Log.d(TAG, "getPrinterThermalHead: " + result);
-                updateParameterList(2, result);
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterThermalHead: " + result);
+                    updateParameterList(2, result);
 
-            }
+                }
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            }
-        });
+                }
+            });
+        }
+
 
         PrinterHelper.getInstance().getPrinterFirmwareVersion(new INeoPrinterCallback() {
             @Override
@@ -454,7 +432,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             @Override
             public void onReturnString(String result) throws RemoteException {
                 Log.d(TAG, "getPrinterFirmwareVersion: " + result);
-                updateParameterList(3, result);
+                updateParameterList((Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel())?3:1, result);
 
             }
 
@@ -470,35 +448,39 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         });
 
         String serviceVersion = PrinterHelper.getInstance().getServiceVersion();
-        updateParameterList(4, serviceVersion);
+        updateParameterList((Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel() )?4:2, serviceVersion);
 
-        String paperType = PrinterHelper.getInstance().getPrinterPaperType() + "";
-        updateParameterList(5, paperType);
+        if (!Utils.isNingzLabel()){
+            String paperType = PrinterHelper.getInstance().getPrinterPaperType() + "";
+            updateParameterList(5, paperType);
+            Log.d(TAG, "initViewObservable version: " + serviceVersion + ", type= " + paperType);
+        }
 
-        Log.d(TAG, "initViewObservable version: " + serviceVersion + ", type= " + paperType);
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()){
+            PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-        PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+                }
 
-            }
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterPaperDistance: " + result);
+                    updateParameterList(6, result);
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
-                Log.d(TAG, "getPrinterPaperDistance: " + result);
-                updateParameterList(6, result);
-            }
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                }
 
-            }
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                }
+            });
+        }
 
-            }
-        });
     }
 
     private void updateParameterList(int checkIndex, String value) {
@@ -509,6 +491,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 item.setDescription(value);
             }
         }
+        parameterLandAdapter.setNewData(list);
     }
 
     /**
@@ -556,5 +539,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             }
         }
         return false;
+    }
+
+    public void updateRv() {
+        if (parameterLandAdapter != null && rvParameter != null){
+            parameterLandAdapter.setNewInstance(list);
+            rvParameter.setAdapter(parameterLandAdapter);
+        }
+
     }
 }

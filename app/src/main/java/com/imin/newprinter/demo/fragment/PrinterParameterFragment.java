@@ -96,7 +96,7 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
     public void initViewObservable() {
         super.initViewObservable();
 
-        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY){
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()){
             PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
                 @Override
                 public void onRunResult(boolean isSuccess) throws RemoteException {
@@ -127,33 +127,34 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
         }
 
 
-        PrinterHelper.getInstance().getPrinterModelName(new INeoPrinterCallback() {
-            @Override
-            public void onRunResult(boolean isSuccess) throws RemoteException {
+            PrinterHelper.getInstance().getPrinterModelName(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onReturnString(String result) throws RemoteException {
-                Log.d(TAG, "getPrinterModelName: " + result);
-                updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?1:0, result);
-                getActivity().runOnUiThread(()-> {
-                    getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?1:0);
-                });
-            }
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+                    Log.d(TAG, "getPrinterModelName: " + result);
+                    updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?1:0, result);
+                    getActivity().runOnUiThread(()-> {
+                        getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?1:0);
+                    });
+                }
 
-            @Override
-            public void onRaiseException(int code, String msg) throws RemoteException {
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
 
-            }
+                }
 
-            @Override
-            public void onPrintResult(int code, String msg) throws RemoteException {
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
 
-            }
-        });
+                }
+            });
 
-        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY){
+
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()){
             PrinterHelper.getInstance().getPrinterThermalHead(new INeoPrinterCallback() {
                 @Override
                 public void onRunResult(boolean isSuccess) throws RemoteException {
@@ -191,7 +192,7 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
             @Override
             public void onReturnString(String result) throws RemoteException {
                 Log.d(TAG, "getPrinterFirmwareVersion: " + result);
-                updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?3:1, result);
+                updateParameterList((Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel())?3:1, result);
                 getActivity().runOnUiThread(()-> {
                     getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?3:1);
                 });
@@ -209,14 +210,14 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
         });
 
         String serviceVersion = PrinterHelper.getInstance().getServiceVersion();
-        updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?4:2, serviceVersion);
-        getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?4:2);
+        updateParameterList((Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel())?4:2, serviceVersion);
+        getRvAdapter().notifyItemChanged((Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel())?4:2);
         String paperType = PrinterHelper.getInstance().getPrinterPaperType() + "";
         updateParameterList(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?5:3, paperType);
         getRvAdapter().notifyItemChanged(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY?5:3);
         Log.d(TAG, "initViewObservable version: " + serviceVersion + ", type= " + paperType);
 
-        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY){
+        if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY  && !Utils.isNingzLabel()){
             PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
                 @Override
                 public void onRunResult(boolean isSuccess) throws RemoteException {
@@ -263,7 +264,8 @@ public class PrinterParameterFragment extends BaseListFragment<FragmentPrinterPa
     }
 
     private String[] getParameterArray() {
-        String[] array = getActivity().getResources().getStringArray(Utils.getPrinterType() == Utils.PrinterFirmwareBy.JIMMY?R.array.printer_parameter_list_ms115:R.array.printer_parameter_list);
+        String[] array = getActivity().getResources().getStringArray(Utils.getPrinterType() == Utils.PrinterFirmwareBy.JIMMY?
+                R.array.printer_parameter_list_ms115:(Utils.isNingzLabel()?R.array.printer_parameter_list_ds2_label:R.array.printer_parameter_list));
         return array;
     }
 

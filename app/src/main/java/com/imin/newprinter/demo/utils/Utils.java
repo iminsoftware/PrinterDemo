@@ -622,6 +622,7 @@ public class Utils {
     }
     public static PrinterFirmwareBy getPrinterType() {
         String usbPrinterVidPid = PrinterHelper.getInstance().getUsbPrinterVidPid();
+        Log.d(TAG, "usbPrinterVidPid: " + usbPrinterVidPid);
         if (!TextUtils.isEmpty(usbPrinterVidPid) && usbPrinterVidPid.contains("10473,653")){
             return PrinterFirmwareBy.JIMMY;
         }else if(!TextUtils.isEmpty(usbPrinterVidPid) && usbPrinterVidPid.contains("8213,1305")){
@@ -629,5 +630,10 @@ public class Utils {
         }else {
             return PrinterFirmwareBy.SELF_DEVELOP;
         }
+    }
+
+    public static boolean isNingzLabel(){
+        Log.d(TAG, "isNingzLabel: " + PrinterHelper.getInstance().getPrinterSupplierName());
+        return "NING_ZHI".equals(PrinterHelper.getInstance().getPrinterSupplierName());
     }
 }

@@ -528,6 +528,12 @@
         <item>@string/printer_distance</item>
     </string-array>
 
+    <string-array name="printer_parameter_list_ds2_label">
+        <item>@string/printer_model_name</item>
+        <item>@string/printer_firmware_version</item>
+        <item>@string/printer_service_version</item>
+    </string-array>
+
     <string-array name="printer_parameter_list_ms115">
         <item>@string/printer_model_name</item>
         <item>@string/printer_firmware_version</item>
@@ -644,4 +650,15 @@
         <item>路线五: 南京->徐州->北京</item>
         <item>路线六: 南京->郑州->成都</item>
     </string-array>
+
+    <string-array name="label_type">
+        <item>@string/all</item>
+        <item>40*30mm</item>
+        <item>40*50mm</item>
+        <item>40*60mm</item>
+        <item>50*30mm</item>
+        <!--<item>50*40mm</item>
+       <item>60*50mm</item>-->
+    </string-array>
+
 </resources>

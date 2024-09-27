@@ -351,5 +351,57 @@
 
     <string name="connect_aidl">AIDL</string>
     <string name="connect_bluetooth">Bluetooth</string>
+    <string name="all">全部</string>
 
+
+    <string name="title1">iMin标签打印机</string>
+    <string name="content1">适用于外卖、商超收银等</string>
+    <string name="content2">0123456789</string>
+    <string name="title2">冰鲜鸡胸肉</string>
+    <string name="content21">食品工艺:非腌制  重量:600g</string>
+    <string name="content22">生产日期:2024/1/15</string>
+    <string name="content23">0123456789</string>
+    <string name="title3">切果鲜</string>
+    <string name="content31">2024/09/23 19:00</string>
+    <string name="content32">  净重         250(g)</string>
+    <string name="content33">请在2小时内使用</string>
+    <string name="title4">谷屋</string>
+    <string name="content41">生产日期：2024年9月17日</string>
+    <string name="content42">保质期：10天</string>
+    <string name="content43">存储条件：常温</string>
+    <string name="content44">价格：10元</string>
+    <string name="content45">www.imintech.cn</string>
+    <string name="title5">合格证</string>
+    <string name="content51">名称：男士T恤</string>
+    <string name="content52">成分：100%棉</string>
+    <string name="content53">型号：175L</string>
+    <string name="content54">颜色：卡其色</string>
+    <string name="content55">等级：合格品</string>
+    <string name="content56">检验员：01</string>
+    <string name="content57">0123456789</string>
+    <string name="title6">合格证</string>
+    <string name="content61">名称：男士T恤</string>
+    <string name="content62">成分：100%棉</string>
+    <string name="content63">型号：175L</string>
+    <string name="content64">颜色：卡其色</string>
+    <string name="content65">等级：合格品</string>
+    <string name="content66">价格：99元</string>
+    <string name="content67">检验员：01</string>
+    <string name="content68">0123456789</string>
+    <string name="title7">CC奶茶</string>
+    <string name="content71">生产日期: 2024年9月25日</string>
+    <string name="content72">保质期: 10天</string>
+    <string name="content73">存储条件: 常温</string>
+    <string name="content74">配料表: 珍珠 牛奶 砂糖</string>
+    <string name="content75">价格: 22元</string>
+    <string name="content76">http://www.imintech.cn</string>
+    <string name="title8">新疆苹果</string>
+    <string name="content81">生产日期: 2024年9月25日</string>
+    <string name="content82">存储条件: 常温</string>
+    <string name="content83">价格: 5元/斤</string>
+    <string name="content84">0123456789</string>
+    <string name="title9">散装商品</string>
+    <string name="content91">售价: 19元</string>
+    <string name="content92">0123456789</string>
+    <string name="content93">生产日期: 2024-09-25</string>
 </resources>

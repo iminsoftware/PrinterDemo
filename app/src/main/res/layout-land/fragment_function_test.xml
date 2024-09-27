@@ -66,14 +66,41 @@
             app:title="@string/function_test"
             tools:ignore="MissingClass" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                android:overScrollMode="never" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llyLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ryH"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:overScrollMode="never"
+                    android:orientation="horizontal"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ryV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:spanCount="3"
+                    android:overScrollMode="never" />
 
-            android:overScrollMode="never" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </FrameLayout>
+
 
 
     </LinearLayout>

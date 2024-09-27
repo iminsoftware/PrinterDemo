@@ -63,7 +63,7 @@
                     android:layout_height="59dp"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:text="@string/normal"
+                    android:text="@string/printer_unknown"
                     android:textColor="@color/white"
                     android:textSize="40sp"
                     android:textStyle="bold" />

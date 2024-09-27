@@ -1,15 +1,22 @@
 package com.imin.newprinter.demo;
 
+import static me.goldze.mvvmhabit.utils.Utils.getContext;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.feature.tui.util.XUiDisplayHelper;
+import com.imin.printer.InitPrinterCallback;
 import com.imin.printer.PrinterHelper;
 
 import me.goldze.mvvmhabit.base.BaseApplication;
@@ -30,11 +37,14 @@ public class IminApplication extends Application {
         mContext = base;
 
     }
+    public FunctionTestHandler functionTestHandler;
+    private static Activity currentActivity = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        functionTestHandler = new FunctionTestHandler(Looper.myLooper());
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -45,13 +55,13 @@ public class IminApplication extends Application {
 
             @Override
             public void onActivityStarted(@NonNull Activity activity) {
-
+                currentActivity = activity;
                 Log.d(TAG, "onActivityStarted: ");
             }
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
-
+                currentActivity = activity;
                 Log.d(TAG, "onActivityResumed: ");
             }
 
@@ -59,12 +69,18 @@ public class IminApplication extends Application {
             public void onActivityPaused(@NonNull Activity activity) {
 
                 Log.d(TAG, "onActivityPaused: ");
+                if (activity == currentActivity) {
+                    currentActivity = null;
+                }
             }
 
             @Override
             public void onActivityStopped(@NonNull Activity activity) {
 
                 Log.d(TAG, "onActivityStopped: ");
+                if (activity == currentActivity) {
+                    currentActivity = null;
+                }
             }
 
             @Override
@@ -77,9 +93,36 @@ public class IminApplication extends Application {
             public void onActivityDestroyed(@NonNull Activity activity) {
 
                 Log.d(TAG, "onActivityDestroyed: ");
+                if (activity == currentActivity) {
+                    currentActivity = null;
+                }
             }
         });
-        PrinterHelper.getInstance().initPrinterService(this);
+        PrinterHelper.getInstance().initPrinterService(this, new InitPrinterCallback() {
+            @Override
+            public void onConnected() {
+                Log.d(TAG, "registorUIChangeLiveDataCallBack:===== "+PrinterHelper.getInstance().getPrinterSupplierName());
+                functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_STATUS, PRINTER_UPDATE_DELAY);
+                int screenWidth = XUiDisplayHelper.getScreenWidth(getContext());
+                int screenHeight = XUiDisplayHelper.getScreenHeight(getContext());
+
+                if (screenWidth > screenHeight) {
+
+                    functionTestHandler.sendEmptyMessageDelayed(PRINTER_GET_PARAMETER, PRINTER_UPDATE_DELAY + PRINTER_UPDATE_DELAY*2);
+                    functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_PARAMETER, PRINTER_UPDATE_DELAY * 3);
+                }
+
+                if (currentActivity != null){
+                    MainActivity activity = (MainActivity) currentActivity;
+                    activity.initViewData();
+                }
+            }
+
+            @Override
+            public void onDisconnected() {
+                Log.d(TAG, "registorUIChangeLiveDataCallBack:===== "+PrinterHelper.getInstance().getPrinterSupplierName());
+            }
+        });
 
         BaseApplication.setApplication(this);
 
@@ -104,4 +147,45 @@ public class IminApplication extends Application {
         Log.d(TAG, "onTerminate: ");
     }
 
+    private static final int PRINTER_UPDATE_STATUS = 200;
+    private static final int PRINTER_GET_PARAMETER = 201;
+    private static final int PRINTER_UPDATE_PARAMETER = 202;
+    private static final int PRINTER_UPDATE_DELAY = 1000;
+    public class FunctionTestHandler extends Handler {
+        public FunctionTestHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            Log.d(TAG, "handleMessage: " + msg.what);
+            try {
+                switch (msg.what) {
+                    case PRINTER_UPDATE_STATUS:
+                        if (currentActivity != null){
+                            MainActivity activity = (MainActivity) currentActivity;
+                            activity.updateStatus(PrinterHelper.getInstance().getPrinterStatus());
+                        }
+                        break;
+
+                    case PRINTER_GET_PARAMETER:
+                        if (currentActivity != null){
+                            MainActivity activity = (MainActivity) currentActivity;
+                            activity.getPrinterParameter();
+                        }
+
+                        break;
+                    case PRINTER_UPDATE_PARAMETER:
+                        if (currentActivity != null){
+                            MainActivity activity = (MainActivity) currentActivity;
+                            activity.updateRv();
+                        }
+                        break;
+                }
+            }catch (Exception e){
+                Log.d(TAG, "handleMessage:e " + e.getMessage());
+            }
+
+        }
+    }
 }
