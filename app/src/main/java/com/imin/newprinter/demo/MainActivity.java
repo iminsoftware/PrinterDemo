@@ -484,14 +484,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     private void updateParameterList(int checkIndex, String value) {
-
-        for (int i = 0; i < list.size(); i++) {
-            DialogItemDescription item = list.get(i);
-            if (checkIndex == i && !TextUtils.isEmpty(value)) {
-                item.setDescription(value);
+        if (list != null){
+            for (int i = 0; i < list.size(); i++) {
+                DialogItemDescription item = list.get(i);
+                if (checkIndex == i && !TextUtils.isEmpty(value)) {
+                    item.setDescription(value);
+                }
             }
+            parameterLandAdapter.setNewData(list);
         }
-        parameterLandAdapter.setNewData(list);
+
     }
 
     /**
