@@ -250,8 +250,9 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         super.initViewObservable();
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            FunctionTestBean bean = list.get(position);
+            if (Utils.isNingzLabel())return;
 
+            FunctionTestBean bean = list.get(position);
             Log.d(TAG, "initViewObservable: " + bean.toString()
                     + ", " + bean.getFragment()
                     + ", position" + position
