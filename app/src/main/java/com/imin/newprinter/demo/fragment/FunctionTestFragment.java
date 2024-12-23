@@ -1,5 +1,6 @@
 package com.imin.newprinter.demo.fragment;
 
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,9 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.imin.newprinter.demo.BR;
 import com.imin.newprinter.demo.IminApplication;
@@ -29,12 +30,15 @@ import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentFunctionTestBinding;
 import com.imin.newprinter.demo.utils.LabelTemplateUtils;
 import com.imin.newprinter.demo.utils.Utils;
+import com.imin.newprinter.demo.view.FlowLayout;
+import com.imin.newprinter.demo.view.SpacesItemDecoration;
+import com.imin.newprinter.demo.view.TagAdapter;
+import com.imin.newprinter.demo.view.TagFlowLayout;
 import com.imin.newprinter.demo.view.TitleLayout;
 import com.imin.newprinter.demo.viewmodel.FunctionTestFragmentViewModel;
 import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.goldze.mvvmhabit.base.BaseFragment;
@@ -55,7 +59,6 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
     private ArrayList<FunctionTestBean> list;
     private RecyclerView recyclerView;
     private FrameLayout setting;
-    private BaseFragment fragment = null;
     private RelativeLayout rlPrintStatus;
     private TextView tvPrintStatus;
     private TitleLayout titleLayout;
@@ -64,6 +67,8 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
 
     private List<LabelTitleBean> labelTypeList,labelBitmapList;
     private String[] stringArray;
+    private StaggeredGridLayoutManager layoutManager;
+    private TagFlowLayout flowLayout;
 
 
     @Override
@@ -91,6 +96,27 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         recyclerView.setVisibility(Utils.isNingzLabel()?View.GONE:View.VISIBLE);
         ryH = binding.getRoot().findViewById(R.id.ryH);
         ryV = binding.getRoot().findViewById(R.id.ryV);
+        flowLayout = binding.getRoot().findViewById(R.id.tabLayout);
+
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        }else {
+            layoutManager = new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL);
+
+        }
+        ryV.setLayoutManager(layoutManager);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);//避免出现空隙
+        recyclerView.setHasFixedSize(true);
+        // 优化滚动状态监听
+        ryV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                layoutManager.invalidateSpanAssignments();
+            }
+        });
+        ryV.addItemDecoration(new SpacesItemDecoration(4,10));
     }
 
     LabelTitleBean selePosition = null;
@@ -144,38 +170,94 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             labelTypeList.add(titleBean);
         }
         labelClick(0);
-        adapter1 = new BaseQuickAdapter<LabelTitleBean, BaseViewHolder>(R.layout.item_label_title) {
-            @Override
-            protected void convert(@NonNull BaseViewHolder viewHolder, LabelTitleBean s) {
-                FrameLayout ivImage = viewHolder.getView(R.id.itemFy);
-                TextView rvTitle = viewHolder.getView(R.id.itemText);
-                rvTitle.setText(s.getTitle());
-                rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.color_1D1D1F));
-                ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_gray));
-                if (selePosition != null && s != null){
-                    if (selePosition.getId() == s.getId()){
-                        ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_red));
-                        rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.white));
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            TagAdapter<LabelTitleBean> tagAdapter = new TagAdapter<LabelTitleBean>(labelTypeList) {
+                @Override
+                public View getView(FlowLayout parent, int position, LabelTitleBean s) {
+                    View view = LayoutInflater.from(getContext()).inflate(R.layout.item_label_title,
+                            flowLayout, false);
+                    FrameLayout ivImage = view.findViewById(R.id.itemFy);
+                    TextView rvTitle = view.findViewById(R.id.itemText);
+                    rvTitle.setText(s.getTitle());
+                    rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.color_1D1D1F));
+                    ivImage.setBackground(getContext().getDrawable(R.drawable.shape_rv_bg_corner_gray));
+                    if (selePosition != null && s != null){
+                        if (selePosition.getId() == s.getId()){
+                            ivImage.setBackground(getContext().getResources().getDrawable(R.drawable.shape_rv_bg_corner_red));
+                            rvTitle.setTextColor(getContext().getColor(R.color.white));
+                        }
+                    }else {
+                        if (s != null && s.getId() == 0){
+                            ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_red));
+                            rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.white));
+                        }
                     }
-                }else {
-                    if (s != null && s.getId() == 0){
-                        ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_red));
-                        rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.white));
+                    return view;
+                }
+            };
+
+            flowLayout.setAdapter(tagAdapter);
+            flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                @Override
+                public boolean onTagClick(View view, int position, FlowLayout parent) {
+
+                    LabelTitleBean titleBean = labelTypeList.get(position);
+                    selePosition = titleBean;
+                    tagAdapter.notifyDataChanged();
+                    labelClick(position);
+                    adapter2.setNewData(labelBitmapList);
+//                    labelListAdapter.setList(labelBitmapList);
+                    Log.d(TAG, "onItemClick: "+position);
+                    return false;
+                }
+            });
+        }else {
+            adapter1 = new BaseQuickAdapter<LabelTitleBean, BaseViewHolder>(R.layout.item_label_title) {
+                @Override
+                protected void convert(@NonNull BaseViewHolder viewHolder, LabelTitleBean s) {
+                    FrameLayout ivImage = viewHolder.getView(R.id.itemFy);
+                    TextView rvTitle = viewHolder.getView(R.id.itemText);
+                    rvTitle.setText(s.getTitle());
+                    rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.color_1D1D1F));
+                    ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_gray));
+                    if (selePosition != null && s != null){
+                        if (selePosition.getId() == s.getId()){
+                            ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_red));
+                            rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.white));
+                        }
+                    }else {
+                        if (s != null && s.getId() == 0){
+                            ivImage.setBackground(IminApplication.mContext.getResources().getDrawable(R.drawable.shape_rv_bg_corner_red));
+                            rvTitle.setTextColor(IminApplication.mContext.getColor(R.color.white));
+                        }
                     }
                 }
-            }
-        };
+            };
 
 
-        adapter1.setNewData(labelTypeList);
-        ryH.setAdapter(adapter1);
+            adapter1.setNewData(labelTypeList);
+            ryH.setAdapter(adapter1);
 
+            adapter1.setOnItemClickListener((adapter, view, position) -> {
+                LabelTitleBean titleBean = labelTypeList.get(position);
+                selePosition = titleBean;
+                adapter1.notifyDataSetChanged();
+                labelClick(position);
+                adapter2.setNewData(labelBitmapList);
+                Log.d(TAG, "onItemClick: "+position);
+            });
+
+
+        }
 
         adapter2 = new BaseQuickAdapter<LabelTitleBean, BaseViewHolder>(R.layout.item_label_rv) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, LabelTitleBean s) {
+
+
                 ImageView itemIv = viewHolder.getView(R.id.itemIv);
                 TextView itemText = viewHolder.getView(R.id.itemText);
+
                 if (s != null){
                     itemIv.setImageBitmap(s.getiMage());
                     itemText.setText(s.getTitle());
@@ -196,14 +278,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         adapter2.setNewData(labelBitmapList);
         ryV.setAdapter(adapter2);
 
-        adapter1.setOnItemClickListener((adapter, view, position) -> {
-            LabelTitleBean titleBean = labelTypeList.get(position);
-            selePosition = titleBean;
-            adapter1.notifyDataSetChanged();
-            labelClick(position);
-            adapter2.setNewData(labelBitmapList);
-            Log.d(TAG, "onItemClick: "+position);
-        });
+
     }
 
     private void labelClick(int position){
@@ -218,6 +293,9 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         Bitmap bitmap7 = LabelTemplateUtils.printLabelSize50x30_CN1();
         Bitmap bitmap8 = LabelTemplateUtils.printLabelSize50x30_CN2();
         Bitmap bitmap9 = LabelTemplateUtils.printLabelSize50x30_CN3();
+
+//        Bitmap bitmap10 = LabelTemplateUtils.printLabelSize50x30_CN21();
+//        Bitmap bitmap11 = LabelTemplateUtils.printLabelSize50x30EN21();
         if (position == 0){
             labelBitmapList.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
             labelBitmapList.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
@@ -228,6 +306,8 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             labelBitmapList.add(new LabelTitleBean(6,stringArray[4],50,30,bitmap7));
             labelBitmapList.add(new LabelTitleBean(7,stringArray[4],50,30,bitmap8));
             labelBitmapList.add(new LabelTitleBean(8,stringArray[4],50,30,bitmap9));
+//            labelBitmapList.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap10));
+//            labelBitmapList.add(new LabelTitleBean(10,stringArray[4],50,30,bitmap11));
         }else if (position == 1){
             labelBitmapList.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
             labelBitmapList.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));

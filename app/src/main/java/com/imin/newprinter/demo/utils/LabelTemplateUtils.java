@@ -17,11 +17,23 @@ import com.imin.printer.label.LabelQrCodeStyle;
 import com.imin.printer.label.LabelTextStyle;
 
 public class LabelTemplateUtils {
+
+    static int posX = 48;
+    static int labelLength = 56;//标签有效点
+    private static final class LabelUtilsHolder {
+        static final LabelTemplateUtils serialHelper = new LabelTemplateUtils();
+    }
+
+    public static LabelTemplateUtils getInstance() {
+        posX = (labelLength - 50) * 8;
+        return LabelUtilsHolder.serialHelper;
+    }
+
     public static Bitmap printLabelSize40x30_CN1(boolean isPrint){
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(40 * 8)
                 .setHeight(30 * 8)
-                .setPosX(128));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 40) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title1), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -54,7 +66,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(40 * 8)
                 .setHeight(30 * 8)
-                .setPosX(128));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 40) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title2), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -91,7 +103,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(40 * 8)
                 .setHeight(30 * 8)
-                .setPosX(128));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 40) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title3), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -129,7 +141,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(40 * 8)
                 .setHeight(30 * 8)
-                .setPosX(128));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 40) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title4), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -172,7 +184,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(40 * 8)
                 .setHeight(50 * 8)
-                .setPosX(128));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 40) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title5), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -230,7 +242,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(40 * 8)
                 .setHeight(60 * 8)
-                .setPosX(128));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 40) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title6), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -293,7 +305,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(50 * 8)
                 .setHeight(30 * 8)
-                .setPosX(48));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 50) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title7), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -327,7 +339,7 @@ public class LabelTemplateUtils {
                 .setTextSize(22));
 
         PrinterHelper.getInstance().labelAddQrCode(IminApplication.mContext.getString(R.string.content76), LabelQrCodeStyle.getQrCodeStyle()
-                .setPosX(300)
+                .setPosX(290)
                 .setPosY(145)
                 .setSize(3)
                 .setErrorLevel(ErrorLevel.H));
@@ -340,7 +352,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(50 * 8)
                 .setHeight(30 * 8)
-                .setPosX(48));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 50) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title8), LabelTextStyle.getTextStyle()
                 .setPosX(0)
                 .setPosY(60)
@@ -379,7 +391,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
                 .setWidth(50 * 8)
                 .setHeight(30 * 8)
-                .setPosX(48));
+                .setPosX(Utils.isPortrait()?48:((labelLength - 50) * 8)));
         PrinterHelper.getInstance().labelAddText(IminApplication.mContext.getString(R.string.title9), LabelTextStyle.getTextStyle()
                 .setPosX(40)
                 .setPosY(60)
@@ -409,181 +421,180 @@ public class LabelTemplateUtils {
 //        PrinterHelper.getInstance().labelPrintCanvas(1,null);
         return PrinterHelper.getInstance().getLabelBitmap();
     }
-    public static Bitmap printLabelSize50x30_CN21(){
-        PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
-                .setWidth(50 * 8)
-                .setHeight(30 * 8)
-                .setPosX(48));
-        PrinterHelper.getInstance().labelAddText("标签打印测试", LabelTextStyle.getTextStyle()
-                .setPosX(20)
-                .setPosY(40)
-                .setTextSize(28));
-
-        PrinterHelper.getInstance().labelAddText("富士苹果", LabelTextStyle.getTextStyle()
-                .setPosX(240)
-                .setPosY(35)
-                .setEnableBold(true)
-                .setTextSize(25));
-
-        PrinterHelper.getInstance().labelAddText("Fuji Apple", LabelTextStyle.getTextStyle()
-                .setPosX(240)
-                .setPosY(60)
-                .setTextSize(25));
-
-        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
-                .setStyle(Shape.PATH)
-                .setPosX(1)
-                .setPosY(65)
-                .setEndX(50 * 8 - 1)
-                .setEndY(65)
-                .setThick(2));
-
-        PrinterHelper.getInstance().labelAddText("包装日期 2024.12.25", LabelTextStyle.getTextStyle()
-                .setPosX(10)
-                .setPosY(80)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddText("重量（kg）/个     1.70", LabelTextStyle.getTextStyle()
-                .setPosX(205)
-                .setPosY(80)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
-                .setStyle(Shape.PATH)
-                .setPosX(1)
-                .setPosY(88)
-                .setEndX(50 * 8 - 1)
-                .setEndY(88)
-                .setThick(2));
-        PrinterHelper.getInstance().labelAddText("单价（元/kg）     9.98", LabelTextStyle.getTextStyle()
-                .setPosX(205)
-                .setPosY(105)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddText("总价（元）", LabelTextStyle.getTextStyle()
-                .setPosX(30)
-                .setPosY(120)
-                .setTextSize(24));
-
-        PrinterHelper.getInstance().labelAddText("16.98", LabelTextStyle.getTextStyle()
-                .setPosX(40)
-                .setPosY(160)
-                .setEnableBold(true)
-                .setTextSize(32));
-
-        PrinterHelper.getInstance().labelAddText("溯源码：101", LabelTextStyle.getTextStyle()
-                .setPosX(30)
-                .setPosY(195)
-                .setTextSize(19));
-
-        PrinterHelper.getInstance().labelAddBarCode("{B123456", LabelBarCodeStyle.getBarCodeStyle()
-                .setPosX(160)
-                .setPosY(120)
-                .setSymbology(Symbology.CODE128)
-                .setDotWidth(2)
-                .setBarHeight(50)
-                .setReadable(HumanReadable.POS_TWO));
-
-        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
-                .setStyle(Shape.PATH)
-                .setPosX(1)
-                .setPosY(205)
-                .setEndX(50 * 8 - 1)
-                .setEndY(205)
-                .setThick(2));
-
-        PrinterHelper.getInstance().labelAddText("地址：XX市XX区XX大道测试超市", LabelTextStyle.getTextStyle()
-                .setPosX(30)
-                .setPosY(225)
-                .setTextSize(14));
-
-        PrinterHelper.getInstance().labelPrintCanvas(1,null);
-        return PrinterHelper.getInstance().getLabelBitmap();
-    }
-
-
-    public static Bitmap printLabelSize50x30EN21(){
-        PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
-                .setWidth(50 * 8)
-                .setHeight(30 * 8)
-                .setPosX(48));
-        PrinterHelper.getInstance().labelAddText("Label Test Fuji Apple", LabelTextStyle.getTextStyle()
-                .setPosX(0)
-                .setPosY(40)
-                .setAlign(Align.CENTER)
-                .setTextSize(26));
-
-
-        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
-                .setStyle(Shape.PATH)
-                .setPosX(1)
-                .setPosY(60)
-                .setEndX(50 * 8 - 1)
-                .setEndY(60)
-                .setThick(2));
-
-        PrinterHelper.getInstance().labelAddText("PACKED 2024.12.25", LabelTextStyle.getTextStyle()
-                .setPosX(10)
-                .setPosY(78)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddText("WT/lb                1.70", LabelTextStyle.getTextStyle()
-                .setPosX(195)
-                .setPosY(78)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
-                .setStyle(Shape.PATH)
-                .setPosX(1)
-                .setPosY(88)
-                .setEndX(50 * 8 - 1)
-                .setEndY(88)
-                .setThick(2));
-        PrinterHelper.getInstance().labelAddText("PRICE PER lb    9.98", LabelTextStyle.getTextStyle()
-                .setPosX(195)
-                .setPosY(105)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddText("TOTAL PRICE", LabelTextStyle.getTextStyle()
-                .setPosX(20)
-                .setPosY(120)
-                .setTextSize(22));
-
-        PrinterHelper.getInstance().labelAddText("$16.98", LabelTextStyle.getTextStyle()
-                .setPosX(30)
-                .setPosY(160)
-                .setEnableBold(true)
-                .setTextSize(26));
-
-        PrinterHelper.getInstance().labelAddText("TRACE NO：101", LabelTextStyle.getTextStyle()
-                .setPosX(30)
-                .setPosY(195)
-                .setTextSize(15));
-
-        PrinterHelper.getInstance().labelAddBarCode("{B123456", LabelBarCodeStyle.getBarCodeStyle()
-                .setPosX(160)
-                .setPosY(120)
-                .setSymbology(Symbology.CODE128)
-                .setDotWidth(2)
-                .setBarHeight(50)
-                .setReadable(HumanReadable.POS_TWO));
-
-        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
-                .setStyle(Shape.PATH)
-                .setPosX(1)
-                .setPosY(205)
-                .setEndX(50 * 8 - 1)
-                .setEndY(205)
-                .setThick(2));
-
-        PrinterHelper.getInstance().labelAddText("Addr:Label Test Supermarket", LabelTextStyle.getTextStyle()
-                .setPosX(30)
-                .setPosY(225)
-                .setTextSize(14));
-
-        PrinterHelper.getInstance().labelPrintCanvas(1,null);
-        return PrinterHelper.getInstance().getLabelBitmap();
-    }
-
+//    public static Bitmap printLabelSize50x30_CN21(){
+//        PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
+//                .setWidth(50 * 8)
+//                .setHeight(30 * 8)
+//                .setPosX(48));
+//        PrinterHelper.getInstance().labelAddText("标签打印测试", LabelTextStyle.getTextStyle()
+//                .setPosX(20)
+//                .setPosY(40)
+//                .setTextSize(28));
+//
+//        PrinterHelper.getInstance().labelAddText("富士苹果", LabelTextStyle.getTextStyle()
+//                .setPosX(240)
+//                .setPosY(35)
+//                .setEnableBold(true)
+//                .setTextSize(25));
+//
+//        PrinterHelper.getInstance().labelAddText("Fuji Apple", LabelTextStyle.getTextStyle()
+//                .setPosX(240)
+//                .setPosY(60)
+//                .setTextSize(25));
+//
+//        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+//                .setStyle(Shape.PATH)
+//                .setPosX(1)
+//                .setPosY(65)
+//                .setEndX(50 * 8 - 1)
+//                .setEndY(65)
+//                .setThick(2));
+//
+//        PrinterHelper.getInstance().labelAddText("包装日期 2024.12.25", LabelTextStyle.getTextStyle()
+//                .setPosX(20)
+//                .setPosY(80)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddText("重量（kg）/个     1.70", LabelTextStyle.getTextStyle()
+//                .setPosX(205)
+//                .setPosY(80)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+//                .setStyle(Shape.PATH)
+//                .setPosX(1)
+//                .setPosY(88)
+//                .setEndX(50 * 8 - 1)
+//                .setEndY(88)
+//                .setThick(2));
+//        PrinterHelper.getInstance().labelAddText("单价（元/kg）     9.98", LabelTextStyle.getTextStyle()
+//                .setPosX(205)
+//                .setPosY(105)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddText("总价（元）", LabelTextStyle.getTextStyle()
+//                .setPosX(30)
+//                .setPosY(120)
+//                .setTextSize(24));
+//
+//        PrinterHelper.getInstance().labelAddText("16.98", LabelTextStyle.getTextStyle()
+//                .setPosX(40)
+//                .setPosY(160)
+//                .setEnableBold(true)
+//                .setTextSize(32));
+//
+//        PrinterHelper.getInstance().labelAddText("溯源码：101", LabelTextStyle.getTextStyle()
+//                .setPosX(30)
+//                .setPosY(195)
+//                .setTextSize(19));
+//
+//        PrinterHelper.getInstance().labelAddBarCode("{B123456", LabelBarCodeStyle.getBarCodeStyle()
+//                .setPosX(160)
+//                .setPosY(120)
+//                .setSymbology(Symbology.CODE128)
+//                .setDotWidth(2)
+//                .setBarHeight(50)
+//                .setReadable(HumanReadable.POS_TWO));
+//
+//        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+//                .setStyle(Shape.PATH)
+//                .setPosX(1)
+//                .setPosY(205)
+//                .setEndX(50 * 8 - 1)
+//                .setEndY(205)
+//                .setThick(2));
+//
+//        PrinterHelper.getInstance().labelAddText("地址：XX市XX区XX大道测试超市", LabelTextStyle.getTextStyle()
+//                .setPosX(30)
+//                .setPosY(225)
+//                .setTextSize(14));
+//
+////        PrinterHelper.getInstance().labelPrintCanvas(1,null);
+//        return PrinterHelper.getInstance().getLabelBitmap();
+//    }
+//
+//
+//    public static Bitmap printLabelSize50x30EN21(){
+//        PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
+//                .setWidth(50 * 8)
+//                .setHeight(30 * 8)
+//                .setPosX(48));
+//        PrinterHelper.getInstance().labelAddText("Label Test Fuji Apple", LabelTextStyle.getTextStyle()
+//                .setPosX(0)
+//                .setPosY(40)
+//                .setAlign(Align.CENTER)
+//                .setTextSize(26));
+//
+//
+//        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+//                .setStyle(Shape.PATH)
+//                .setPosX(1)
+//                .setPosY(60)
+//                .setEndX(50 * 8 - 1)
+//                .setEndY(60)
+//                .setThick(2));
+//
+//        PrinterHelper.getInstance().labelAddText("PACKED 2024.12.25", LabelTextStyle.getTextStyle()
+//                .setPosX(20)
+//                .setPosY(78)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddText("WT/lb                1.70", LabelTextStyle.getTextStyle()
+//                .setPosX(195)
+//                .setPosY(78)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+//                .setStyle(Shape.PATH)
+//                .setPosX(1)
+//                .setPosY(88)
+//                .setEndX(50 * 8 - 1)
+//                .setEndY(88)
+//                .setThick(2));
+//        PrinterHelper.getInstance().labelAddText("PRICE PER lb    9.98", LabelTextStyle.getTextStyle()
+//                .setPosX(195)
+//                .setPosY(105)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddText("TOTAL PRICE", LabelTextStyle.getTextStyle()
+//                .setPosX(20)
+//                .setPosY(120)
+//                .setTextSize(22));
+//
+//        PrinterHelper.getInstance().labelAddText("$16.98", LabelTextStyle.getTextStyle()
+//                .setPosX(30)
+//                .setPosY(160)
+//                .setEnableBold(true)
+//                .setTextSize(26));
+//
+//        PrinterHelper.getInstance().labelAddText("TRACE NO：101", LabelTextStyle.getTextStyle()
+//                .setPosX(30)
+//                .setPosY(195)
+//                .setTextSize(15));
+//
+//        PrinterHelper.getInstance().labelAddBarCode("{B123456", LabelBarCodeStyle.getBarCodeStyle()
+//                .setPosX(160)
+//                .setPosY(120)
+//                .setSymbology(Symbology.CODE128)
+//                .setDotWidth(2)
+//                .setBarHeight(50)
+//                .setReadable(HumanReadable.POS_TWO));
+//
+//        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+//                .setStyle(Shape.PATH)
+//                .setPosX(1)
+//                .setPosY(205)
+//                .setEndX(50 * 8 - 1)
+//                .setEndY(205)
+//                .setThick(2));
+//
+//        PrinterHelper.getInstance().labelAddText("Addr:Label Test Supermarket", LabelTextStyle.getTextStyle()
+//                .setPosX(30)
+//                .setPosY(225)
+//                .setTextSize(14));
+//
+////        PrinterHelper.getInstance().labelPrintCanvas(1,null);
+//        return PrinterHelper.getInstance().getLabelBitmap();
+//    }
 
 }

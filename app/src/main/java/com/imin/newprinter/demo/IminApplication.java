@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 
 
@@ -16,12 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.feature.tui.util.XUiDisplayHelper;
+import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.InitPrinterCallback;
 import com.imin.printer.PrinterHelper;
 
 import me.goldze.mvvmhabit.base.BaseApplication;
 import me.goldze.mvvmhabit.crash.CaocConfig;
 import me.goldze.mvvmhabit.utils.KLog;
+import me.goldze.mvvmhabit.utils.Utils;
 
 
 public class IminApplication extends Application {
@@ -105,17 +108,60 @@ public class IminApplication extends Application {
                 functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_STATUS, PRINTER_UPDATE_DELAY);
                 int screenWidth = XUiDisplayHelper.getScreenWidth(getContext());
                 int screenHeight = XUiDisplayHelper.getScreenHeight(getContext());
+                if (com.imin.newprinter.demo.utils.Utils.compareStringToInt(PrinterHelper.getInstance().getServiceVersion(),"2.0.11_2412221202") >=0){//判断是否 > 20241223
+                    PrinterHelper.getInstance().labelGetPrinterMode(new INeoPrinterCallback() {
+                        @Override
+                        public void onRunResult(boolean isSuccess) throws RemoteException {
 
-                if (screenWidth > screenHeight) {
+                        }
 
-                    functionTestHandler.sendEmptyMessageDelayed(PRINTER_GET_PARAMETER, PRINTER_UPDATE_DELAY + PRINTER_UPDATE_DELAY*2);
-                    functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_PARAMETER, PRINTER_UPDATE_DELAY * 3);
+                        @Override
+                        public void onReturnString(String result) throws RemoteException {
+                            if (!com.imin.newprinter.demo.utils.Utils.isEmpty(result)) {
+                                if (result.equals("Receipt")){
+
+                                }else {
+
+                                }
+                            }
+                            com.imin.newprinter.demo.utils.Utils.printModel = result;
+
+                            if (screenWidth > screenHeight) {
+                                functionTestHandler.sendEmptyMessageDelayed(PRINTER_GET_PARAMETER, PRINTER_UPDATE_DELAY + PRINTER_UPDATE_DELAY*2);
+                                functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_PARAMETER, PRINTER_UPDATE_DELAY * 3);
+                            }
+
+                            if (currentActivity != null){
+                                MainActivity activity = (MainActivity) currentActivity;
+                                activity.initViewData();
+                            }
+                        }
+
+                        @Override
+                        public void onRaiseException(int code, String msg) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onPrintResult(int code, String msg) throws RemoteException {
+
+                        }
+                    });
+
+                }else {
+                    if (screenWidth > screenHeight) {
+                        functionTestHandler.sendEmptyMessageDelayed(PRINTER_GET_PARAMETER, PRINTER_UPDATE_DELAY + PRINTER_UPDATE_DELAY*2);
+                        functionTestHandler.sendEmptyMessageDelayed(PRINTER_UPDATE_PARAMETER, PRINTER_UPDATE_DELAY * 3);
+                    }
+
+                    if (currentActivity != null){
+                        MainActivity activity = (MainActivity) currentActivity;
+                        activity.initViewData();
+                    }
+
                 }
 
-                if (currentActivity != null){
-                    MainActivity activity = (MainActivity) currentActivity;
-                    activity.initViewData();
-                }
+
             }
 
             @Override

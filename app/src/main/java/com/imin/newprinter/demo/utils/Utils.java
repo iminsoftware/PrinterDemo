@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -18,7 +19,9 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -39,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -632,8 +637,70 @@ public class Utils {
         }
     }
 
+    public static String printModel = "Receipt";// receipt 小票 ; Label 标签
+
     public static boolean isNingzLabel(){
         Log.d(TAG, "isNingzLabel: " + PrinterHelper.getInstance().getPrinterSupplierName());
-        return "NING_ZHI".equals(PrinterHelper.getInstance().getPrinterSupplierName());
+        return "NING_ZHI".equals(PrinterHelper.getInstance().getPrinterSupplierName()) || !printModel.equalsIgnoreCase("Receipt");
+    }
+
+    public static boolean isPortrait(){
+        return IminApplication.mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    /**
+     * 0 等于  ；  1 需要升级并且取值 left  ； -1 取值right
+     * @param left
+     * @param right
+     * left >right =1 ;left< right=-1
+     * @return
+     */
+    public static int compareStringToInt(String left, String right) {
+
+        int ret = -1;
+        if (Utils.isEmpty(left) && Utils.isEmpty(right)) {
+            return 0;
+        }
+
+        if (Utils.isEmpty(left)) {
+            return -1;
+        }
+
+        if (Utils.isEmpty(right)) {
+            return 1;
+        }
+
+        if (left.equals(right)) {
+            ret = 0;
+        } else {
+            long aLife = Utils.getStringNumber(left.trim());
+            long bRight = Utils.getStringNumber(right.trim());
+            if (aLife>bRight){
+                return 1;
+            }else if (aLife==bRight){
+                return 0;
+            }else {
+                return -1;
+            }
+//            ret = left.compareTo(right);
+        }
+
+        return ret;
+    }
+
+    //获取文本里面的数字
+    public static long getStringNumber(String s){
+        if (isEmpty(s))return 0;
+        StringBuilder number = new StringBuilder();
+        String pattern = "\\d+";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(s);
+        while (m.find()) {
+            number.append(m.group());
+        }
+        if (number.length() > 0) {
+            return Long.parseLong(number.toString());
+        }
+        return 0;
     }
 }

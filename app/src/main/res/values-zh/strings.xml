@@ -347,7 +347,7 @@
     <string name="connect_mode">连接方式</string>
     <string name="printer_parameter">打印机参数</string>
     <string name="about">关于</string>
-    <string name="about_printer_demo">iMinPrinterDemo适用于iMin系列内置打印机POS设备，iMinPrinterDemo集成了AIDL和Bluetooth两种连接方式，并且提供了一系列打印测试模块，帮助开发者更快的接入打印功能</string>
+    <string name="about_printer_demo">iMinPrinterDemo适用于iMin系列内置打印机POS设备，并且提供了一系列打印测试模块，帮助开发者更快的接入打印功能</string><!--iMinPrinterDemo集成了AIDL和Bluetooth两种连接方式，-->
 
     <string name="connect_aidl">AIDL</string>
     <string name="connect_bluetooth">Bluetooth</string>

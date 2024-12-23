@@ -315,7 +315,7 @@
     <string name="connect_mode">Connection method</string>
     <string name="printer_parameter">Printer parameters</string>
     <string name="about">About</string>
-    <string name="about_printer_demo">iMinPrinterDemo is suitable for iMin series POS devices with built-in printers. iMinPrinterDemo integrates two connection methods: AIDL and Bluetooth. It also provides a series of print test modules to help developers quickly integrate printing functionality</string>
+    <string name="about_printer_demo">iMinPrinterDemo is suitable for iMin series POS devices with built-in printers. It also provides a series of print test modules to help developers quickly integrate printing functionality</string><!--iMinPrinterDemo integrates two connection methods: AIDL and Bluetooth.-->
     <string name="connect_aidl">AIDL</string>
     <string name="connect_bluetooth">Bluetooth</string>
     <string name="all">All</string>

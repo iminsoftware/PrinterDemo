@@ -98,13 +98,20 @@
                 android:layout_height="match_parent"
                 android:visibility="gone"
                 android:orientation="vertical">
+                <com.imin.newprinter.demo.view.TagFlowLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ryH"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:overScrollMode="never"
                     android:orientation="horizontal"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ryV"
                     android:layout_width="match_parent"
