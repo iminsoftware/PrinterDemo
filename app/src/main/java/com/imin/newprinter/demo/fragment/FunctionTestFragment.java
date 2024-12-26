@@ -65,10 +65,15 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
     private RecyclerView ryH;
     private RecyclerView ryV;
 
-    private List<LabelTitleBean> labelTypeList,labelBitmapList;
+    private List<LabelTitleBean> labelTypeList;
     private String[] stringArray;
     private StaggeredGridLayoutManager layoutManager;
     private TagFlowLayout flowLayout;
+//    private RvBaseAdapter rvBaseAdapter;
+    private List<LabelTitleBean> titleBeans;
+
+//    private List<LabelTitleBean> titleBeans;
+    private int selectTabPositon = 0;
 
 
     @Override
@@ -97,6 +102,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         ryH = binding.getRoot().findViewById(R.id.ryH);
         ryV = binding.getRoot().findViewById(R.id.ryV);
         flowLayout = binding.getRoot().findViewById(R.id.tabLayout);
+        View emptyView = binding.getRoot().findViewById(R.id.emptyView);
 
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -117,6 +123,9 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             }
         });
         ryV.addItemDecoration(new SpacesItemDecoration(4,10));
+        emptyView.setOnClickListener(view -> {
+
+        });
     }
 
     LabelTitleBean selePosition = null;
@@ -169,7 +178,6 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             titleBean.setTitle(stringArray[i]);
             labelTypeList.add(titleBean);
         }
-        labelClick(0);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             TagAdapter<LabelTitleBean> tagAdapter = new TagAdapter<LabelTitleBean>(labelTypeList) {
                 @Override
@@ -197,6 +205,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             };
 
             flowLayout.setAdapter(tagAdapter);
+
             flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
                 @Override
                 public boolean onTagClick(View view, int position, FlowLayout parent) {
@@ -204,11 +213,15 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
                     LabelTitleBean titleBean = labelTypeList.get(position);
                     selePosition = titleBean;
                     tagAdapter.notifyDataChanged();
-                    labelClick(position);
-                    adapter2.setNewData(labelBitmapList);
-//                    labelListAdapter.setList(labelBitmapList);
-                    Log.d(TAG, "onItemClick: "+position);
-                    return false;
+//                    adapter2.setList(null);
+//                    adapter2.setList(labelClick(position));
+//                    ryV.removeAllViews();
+//                    ryV.requestLayout();
+                    setLabelRvAdapter(labelClick(titleBean.getId()));
+                    // 重新设置LayoutManager（如果必要）
+                    Log.d(TAG, "flowLayout  onItemClick:==> "+position+"        ");
+
+                    return true;
                 }
             });
         }else {
@@ -242,19 +255,17 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
                 LabelTitleBean titleBean = labelTypeList.get(position);
                 selePosition = titleBean;
                 adapter1.notifyDataSetChanged();
-                labelClick(position);
-                adapter2.setNewData(labelBitmapList);
+                setLabelRvAdapter(labelClick(selectTabPositon));
                 Log.d(TAG, "onItemClick: "+position);
             });
 
 
         }
 
+//        rvBaseAdapter = new RvBaseAdapter(new ArrayList<>());
         adapter2 = new BaseQuickAdapter<LabelTitleBean, BaseViewHolder>(R.layout.item_label_rv) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, LabelTitleBean s) {
-
-
                 ImageView itemIv = viewHolder.getView(R.id.itemIv);
                 TextView itemText = viewHolder.getView(R.id.itemText);
 
@@ -266,23 +277,42 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         };
 
         adapter2.setOnItemClickListener((adapter, view, position) -> {
-            if (labelBitmapList != null){
-                LabelTitleBean titleBean = labelBitmapList.get(position);
+            Log.d(TAG, "adapter2  onItemClick11: " + position + " , labelBitmapList.size()==> " + "  ,,titleBeans.size=>   "+titleBeans.size()+" " +
+                    "    "+selectTabPositon+"    "+ryV.getChildCount());
+            if (adapter2.getData() != null){
+                LabelTitleBean titleBean = adapter2.getData().get(position);
                 if (titleBean != null){
+                    Log.d(TAG, "adapter2  onItemClick000: "+position+" , labelBitmapList.size()==> "+"  ,,   "+titleBean.getHeight());
                     PrinterHelper.getInstance().labelPrintBitmap(titleBean.getiMage(),titleBean.getWidth(),titleBean.getHeight(),null);
                 }
             }
-            Log.d(TAG, "onItemClick: "+position);
+            Log.d(TAG, "adapter2  onItemClick: " + position + " , labelBitmapList.size()==> " + "  ,,titleBeans.size=>   "+titleBeans.size()+" " +
+                        "    "+selectTabPositon);
         });
 
-        adapter2.setNewData(labelBitmapList);
+
         ryV.setAdapter(adapter2);
+
+
+        setLabelRvAdapter(labelClick(0));
+//        rvBaseAdapter.setOnItemClickListener(new RvBaseAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(LabelTitleBean titleBean, int position) {
+//                if (titleBean != null) {
+//                    Log.d(TAG, "adapter2  onItemClick000: " + position + " , labelBitmapList.size()==> " + "  ,,   " + titleBean.getWidth());
+//                    PrinterHelper.getInstance().labelPrintBitmap(titleBean.getiMage(), titleBean.getWidth(), titleBean.getHeight(), null);
+//                }
+//                Log.d(TAG, "adapter2  onItemClick: " + position + " , labelBitmapList.size()==> " + "  ,,titleBeans.size=>   "+titleBeans.size()+" " +
+//                        "   "+labelClick(selectTabPositon).size()+"    "+selectTabPositon+"      "+selePosition.getId());
+//            }
+//        });
 
 
     }
 
-    private void labelClick(int position){
-        labelBitmapList = new ArrayList<>();
+    private List<LabelTitleBean> labelClick(int position){
+        selectTabPositon = position;
+        titleBeans = new ArrayList<>();
         Bitmap bitmap1 = LabelTemplateUtils.printLabelSize40x30_CN1(false);
         Bitmap bitmap2 = LabelTemplateUtils.printLabelSize40x30_CN2(false);
         Bitmap bitmap3 = LabelTemplateUtils.printLabelSize40x30_CN3(false);
@@ -297,34 +327,41 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
 //        Bitmap bitmap10 = LabelTemplateUtils.printLabelSize50x30_CN21();
 //        Bitmap bitmap11 = LabelTemplateUtils.printLabelSize50x30EN21();
         if (position == 0){
-            labelBitmapList.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
-            labelBitmapList.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
-            labelBitmapList.add(new LabelTitleBean(2,stringArray[1],40,30,bitmap3));
-            labelBitmapList.add(new LabelTitleBean(3,stringArray[1],40,30,bitmap4));
-            labelBitmapList.add(new LabelTitleBean(4,stringArray[2],40,50,bitmap5));
-            labelBitmapList.add(new LabelTitleBean(5,stringArray[3],40,60,bitmap6));
-            labelBitmapList.add(new LabelTitleBean(6,stringArray[4],50,30,bitmap7));
-            labelBitmapList.add(new LabelTitleBean(7,stringArray[4],50,30,bitmap8));
-            labelBitmapList.add(new LabelTitleBean(8,stringArray[4],50,30,bitmap9));
+            titleBeans.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
+            titleBeans.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
+            titleBeans.add(new LabelTitleBean(2,stringArray[1],40,30,bitmap3));
+            titleBeans.add(new LabelTitleBean(3,stringArray[1],40,30,bitmap4));
+            titleBeans.add(new LabelTitleBean(4,stringArray[2],40,50,bitmap5));
+            titleBeans.add(new LabelTitleBean(5,stringArray[3],40,60,bitmap6));
+            titleBeans.add(new LabelTitleBean(6,stringArray[4],50,30,bitmap7));
+            titleBeans.add(new LabelTitleBean(7,stringArray[4],50,30,bitmap8));
+            titleBeans.add(new LabelTitleBean(8,stringArray[4],50,30,bitmap9));
 //            labelBitmapList.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap10));
 //            labelBitmapList.add(new LabelTitleBean(10,stringArray[4],50,30,bitmap11));
         }else if (position == 1){
-            labelBitmapList.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
-            labelBitmapList.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
-            labelBitmapList.add(new LabelTitleBean(2,stringArray[1],40,30,bitmap3));
-            labelBitmapList.add(new LabelTitleBean(3,stringArray[1],40,30,bitmap4));
+            titleBeans.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
+            titleBeans.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
+            titleBeans.add(new LabelTitleBean(2,stringArray[1],40,30,bitmap3));
+            titleBeans.add(new LabelTitleBean(3,stringArray[1],40,30,bitmap4));
         }else if (position == 2){
-            labelBitmapList.add(new LabelTitleBean(0,stringArray[2],40,50,bitmap5));
+            titleBeans.add(new LabelTitleBean(0,stringArray[2],40,50,bitmap5));
         }else if (position == 3){
-            labelBitmapList.add(new LabelTitleBean(0,stringArray[3],40,60,bitmap6));
+            titleBeans.add(new LabelTitleBean(0,stringArray[3],40,60,bitmap6));
         } else if (position == 4) {
-            labelBitmapList.add(new LabelTitleBean(0,stringArray[4],50,30,bitmap7));
-            labelBitmapList.add(new LabelTitleBean(1,stringArray[4],50,30,bitmap8));
-            labelBitmapList.add(new LabelTitleBean(2,stringArray[4],50,30,bitmap9));
+            titleBeans.add(new LabelTitleBean(0,stringArray[4],50,30,bitmap7));
+            titleBeans.add(new LabelTitleBean(1,stringArray[4],50,30,bitmap8));
+            titleBeans.add(new LabelTitleBean(2,stringArray[4],50,30,bitmap9));
         }
 
+        Log.d(TAG, "labelClick  onItemClick: " + position+ "  ,,titleBeans.size=>   "+titleBeans.size());
+        return titleBeans;
     }
 
+    private void setLabelRvAdapter(List<LabelTitleBean> list){
+        adapter2.getData().clear();
+        adapter2.setList(list);
+
+    }
     @Override
     public void initViewObservable() {
         super.initViewObservable();
@@ -340,6 +377,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             switchFragment(position);
 
         });
+
 
 
         setting.setOnClickListener(v -> {

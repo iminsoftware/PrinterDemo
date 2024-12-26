@@ -83,6 +83,10 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <View
+                android:id="@+id/emptyView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
@@ -95,7 +99,7 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llyLabel"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:orientation="vertical">
                 <com.imin.newprinter.demo.view.TagFlowLayout
@@ -112,13 +116,12 @@
                     android:overScrollMode="never"
                     android:orientation="horizontal"/>
 
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ryV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                    app:spanCount="3"
                     android:overScrollMode="never" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
