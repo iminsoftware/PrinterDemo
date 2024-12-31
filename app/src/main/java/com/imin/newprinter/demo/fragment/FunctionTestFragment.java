@@ -255,7 +255,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
                 LabelTitleBean titleBean = labelTypeList.get(position);
                 selePosition = titleBean;
                 adapter1.notifyDataSetChanged();
-                setLabelRvAdapter(labelClick(selectTabPositon));
+                setLabelRvAdapter(labelClick(position));
                 Log.d(TAG, "onItemClick: "+position);
             });
 
@@ -323,6 +323,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         Bitmap bitmap7 = LabelTemplateUtils.printLabelSize50x30_CN1();
         Bitmap bitmap8 = LabelTemplateUtils.printLabelSize50x30_CN2();
         Bitmap bitmap9 = LabelTemplateUtils.printLabelSize50x30_CN3();
+//        Bitmap bitmap12 = LabelTemplateUtils.printLabel50x301();
 
 //        Bitmap bitmap10 = LabelTemplateUtils.printLabelSize50x30_CN21();
 //        Bitmap bitmap11 = LabelTemplateUtils.printLabelSize50x30EN21();
@@ -336,6 +337,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             titleBeans.add(new LabelTitleBean(6,stringArray[4],50,30,bitmap7));
             titleBeans.add(new LabelTitleBean(7,stringArray[4],50,30,bitmap8));
             titleBeans.add(new LabelTitleBean(8,stringArray[4],50,30,bitmap9));
+//            titleBeans.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap12));
 //            labelBitmapList.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap10));
 //            labelBitmapList.add(new LabelTitleBean(10,stringArray[4],50,30,bitmap11));
         }else if (position == 1){
@@ -351,6 +353,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             titleBeans.add(new LabelTitleBean(0,stringArray[4],50,30,bitmap7));
             titleBeans.add(new LabelTitleBean(1,stringArray[4],50,30,bitmap8));
             titleBeans.add(new LabelTitleBean(2,stringArray[4],50,30,bitmap9));
+//            titleBeans.add(new LabelTitleBean(3,stringArray[4],50,30,bitmap12));
         }
 
         Log.d(TAG, "labelClick  onItemClick: " + position+ "  ,,titleBeans.size=>   "+titleBeans.size());

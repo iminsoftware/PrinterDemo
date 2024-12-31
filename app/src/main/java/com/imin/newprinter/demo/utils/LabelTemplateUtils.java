@@ -1,6 +1,7 @@
 package com.imin.newprinter.demo.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.imin.newprinter.demo.IminApplication;
 import com.imin.newprinter.demo.R;
@@ -12,6 +13,7 @@ import com.imin.printer.enums.Shape;
 import com.imin.printer.enums.Symbology;
 import com.imin.printer.label.LabelAreaStyle;
 import com.imin.printer.label.LabelBarCodeStyle;
+import com.imin.printer.label.LabelBitmapStyle;
 import com.imin.printer.label.LabelCanvasStyle;
 import com.imin.printer.label.LabelQrCodeStyle;
 import com.imin.printer.label.LabelTextStyle;
@@ -596,5 +598,67 @@ public class LabelTemplateUtils {
 ////        PrinterHelper.getInstance().labelPrintCanvas(1,null);
 //        return PrinterHelper.getInstance().getLabelBitmap();
 //    }
+
+    public static Bitmap printLabel50x301(){
+        PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
+                .setWidth(50 * 8)
+                .setHeight(30 * 8)
+                .setPosX(0));
+        PrinterHelper.getInstance().labelAddText("Hi，iMin 先生", LabelTextStyle.getTextStyle()
+                .setPosX(20)
+                .setPosY(40)
+                .setTextSize(28));
+
+        PrinterHelper.getInstance().labelAddText("335", LabelTextStyle.getTextStyle()
+                .setPosX(30)
+                .setPosY(85)
+                .setEnableBold(true)
+                .setTextSize(35));
+
+        PrinterHelper.getInstance().labelAddText("[热]：", LabelTextStyle.getTextStyle()
+                .setPosX(30)
+                .setPosY(113)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddText("第100/102 杯", LabelTextStyle.getTextStyle()
+                .setPosX(120)
+                .setPosY(85)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddText("陨石生椰拿铁", LabelTextStyle.getTextStyle()
+                .setPosX(120)
+                .setPosY(113)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddText("不另外加糖", LabelTextStyle.getTextStyle()
+                .setPosX(30)
+                .setPosY(148)
+                .setEnableBold(true)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddText("日期： ", LabelTextStyle.getTextStyle()
+                .setPosX(30)
+                .setPosY(195)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddText("2024/12/30   17：20 ", LabelTextStyle.getTextStyle()
+                .setPosX(120)
+                .setPosY(195)
+                .setEnableBold(true)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddText("建议尽快饮用，风味更佳 ", LabelTextStyle.getTextStyle()
+                .setPosX(30)
+                .setPosY(225)
+                .setTextSize(22));
+
+        PrinterHelper.getInstance().labelAddBitmap(BitmapFactory.decodeResource(IminApplication.mContext.getResources(), R.drawable.luckin_coffee), LabelBitmapStyle.getBitmapStyle()
+                .setPosX(290)
+                .setPosY(30)
+                .setWidth(80)
+                .setHeight(80));
+
+        return PrinterHelper.getInstance().getLabelBitmap();
+    }
 
 }
