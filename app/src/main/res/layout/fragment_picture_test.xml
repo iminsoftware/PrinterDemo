@@ -71,6 +71,11 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             app:bv_text_content_color="@color/xui_config_color_white" />
+        <Button
+            android:id="@+id/btn_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

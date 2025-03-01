@@ -1,7 +1,11 @@
 package com.imin.newprinter.demo.fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +27,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.feature.tui.dialog.builder.SeekbarDialogBuilder;
@@ -44,6 +50,7 @@ import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @Author: Mark
@@ -197,7 +204,48 @@ public class PictureFragment extends BaseListFragment<FragmentPictureTestBinding
             pictureHandler.sendEmptyMessage(PRINTER_BITMAP);
         });
 
+        Button btn_menu = binding.getRoot().findViewById(R.id.btn_menu);
+        btn_menu.setOnClickListener(view -> {
+//            Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.ic7236);
+//            Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.a1110);
+//            PrinterHelper.getInstance().printBitmap(toGrayscale(bitmap1),null);
+//            PrinterHelper.getInstance().printBitmap(toGrayscale(bitmap2),null);
+//            PrinterHelper.getInstance().printBitmapColorChart(bitmap1,null);
+//            PrinterHelper.getInstance().printBitmapColorChart(bitmap2,null);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Bitmap bitmap1 = Glide.with(getContext()).asBitmap()
+                                .load("https://oss.91xft.cn/x-orchard/console/common/20241129164235_iShot_2024-11-29_16.40.55.png")
+                                .submit(160,160).get();
+                        PrinterHelper.getInstance().printBitmapColorChart(bitmap1,null);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+
+        });
+
     }
+
+    private static Bitmap toGrayscale(Bitmap bmpOriginal) {
+        int height = bmpOriginal.getHeight();
+        int width = bmpOriginal.getWidth();
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0F);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0.0F, 0.0F, paint);
+        return bmpGrayscale;
+    }
+
 
     private void vectorToBitmap() {
 
