@@ -338,8 +338,8 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             titleBeans.add(new LabelTitleBean(7,stringArray[4],50,30,bitmap8));
             titleBeans.add(new LabelTitleBean(8,stringArray[4],50,30,bitmap9));
 //            titleBeans.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap12));
-//            labelBitmapList.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap10));
-//            labelBitmapList.add(new LabelTitleBean(10,stringArray[4],50,30,bitmap11));
+//            titleBeans.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap10));
+//            titleBeans.add(new LabelTitleBean(10,stringArray[4],50,30,bitmap11));
         }else if (position == 1){
             titleBeans.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
             titleBeans.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
