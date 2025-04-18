@@ -235,11 +235,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             }else if (position == 10){
                 if (wifiConnectFragment == null){
                     wifiConnectFragment = new WifiConnectFragment();
+                    wifiConnectFragment.setCallback(this);
                 }
                 preFragment = wifiConnectFragment;
             }else {
                 if (btConnectFragment == null){
                     btConnectFragment = new BtConnectFragment();
+                    btConnectFragment.setCallback(this);
                 }
                 preFragment = btConnectFragment;
             }

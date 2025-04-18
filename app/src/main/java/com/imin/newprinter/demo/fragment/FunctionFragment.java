@@ -93,6 +93,28 @@ public class FunctionFragment extends BaseFragment {
             }
         });
         binding.ryV.addItemDecoration(new SpacesItemDecoration(4,10));
+
+        binding.usbLy.setOnClickListener(view -> {
+            switchFragment(-1);
+            binding.usbIv.setImageResource(R.drawable.ic_check);
+            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+            binding.btIv.setImageResource(R.drawable.ic_uncheck);
+        });
+
+        binding.wifiLy.setOnClickListener(view -> {
+            switchFragment(10);
+            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+            binding.wifiIv.setImageResource(R.drawable.ic_check);
+            binding.btIv.setImageResource(R.drawable.ic_uncheck);
+        });
+
+        binding.btLy.setOnClickListener(view -> {
+            switchFragment(11);
+            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+            binding.btIv.setImageResource(R.drawable.ic_check);
+        });
+
     }
 
 
