@@ -22,15 +22,20 @@ import com.feature.tui.util.XUiDisplayHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.imin.newprinter.demo.BR;
+import com.imin.newprinter.demo.IminApplication;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.adapter.CommonTestAdapter;
 import com.imin.newprinter.demo.adapter.CustomDividerItemDecoration;
 import com.imin.newprinter.demo.bean.FunctionTestBean;
 import com.imin.newprinter.demo.databinding.FragmentPictureTestBinding;
+import com.imin.newprinter.demo.dialog.BaseDialog;
+import com.imin.newprinter.demo.dialog.SelectDialog;
 import com.imin.newprinter.demo.view.TitleLayout;
 import com.imin.newprinter.demo.viewmodel.FragmentCommonViewModel;
+import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,6 +50,7 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
 
     private List<DialogItemDescription> mConnectModeList;
     private int mConnectMode = 0;
+    private int printType;
 
 
     @Override
@@ -68,11 +74,12 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
         int screenWidth = XUiDisplayHelper.getScreenWidth(getContext());
         int screenHeight = XUiDisplayHelper.getScreenHeight(getContext());
 
-
+        printType = PrinterHelper.getInstance().getPrinterSupportConnectType();
+        Log.d(TAG, "printType: " + printType);
         if (screenWidth > screenHeight) {
-            contentList = getResources().getStringArray(R.array.settings_list_land);
+            contentList = getResources().getStringArray(printType ==2?R.array.settings_list_wifi_land:R.array.settings_list_land);
         } else {
-            contentList = getResources().getStringArray(R.array.settings_list);
+            contentList = getResources().getStringArray(printType ==2?R.array.settings_wifi_list:R.array.settings_list);
         }
         super.initData();
 
@@ -97,8 +104,17 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
             if (i == 0) {
 
                 list.add(new FunctionTestBean(contentList[i], "AIDL"));
-            } else {
-                list.add(new FunctionTestBean(contentList[i], 0));
+            }
+            else {
+                if (i==2 && printType == 2){
+                    list.add(new FunctionTestBean(contentList[i], "USB"));
+
+                }else {
+
+                    list.add(new FunctionTestBean(contentList[i], 0));
+
+                }
+
             }
         }
 
@@ -128,9 +144,12 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
                         }
                     }
 
-                } else if (item.getTitle().equals(contentList[2])) {
+                } else if (item.getTitle().equals(contentList[3])) {
 
                     showAgreementDialog(item);
+                }else if (item.getTitle().equals(contentList[2])) {//打印机连接方式
+
+                    showPrintTypeDialog(item,tvValue);
                 }
 
             }
@@ -173,9 +192,56 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
         mSelectDialog.show();
     }
 
+    SelectDialog selectDialog;
+    private List<String> connectTypeList;
+    int selectType = 0;
+    private void showPrintTypeDialog(FunctionTestBean item, TextView tvValue) {
+        connectTypeList = getPrinterConnectType();
+        if (connectTypeList == null || connectTypeList.size() == 0) {
+            return;
+        }
+        Log.d(TAG, "connectTypeList: i= " + connectTypeList.size());
+        if (selectDialog != null) {
+            selectDialog.dismiss();
+            selectDialog = null;
+        }
+        selectDialog = new SelectDialog(tvValue.getContext());
+        selectDialog.setClickListener(new BaseDialog.ClickListener() {
+            @Override
+            public void dismiss() {
+            }
+
+            @Override
+            public void selectItem(String s, int i) {
+                if (s != null) {
+                    tvValue.setText(s.trim());
+                    selectType = i;
+                }
+            }
+
+            @Override
+            public void cancel() {
+            }
+
+            @Override
+            public void sure(String s) {
+            }
+        });
+        selectDialog.setRvStringListData(connectTypeList);
+        selectDialog.setTitle(item.getTitle());
+        selectDialog.show();
+    }
+
     private String[] getConnectModeArray() {
         String[] array = getActivity().getResources().getStringArray(R.array.connecting_mode);
         return array;
+    }
+
+    public static List<String> getPrinterConnectType() {
+        List<String> list = new ArrayList<>();
+        String[] strings = IminApplication.mContext.getResources().getStringArray(R.array.print_method);
+        list = Arrays.asList(strings);
+        return list;
     }
 
     private List<DialogItemDescription> getConnectModeList(int checkIndex) {
@@ -191,6 +257,7 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
 
         return list;
     }
+
 
 
 }

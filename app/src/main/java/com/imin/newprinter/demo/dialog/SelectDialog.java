@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -38,14 +39,7 @@ public class SelectDialog extends BaseDialog {
     public SelectDialog(@NonNull Context context) {
         super(context, R.layout.set_dialog);
         Log.d(TAG, "SelectDialog: ");
-//        initView();
     }
-
-//    public SelectDialog(Context context, @NonNull QrBarCodeInfo tips) {
-//        super(context, R.layout.set_dialog);
-////        initView();
-//
-//    }
 
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
@@ -77,10 +71,15 @@ public class SelectDialog extends BaseDialog {
         flClose = findViewById(R.id.tvCancel);
         rvDialog = findViewById(R.id.rv);
 
+        flClose.setOnClickListener(v -> {
+            if (clickListener != null){
+                clickListener.dismiss();
+            }
+            dismiss();
+        });
+
         setTitleDialog.setText(mTitle);
-
-
-
+        rvDialog.setLayoutManager(new LinearLayoutManager(this.getContext()));
         adapterStr = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.layout_select_dialog_item) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, String functionBean) {
@@ -92,7 +91,7 @@ public class SelectDialog extends BaseDialog {
             }
         };
 
-//        adapterStr.setNewData(new ArrayList<>());
+        adapterStr.setNewData(new ArrayList<>());
         adapterStr.setNewData(stringList);
         rvDialog.setAdapter(adapterStr);
 

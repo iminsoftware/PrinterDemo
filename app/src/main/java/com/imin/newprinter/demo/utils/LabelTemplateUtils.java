@@ -685,16 +685,16 @@ public class LabelTemplateUtils {
                 .setPosY(60)
                 .setTextSize(18));
 
-        PrinterHelper.getInstance().labelAddText("重量（kg）/个       1.70", LabelTextStyle.getTextStyle()
+        PrinterHelper.getInstance().labelAddText("重量（kg）/个     1.70", LabelTextStyle.getTextStyle()
                 .setPosX(185)
-                .setPosY(85)
-                .setTextSize(15));
+                .setPosY(82)
+                .setTextSize(20));
 
 
-        PrinterHelper.getInstance().labelAddText("单价（元/kg）       9.98", LabelTextStyle.getTextStyle()
+        PrinterHelper.getInstance().labelAddText("单价（元/kg）     9.98", LabelTextStyle.getTextStyle()
                 .setPosX(185)
                 .setPosY(113)
-                .setTextSize(15));
+                .setTextSize(20));
 
         PrinterHelper.getInstance().labelAddText("总价（元）", LabelTextStyle.getTextStyle()
                 .setPosX(20)
@@ -722,7 +722,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelAddText("地址：XX市XX区XX大道测试超市", LabelTextStyle.getTextStyle()
                 .setPosX(12)
                 .setPosY(227)
-                .setTextSize(16));
+                .setTextSize(20));
 
 //        PrinterHelper.getInstance().labelPrintCanvas(1,null);
         return PrinterHelper.getInstance().getLabelBitmap();
@@ -752,16 +752,16 @@ public class LabelTemplateUtils {
                 .setPosY(60)
                 .setTextSize(20));
 
-        PrinterHelper.getInstance().labelAddText("WT/lb                     1.70", LabelTextStyle.getTextStyle()
+        PrinterHelper.getInstance().labelAddText("WT/lb                  1.70", LabelTextStyle.getTextStyle()
                 .setPosX(185)
-                .setPosY(85)
-                .setTextSize(18));
+                .setPosY(82)
+                .setTextSize(20));
 
 
-        PrinterHelper.getInstance().labelAddText("PRICE PER lb       9.98", LabelTextStyle.getTextStyle()
+        PrinterHelper.getInstance().labelAddText("PRICE PER lb      9.98", LabelTextStyle.getTextStyle()
                 .setPosX(185)
                 .setPosY(113)
-                .setTextSize(18));
+                .setTextSize(20));
 
         PrinterHelper.getInstance().labelAddText("TOTAL PRICE", LabelTextStyle.getTextStyle()
                 .setPosX(18)
@@ -789,7 +789,7 @@ public class LabelTemplateUtils {
         PrinterHelper.getInstance().labelAddText("Addr: Label Test Supermarket", LabelTextStyle.getTextStyle()
                 .setPosX(12)
                 .setPosY(227)
-                .setTextSize(16));
+                .setTextSize(20));
 
 //        PrinterHelper.getInstance().labelPrintCanvas(1,null);
         return PrinterHelper.getInstance().getLabelBitmap();

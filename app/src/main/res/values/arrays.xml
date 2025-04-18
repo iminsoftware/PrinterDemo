@@ -65,6 +65,19 @@
         <item>@string/about</item>
     </string-array>
 
+    <string-array name="settings_wifi_list">
+        <item>@string/connect_mode</item>
+        <item>@string/printer_parameter</item>
+        <item>@string/printer_connect_type</item>
+        <item>@string/about</item>
+    </string-array>
+
+    <string-array name="settings_list_wifi_land">
+        <item>@string/connect_mode</item>
+        <item>@string/printer_connect_type</item>
+        <item>@string/about</item>
+    </string-array>
+
     <string-array name="settings_list_land">
         <item>@string/connect_mode</item>
         <item>@string/about</item>
@@ -628,6 +641,11 @@
     <string-array name="print_api">
         <item>AIDL</item>
         <item>API</item>
+    </string-array>
+
+    <string-array name="print_method">
+        <item>USB</item>
+        <item>WiFi</item>
     </string-array>
 
     <string-array name="qr_block_size">

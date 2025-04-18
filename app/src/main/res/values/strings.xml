@@ -367,7 +367,10 @@
     <string name="content83">Price: 5 ￥/Jin</string>
     <string name="content84">0123456789</string>
     <string name="title9">Bulk commoditie</string>
-    <string name="content91"> 19 ￥</string>
+    <string name="content91"> 19 $</string>
     <string name="content92">0123456789</string>
     <string name="content93">Date: 2024-09-25</string>
+    <string name="function_printMethod">Printing method：</string>
+    <string name="printer_connect_type">Printer connection method</string>
+    <string name="printer_connection_method">连接方式</string>
 </resources>

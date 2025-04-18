@@ -11,9 +11,10 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="@color/bg_color_eff1f7"
         >
 
@@ -33,10 +34,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_title"
+            android:background="@drawable/list_item_selector"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:overScrollMode="never" />
 
-    </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </layout>

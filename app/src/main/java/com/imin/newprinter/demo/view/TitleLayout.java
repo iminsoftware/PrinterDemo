@@ -84,6 +84,16 @@ public class TitleLayout extends LinearLayout {
 
         tvPrinterStatus.setText(getContext().getString(R.string.print_status, PrinterHelper.getInstance().getPrinterStatus() + ""));
 
+        if (isRightVisible){
+            flyRight.setOnClickListener(view1 -> {
+                if (rightCallback != null){
+                    rightCallback.onClick(view1);
+                }
+            });
+        }
+
+
+
     }
 
     SelectDialog selectDialog;
@@ -106,5 +116,14 @@ public class TitleLayout extends LinearLayout {
     public interface LeftCallback {
         void backPre();
         void nextPage(int num);
+    }
+    RightCallback rightCallback;
+
+    public void setRightCallback(RightCallback rightCallback) {
+        this.rightCallback = rightCallback;
+    }
+
+    public interface RightCallback{
+        void onClick(View view);
     }
 }

@@ -344,8 +344,9 @@
     <string name="set_pls_content">请輸入内容</string>
 
     <string name="list_empty_tips">暂时没有内容哦~</string>
-    <string name="connect_mode">连接方式</string>
+    <string name="connect_mode">SDK连接方式</string>
     <string name="printer_parameter">打印机参数</string>
+    <string name="printer_connect_type">打印机连接方式</string>
     <string name="about">关于</string>
     <string name="about_printer_demo">iMinPrinterDemo适用于iMin系列内置打印机POS设备，并且提供了一系列打印测试模块，帮助开发者更快的接入打印功能</string><!--iMinPrinterDemo集成了AIDL和Bluetooth两种连接方式，-->
 
@@ -404,4 +405,6 @@
     <string name="content91">售价: 19元</string>
     <string name="content92">0123456789</string>
     <string name="content93">生产日期: 2024-09-25</string>
+    <string name="function_printMethod">打印方式</string>
+    <string name="printer_connection_method">连接方式</string>
 </resources>

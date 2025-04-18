@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -27,6 +28,7 @@ import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.bean.FunctionTestBean;
 import com.imin.newprinter.demo.bean.LabelTitleBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
+import com.imin.newprinter.demo.databinding.FragmentFunctionBinding;
 import com.imin.newprinter.demo.databinding.FragmentFunctionTestBinding;
 import com.imin.newprinter.demo.utils.LabelTemplateUtils;
 import com.imin.newprinter.demo.utils.Utils;
@@ -41,66 +43,37 @@ import com.imin.printer.PrinterHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.goldze.mvvmhabit.base.BaseFragment;
+public class FunctionFragment extends BaseFragment {
 
-/**
- * @Author: Mark
- * @date: 2023/12/5 Time：11:30
- * @description:
- */
-public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBinding, FunctionTestFragmentViewModel>
-        implements SwitchFragmentListener {
+    private static final String TAG = "FunctionFragment";
 
-    private static final String TAG = "FunctionTestFragment";
-
-    private SwitchFragmentListener listener;
     private BaseQuickAdapter<FunctionTestBean, BaseViewHolder> adapter;
     BaseQuickAdapter<LabelTitleBean, BaseViewHolder> adapter1,adapter2;
     private ArrayList<FunctionTestBean> list;
-    private RecyclerView recyclerView;
-    private FrameLayout setting;
-    private RelativeLayout rlPrintStatus;
-    private TextView tvPrintStatus;
-    private TitleLayout titleLayout;
-    private RecyclerView ryH;
-    private RecyclerView ryV;
 
     private List<LabelTitleBean> labelTypeList;
     private String[] stringArray;
     private StaggeredGridLayoutManager layoutManager;
-    private TagFlowLayout flowLayout;
     private List<LabelTitleBean> titleBeans;
 
     private int selectTabPositon = 0;
+    private com.imin.newprinter.demo.databinding.FragmentFunctionBinding binding;
 
-
+    @Nullable
     @Override
-    public int initContentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return R.layout.fragment_function_test;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentFunctionBinding.inflate(inflater);
+        initView();
+        initData();
+        return binding.getRoot();
     }
 
-    @Override
-    public int initVariableId() {
-        return BR.viewModel;
-    }
 
-    @Override
-    protected void registorUIChangeLiveDataCallBack() {
-        super.registorUIChangeLiveDataCallBack();
 
-        recyclerView = binding.getRoot().findViewById(R.id.recycler_view);
-        setting = binding.getRoot().findViewById(R.id.flyRight);
-        rlPrintStatus = binding.getRoot().findViewById(R.id.rl_print_status);
-        tvPrintStatus = binding.getRoot().findViewById(R.id.tv_printer_status);
-        titleLayout = binding.getRoot().findViewById(R.id.view_title);
-        titleLayout.setTitle(Utils.isNingzLabel()?"":getString(R.string.function_test));
-        LinearLayoutCompat llyLabel = binding.getRoot().findViewById(R.id.llyLabel);
-        llyLabel.setVisibility(Utils.isNingzLabel()? View.VISIBLE:View.GONE);
-        recyclerView.setVisibility(Utils.isNingzLabel()?View.GONE:View.VISIBLE);
-        ryH = binding.getRoot().findViewById(R.id.ryH);
-        ryV = binding.getRoot().findViewById(R.id.ryV);
-        flowLayout = binding.getRoot().findViewById(R.id.tabLayout);
-
+    private void initView() {
+        binding.viewTitle.setTitle(Utils.isNingzLabel()?"":getString(R.string.function_test));
+        binding.llyLabel.setVisibility(Utils.isNingzLabel()? View.VISIBLE:View.GONE);
+        binding.recyclerView.setVisibility(Utils.isNingzLabel()?View.GONE:View.VISIBLE);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
@@ -108,25 +81,24 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             layoutManager = new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL);
 
         }
-        ryV.setLayoutManager(layoutManager);
+        binding.ryV.setLayoutManager(layoutManager);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);//避免出现空隙
-        recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(true);
         // 优化滚动状态监听
-        ryV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.ryV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 layoutManager.invalidateSpanAssignments();
             }
         });
-        ryV.addItemDecoration(new SpacesItemDecoration(4,10));
-
+        binding.ryV.addItemDecoration(new SpacesItemDecoration(4,10));
     }
 
+
     LabelTitleBean selePosition = null;
-    @Override
+
     public void initData() {
-        super.initData();
 
         list = new ArrayList<>();
         list.add(new FunctionTestBean(getString(R.string.function_all), R.mipmap.ic_all));
@@ -152,7 +124,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         };
 
         adapter.setNewData(list);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         if (Utils.isNingzLabel()){
             initLabelPrintTest();
@@ -160,6 +132,27 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
 
         updatePrinterStatus(PrinterHelper.getInstance().getPrinterStatus());
         Log.d(TAG, "initData: ");
+
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            if (Utils.isNingzLabel())return;
+
+            FunctionTestBean bean = list.get(position);
+            Log.d(TAG, "initViewObservable: " + bean.toString()
+                    + ", " + bean.getFragment()
+                    + ", position" + position
+            );
+            switchFragment(position);
+
+        });
+
+
+
+        binding.viewTitle.setRightCallback(v -> {
+            Log.d(TAG, "setting: ");
+            switchFragment(100);
+        });
+        Log.d(TAG, "initViewObservable: ");
+
 
     }
 
@@ -178,7 +171,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
                 @Override
                 public View getView(FlowLayout parent, int position, LabelTitleBean s) {
                     View view = LayoutInflater.from(getContext()).inflate(R.layout.item_label_title,
-                            flowLayout, false);
+                            binding.tabLayout, false);
                     FrameLayout ivImage = view.findViewById(R.id.itemFy);
                     TextView rvTitle = view.findViewById(R.id.itemText);
                     rvTitle.setText(s.getTitle());
@@ -199,9 +192,9 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
                 }
             };
 
-            flowLayout.setAdapter(tagAdapter);
+            binding.tabLayout.setAdapter(tagAdapter);
 
-            flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            binding.tabLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
                 @Override
                 public boolean onTagClick(View view, int position, FlowLayout parent) {
 
@@ -244,7 +237,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
 
 
             adapter1.setNewData(labelTypeList);
-            ryH.setAdapter(adapter1);
+            binding.ryH.setAdapter(adapter1);
 
             adapter1.setOnItemClickListener((adapter, view, position) -> {
                 LabelTitleBean titleBean = labelTypeList.get(position);
@@ -272,7 +265,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
 
         adapter2.setOnItemClickListener((adapter, view, position) -> {
             Log.d(TAG, "adapter2  onItemClick11: " + position + " , labelBitmapList.size()==> " + "  ,,titleBeans.size=>   "+titleBeans.size()+" " +
-                    "    "+selectTabPositon+"    "+ryV.getChildCount());
+                    "    "+selectTabPositon+"    "+binding.ryV.getChildCount());
             if (adapter2.getData() != null){
                 LabelTitleBean titleBean = adapter2.getData().get(position);
                 if (titleBean != null){
@@ -285,21 +278,10 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         });
 
 
-        ryV.setAdapter(adapter2);
+        binding.ryV.setAdapter(adapter2);
 
 
         setLabelRvAdapter(labelClick(0));
-//        rvBaseAdapter.setOnItemClickListener(new RvBaseAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(LabelTitleBean titleBean, int position) {
-//                if (titleBean != null) {
-//                    Log.d(TAG, "adapter2  onItemClick000: " + position + " , labelBitmapList.size()==> " + "  ,,   " + titleBean.getWidth());
-//                    PrinterHelper.getInstance().labelPrintBitmap(titleBean.getiMage(), titleBean.getWidth(), titleBean.getHeight(), null);
-//                }
-//                Log.d(TAG, "adapter2  onItemClick: " + position + " , labelBitmapList.size()==> " + "  ,,titleBeans.size=>   "+titleBeans.size()+" " +
-//                        "   "+labelClick(selectTabPositon).size()+"    "+selectTabPositon+"      "+selePosition.getId());
-//            }
-//        });
 
 
     }
@@ -317,10 +299,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         Bitmap bitmap7 = LabelTemplateUtils.printLabelSize50x30_CN1();
         Bitmap bitmap8 = LabelTemplateUtils.printLabelSize50x30_CN2();
         Bitmap bitmap9 = LabelTemplateUtils.printLabelSize50x30_CN3();
-//        Bitmap bitmap12 = LabelTemplateUtils.printLabel50x301();
 
-//        Bitmap bitmap10 = LabelTemplateUtils.printLabelSize50x30_CN21();
-//        Bitmap bitmap11 = LabelTemplateUtils.printLabelSize50x30EN21();
         if (position == 0){
             titleBeans.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
             titleBeans.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
@@ -331,9 +310,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             titleBeans.add(new LabelTitleBean(6,stringArray[4],50,30,bitmap7));
             titleBeans.add(new LabelTitleBean(7,stringArray[4],50,30,bitmap8));
             titleBeans.add(new LabelTitleBean(8,stringArray[4],50,30,bitmap9));
-//            titleBeans.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap12));
-//            titleBeans.add(new LabelTitleBean(9,stringArray[4],50,30,bitmap10));
-//            titleBeans.add(new LabelTitleBean(10,stringArray[4],50,30,bitmap11));
+
         }else if (position == 1){
             titleBeans.add(new LabelTitleBean(0,stringArray[1],40,30,bitmap1));
             titleBeans.add(new LabelTitleBean(1,stringArray[1],40,30,bitmap2));
@@ -347,7 +324,6 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
             titleBeans.add(new LabelTitleBean(0,stringArray[4],50,30,bitmap7));
             titleBeans.add(new LabelTitleBean(1,stringArray[4],50,30,bitmap8));
             titleBeans.add(new LabelTitleBean(2,stringArray[4],50,30,bitmap9));
-//            titleBeans.add(new LabelTitleBean(3,stringArray[4],50,30,bitmap12));
         }
 
         Log.d(TAG, "labelClick  onItemClick: " + position+ "  ,,titleBeans.size=>   "+titleBeans.size());
@@ -359,31 +335,6 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         adapter2.setList(list);
 
     }
-    @Override
-    public void initViewObservable() {
-        super.initViewObservable();
-
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (Utils.isNingzLabel())return;
-
-            FunctionTestBean bean = list.get(position);
-            Log.d(TAG, "initViewObservable: " + bean.toString()
-                    + ", " + bean.getFragment()
-                    + ", position" + position
-            );
-            switchFragment(position);
-
-        });
-
-
-
-        setting.setOnClickListener(v -> {
-            Log.d(TAG, "setting: ");
-            switchFragment(100);
-        });
-        Log.d(TAG, "initViewObservable: ");
-
-    }
 
     private SwitchFragmentListener fragmentListener;
 
@@ -393,7 +344,7 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         Log.d(TAG, "setCallback: " + (fragmentListener != null));
     }
 
-    @Override
+
     public void switchFragment(int num) {
         Log.d(TAG, "switchPager :num=  " + num + (fragmentListener != null));
 
@@ -408,12 +359,12 @@ public class FunctionTestFragment extends BaseFragment<FragmentFunctionTestBindi
         Log.d(TAG, "updateStatus: " + status + ", isNormal= " + isNormal);
 
         Drawable drawable = IminApplication.mContext.getResources().getDrawable(isNormal ? R.drawable.bg_printer_normal : R.drawable.bg_printer_exception);
-        if (rlPrintStatus != null) {
-            rlPrintStatus.setBackground(drawable);
+        if (binding.rlPrintStatus != null) {
+            binding.rlPrintStatus.setBackground(drawable);
         }
 
-        if (tvPrintStatus != null) {
-            tvPrintStatus.setText(printerStatusTip);
+        if (binding.tvPrinterStatus != null) {
+            binding.tvPrinterStatus.setText(printerStatusTip);
         }
     }
 }
