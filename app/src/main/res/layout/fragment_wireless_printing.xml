@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.imin.newprinter.demo.view.TitleLayout
+        android:id="@+id/viewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftTitleVisible="false"
+        app:title="@string/print_test"
+        app:back="false"
+        android:visibility="gone"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:leftVisible="false"
+        app:rightVisible="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
+    <LinearLayout
+        android:id="@+id/connectLy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewTitle">
+        <TextView
+            android:id="@+id/connectStatusTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/color_1D1D1F"
+            android:text="@string/status_wifi"
+            />
+        <TextView
+            android:id="@+id/connectContentTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/color_1D1D1F"
+            android:text="@string/status_ip"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/connectNetworkTv"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:textSize="17sp"
+        android:layout_marginHorizontal="15dp"
+        android:textColor="@color/white"
+        android:text="@string/configuration"
+        android:gravity="center"
+        android:background="@drawable/dra_green_corner_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/connectLy"
+        app:layout_constraintBottom_toBottomOf="@+id/connectLy"
+
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wirelessRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectLy"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,8 +26,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +37,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.feature.tui.modle.DialogItemDescription;
 import com.feature.tui.util.XUiDisplayHelper;
-import com.imin.newprinter.demo.bean.FunctionTestBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.ActivityMainBinding;
 import com.imin.newprinter.demo.fragment.AllTestFragment;
@@ -44,7 +45,6 @@ import com.imin.newprinter.demo.fragment.BaseFragment;
 import com.imin.newprinter.demo.fragment.BtConnectFragment;
 import com.imin.newprinter.demo.fragment.DoubleQrCodeFragment;
 import com.imin.newprinter.demo.fragment.FunctionFragment;
-import com.imin.newprinter.demo.fragment.FunctionTestFragment;
 import com.imin.newprinter.demo.fragment.IminBaseFragment;
 import com.imin.newprinter.demo.fragment.PaperFeedFragment;
 import com.imin.newprinter.demo.fragment.PictureFragment;
@@ -57,19 +57,18 @@ import com.imin.newprinter.demo.fragment.TransFragment;
 import com.imin.newprinter.demo.fragment.WifiConnectFragment;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.view.TitleLayout;
-import com.imin.newprinter.demo.viewmodel.MainViewModel;
 import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-import me.goldze.mvvmhabit.base.BaseActivity;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> implements SwitchFragmentListener, TitleLayout.LeftCallback, IBinder.DeathRecipient {
+public class MainActivity extends AppCompatActivity implements SwitchFragmentListener, TitleLayout.LeftCallback, IBinder.DeathRecipient {
 
-    private static final String TAG = "PrintDemoMainActivity";
+    private static final String TAG = "PrintDemo_MainActivity";
     private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
 
 
@@ -79,27 +78,25 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     private FragmentManager fragmentManager;
     private FunctionFragment functionTestFragment;
 
-    private HashMap<Integer, IminBaseFragment> fragmentMap = new HashMap<>();
+    private LinkedHashMap<Integer, IminBaseFragment> fragmentMap = new LinkedHashMap<>();
     private IminBaseFragment currentFragment;
     private BaseFragment preFragment;
     BaseFragment selectFragment;
     private BaseQuickAdapter<DialogItemDescription, BaseViewHolder> parameterLandAdapter;
 
-    private RecyclerView rvParameter;
+//    private RecyclerView rvParameter;
     private String[] contentArray;
     private List<DialogItemDescription> list;
 
     int requestPermissionCode = 10;
     private WifiConnectFragment wifiConnectFragment;
     private BtConnectFragment btConnectFragment;
+    private com.imin.newprinter.demo.databinding.ActivityMainBinding binding;
 
     @Override
-    public int initContentView(Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
-        // Allow the content to extend into the status and navigation bars
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -123,27 +120,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             window.getDecorView().setSystemUiVisibility(flags);
         }
 
-        return R.layout.activity_main;
+
+        setContentView(binding.getRoot());
+        initView();
+        initData();
     }
 
-    @Override
-    public int initVariableId() {
-        return BR.viewModel;
-    }
-
-    @Override
-    protected void registorUIChangeLiveDataCallBack() {
-        super.registorUIChangeLiveDataCallBack();
+    private void initView() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestPermissionCode);
-            return;
+
         }
-        rvParameter = binding.getRoot().findViewById(R.id.rv_parameter);
-        Log.d(TAG, "registorUIChangeLiveDataCallBack:===== " + PrinterHelper.getInstance().getPrinterSupplierName());
     }
 
+
+
     public void initData() {
-        super.initData();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
         registerReceiver(mReceiver, intentFilter);
@@ -177,7 +169,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             };
 
             parameterLandAdapter.setNewInstance(list);
-            rvParameter.setAdapter(parameterLandAdapter);
+            binding.rvParameter.setAdapter(parameterLandAdapter);
 
         }
 
@@ -209,12 +201,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     }
 
-    @Override
-    public void initViewObservable() {
-        super.initViewObservable();
-
-
-    }
 
     private void updateFragment(int position) {
         Log.d(TAG, "updateFragment: num= " + position
@@ -223,6 +209,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         if (position == -1 || position == 10|| position == 11) {
+            if (Utils.isPortrait()){
+                if (binding.viewTitle != null){
+                    binding.viewTitle.setVisibility(View.VISIBLE);
+                }
+
+                binding.clConnect.setVisibility(View.VISIBLE);
+                binding.rlPrintStatus.setVisibility(View.VISIBLE);
+            }
+
             if (position == -1){
                 if (Utils.isNingzLabel()) {
                     functionTestFragment = null;
@@ -246,25 +241,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 preFragment = btConnectFragment;
             }
 
-            if (currentFragment != null){
-                transaction.remove(currentFragment);
-            }
-            if (selectFragment != null){
-                transaction.remove(selectFragment);
-            }
-
-            transaction.add(R.id.fl_main, preFragment, String.valueOf(position));
+            transaction.replace(binding.flMain.getId(), preFragment, String.valueOf(position));
             transaction.addToBackStack(null);
-            transaction.show(preFragment);
             transaction.commit();
-
+            fragmentManager.executePendingTransactions();
             selectFragment = preFragment;
         } else {
-            if (selectFragment != null){
-                transaction.remove(selectFragment);
-            }
-            if (currentFragment != null){
-                transaction.remove(currentFragment);
+            if (Utils.isPortrait()){
+                binding.viewTitle.setVisibility(View.GONE);
+                binding.clConnect.setVisibility(View.GONE);
+                binding.rlPrintStatus.setVisibility(View.GONE);
+
+            }else {
+//                if (binding.viewTitle != null){
+//                    binding.viewTitle.setVisibility(View.VISIBLE);
+//                }
+//
+//                binding.clConnect.setVisibility(View.VISIBLE);
+//                binding.rlPrintStatus.setVisibility(View.VISIBLE);
             }
 
             IminBaseFragment fragment = fragmentMap.get(position);
@@ -314,11 +308,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             }
 
 
-            transaction.replace(R.id.fl_main, fragment, String.valueOf(position));
+            transaction.replace(binding.flMain.getId(), fragment, String.valueOf(position));
             transaction.addToBackStack(null);
-            transaction.show(fragment);
             transaction.commit();
-
+            fragmentManager.executePendingTransactions();
             currentFragment = fragment;
 
         }
@@ -331,12 +324,42 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         if (fragmentManager.getBackStackEntryCount() <= 0) {
             finish();
         } else {
+            int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+            FragmentManager.BackStackEntry topEntry = getSupportFragmentManager().getBackStackEntryAt(backStackCount - 1);
+            String currentTag = topEntry.getName();
+            Log.d(TAG, "onBackPressed  currentTag= " + currentTag);
             getSupportFragmentManager().popBackStack();
         }
 
         updateStatus(PrinterHelper.getInstance().getPrinterStatus());
     }
 
+    public void showHomePage(){
+        Log.d(TAG, "showHomePage: " + fragmentManager.getBackStackEntryCount());
+
+        // 获取当前回退栈的条目数量
+        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (backStackCount > 0) {
+            // 获取栈顶条目的 Tag
+            FragmentManager.BackStackEntry topEntry = getSupportFragmentManager().getBackStackEntryAt(backStackCount - 1);
+            String currentTag = topEntry.getName();
+            // 执行回退操作
+           // supportFragmentManager.popBackStack()
+        }
+
+
+
+//        if (Utils.isPortrait()){
+
+//            binding.viewTitle.setVisibility(View.VISIBLE);
+//            binding.clConnect.setVisibility(View.VISIBLE);
+//            binding.rlPrintStatus.setVisibility(View.VISIBLE);
+//            getSupportFragmentManager().popBackStack(
+//                    null, // name 设为 null 表示弹出所有事务
+//                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+//            );
+//        }
+    }
     @Override
     public void switchFragment(int num) {
         Log.d(TAG, "switchPager: " + num);
@@ -646,9 +669,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     public void updateRv() {
-        if (parameterLandAdapter != null && rvParameter != null) {
+        if (parameterLandAdapter != null && binding.rvParameter != null) {
             parameterLandAdapter.setNewInstance(list);
-            rvParameter.setAdapter(parameterLandAdapter);
+            binding.rvParameter.setAdapter(parameterLandAdapter);
         }
 
     }

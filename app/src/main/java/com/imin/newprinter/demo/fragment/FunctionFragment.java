@@ -24,6 +24,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.imin.newprinter.demo.BR;
 import com.imin.newprinter.demo.IminApplication;
+import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.bean.FunctionTestBean;
 import com.imin.newprinter.demo.bean.LabelTitleBean;
@@ -69,6 +70,13 @@ public class FunctionFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null){
+            ((MainActivity)(getActivity())).showHomePage();
+        }
+    }
 
     private void initView() {
         binding.viewTitle.setTitle(Utils.isNingzLabel()?"":getString(R.string.function_test));
@@ -94,26 +102,26 @@ public class FunctionFragment extends BaseFragment {
         });
         binding.ryV.addItemDecoration(new SpacesItemDecoration(4,10));
 
-        binding.usbLy.setOnClickListener(view -> {
-            switchFragment(-1);
-            binding.usbIv.setImageResource(R.drawable.ic_check);
-            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
-            binding.btIv.setImageResource(R.drawable.ic_uncheck);
-        });
-
-        binding.wifiLy.setOnClickListener(view -> {
-            switchFragment(10);
-            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-            binding.wifiIv.setImageResource(R.drawable.ic_check);
-            binding.btIv.setImageResource(R.drawable.ic_uncheck);
-        });
-
-        binding.btLy.setOnClickListener(view -> {
-            switchFragment(11);
-            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
-            binding.btIv.setImageResource(R.drawable.ic_check);
-        });
+//        binding.usbLy.setOnClickListener(view -> {
+//            switchFragment(-1);
+//            binding.usbIv.setImageResource(R.drawable.ic_check);
+//            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+//            binding.btIv.setImageResource(R.drawable.ic_uncheck);
+//        });
+//
+//        binding.wifiLy.setOnClickListener(view -> {
+//            switchFragment(10);
+//            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+//            binding.wifiIv.setImageResource(R.drawable.ic_check);
+//            binding.btIv.setImageResource(R.drawable.ic_uncheck);
+//        });
+//
+//        binding.btLy.setOnClickListener(view -> {
+//            switchFragment(11);
+//            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+//            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+//            binding.btIv.setImageResource(R.drawable.ic_check);
+//        });
 
     }
 

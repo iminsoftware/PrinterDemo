@@ -373,4 +373,18 @@
     <string name="function_printMethod">Printing method：</string>
     <string name="printer_connect_type">Printer connection method</string>
     <string name="printer_connection_method">连接方式</string>
+    <string name="status_wifi">"状态：%s %s "</string>
+    <string name="distribution_network">配网</string>
+    <string name="connect">连接</string>
+    <string name="connect_wifi_tips">注意：请将平板正确放置到底座</string>
+    <string name="connect_wifi_tips1">请将平板正确放置到底座</string>
+    <string name="wifi_ssid">SSID:</string>
+    <string name="wifi_pwd">密码：</string>
+    <string name="status_ip">IP:%s</string>
+    <string name="start_connect_network">开始配网</string>
+    <string name="automatically_connect">自动连接</string>
+    <string name="edit_hit">请输入...\n</string>
+    <string name="active_connect">主动连接</string>
+    <string name="start_connect">开始连接</string>
+    <string name="configuration">配置</string>
 </resources>
