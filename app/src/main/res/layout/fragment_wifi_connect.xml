@@ -225,6 +225,108 @@
                     app:layout_constraintTop_toBottomOf="@+id/pwdEt" />
 
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clStatic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/swichStatic">
+                    <TextView
+                        android:id="@+id/staticTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/color_666666"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/staticIpEt"
+                        app:layout_constraintBottom_toBottomOf="@+id/staticIpEt"
+                        android:text="@string/static_ip"/>
+                    <EditText
+                        android:id="@+id/staticIpEt"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
+                        android:textSize="16dp"
+                        android:layout_marginStart="80dp"
+                        android:paddingHorizontal="5dp"
+                        android:hint="@string/edit_hit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/stri_bg_gray_5dp"
+                        android:inputType="number|textNoSuggestions"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/color_666666"
+                        android:text="@string/static_gw"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/gwEt"
+                        app:layout_constraintBottom_toBottomOf="@+id/gwEt"/>
+                    <EditText
+                        android:id="@+id/gwEt"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
+                        android:textSize="16dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="20dp"
+                        android:paddingHorizontal="5dp"
+                        android:hint="@string/edit_hit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/staticIpEt"
+                        android:background="@drawable/stri_bg_gray_5dp"
+                        android:inputType="number|textNoSuggestions"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/color_666666"
+                        android:text="@string/static_mask"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/maskEt"
+                        app:layout_constraintBottom_toBottomOf="@+id/maskEt"/>
+                    <EditText
+                        android:id="@+id/maskEt"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
+                        android:textSize="16dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="20dp"
+                        android:paddingHorizontal="5dp"
+                        android:hint="@string/edit_hit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/gwEt"
+                        android:background="@drawable/stri_bg_gray_5dp"
+                        android:inputType="number|textNoSuggestions"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/color_666666"
+                        android:text="@string/static_dns"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/dnsEt"
+                        app:layout_constraintBottom_toBottomOf="@+id/dnsEt"/>
+                    <EditText
+                        android:id="@+id/dnsEt"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
+                        android:textSize="16dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="20dp"
+                        android:paddingHorizontal="5dp"
+                        android:hint="@string/edit_hit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/maskEt"
+                        android:background="@drawable/stri_bg_gray_5dp"
+                        android:inputType="number|textNoSuggestions"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:id="@+id/networkConfirmTv"
                     android:layout_width="200dp"
@@ -237,7 +339,7 @@
                     android:background="@drawable/dra_green_corner_5"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/swichStatic"
+                    app:layout_constraintTop_toBottomOf="@+id/clStatic"
 
                     />
 
@@ -330,7 +432,7 @@
                     android:layout_marginStart="130dp"
                     android:layout_marginTop="20dp"
                     android:paddingHorizontal="5dp"
-                    android:inputType="textPassword"
+                    android:inputType="number|textNoSuggestions"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/autoTips"
                     android:background="@drawable/stri_bg_gray_5dp"/>

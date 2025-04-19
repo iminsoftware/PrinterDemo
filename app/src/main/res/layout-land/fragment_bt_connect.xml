@@ -1,7 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_color_eff1f7"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.imin.newprinter.demo.view.TitleLayout
+            android:id="@+id/viewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:leftTitleVisible="false"
+            android:visibility="visible"
+            app:leftTitle="@string/print_test"
+            app:back="true"
+            app:title="@string/print_test"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            app:leftVisible="false"
+            app:rightVisible="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/btStatusTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginHorizontal="15dp"
+        android:textColor="@color/color_1D1D1F"
+        android:text="@string/status_wifi"
+       />
+    <TextView
+        android:id="@+id/btAddressTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="15dp"
+        android:textColor="@color/color_1D1D1F"
+        android:text="@string/status_ip"
+        android:layout_marginTop="10dp"
+        />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1">
+
+            <com.imin.newprinter.demo.view.RefreshListView
+                android:id="@+id/lv_bluetooth_device"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:listSelector="@drawable/btn_white_selector" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/search_bt"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp10"
+        android:text="@string/search"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:background="@drawable/dra_green_corner_5" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

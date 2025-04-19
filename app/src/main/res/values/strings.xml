@@ -390,6 +390,9 @@
     <string name="toast1">请输入密码</string>
     <string name="paired">paired</string>
     <string name="unpaired">unpaired</string>
-
     <string name="search_bt">搜索蓝牙</string>
+    <string name="static_ip">静态IP:</string>
+    <string name="static_gw">GW：</string>
+    <string name="static_mask">MASK：</string>
+    <string name="static_dns">DNS：</string>
 </resources>

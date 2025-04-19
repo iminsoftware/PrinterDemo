@@ -1,13 +1,17 @@
 package com.imin.newprinter.demo.fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +22,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
@@ -38,7 +44,8 @@ import java.util.Set;
  * @date: 2025/4/18
  * @description:
  */
-public class BtConnectFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+@SuppressLint("MissingPermission")
+public class BtConnectFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     private static final String TAG = BtConnectFragment.class.getSimpleName();
 
     private com.imin.newprinter.demo.databinding.FragmentBtConnectBinding binding;
@@ -53,6 +60,7 @@ public class BtConnectFragment extends BaseFragment implements View.OnClickListe
     private BluetoothListAdapter adapter;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -72,6 +80,7 @@ public class BtConnectFragment extends BaseFragment implements View.OnClickListe
                 }
             }
             BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
+
             if (device.getBluetoothClass().getMajorDeviceClass() != 1536) {//只显示蓝牙打印机
                 return;
             }
@@ -175,10 +184,33 @@ public class BtConnectFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void initView() {
-        binding.searchBt.setOnClickListener(this);
+        binding.srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.srlRefresh.setRefreshing(false);
+                    }
+                },3000);
+            }
+        });
+
+        binding.searchBt.setOnClickListener(view -> {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
+                return;
+            }
+            binding.srlRefresh.setRefreshing(true);
+            binding.searchBt.setVisibility(View.GONE);
+            searchBlueTooth();
+        });
         adapter = new BluetoothListAdapter(pairedDevices, newDevices, getContext());
         binding.lvBluetoothDevice.setAdapter(adapter);
         binding.lvBluetoothDevice.setOnItemClickListener(this);
+
+
     }
 
     private void initData() {
@@ -241,25 +273,11 @@ public class BtConnectFragment extends BaseFragment implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.search_bt:
-                if (!mBluetoothAdapter.isEnabled()) {
-                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
-                    return;
-                }
-                binding.srlRefresh.setRefreshing(true);
-                binding.searchBt.setVisibility(View.GONE);
-                searchBlueTooth();
-                break;
-        }
-    }
 
     /**
      * 搜索设备
      */
+    @SuppressLint("MissingPermission")
     public synchronized void searchBlueTooth() {
         mBluetoothAdapter.startDiscovery();//开始搜索
     }

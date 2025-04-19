@@ -132,7 +132,10 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     private void initView() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestPermissionCode);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+                    ,Manifest.permission.BLUETOOTH_SCAN
+                    ,Manifest.permission.BLUETOOTH
+                    ,Manifest.permission.BLUETOOTH_CONNECT}, requestPermissionCode);
 
         }
 

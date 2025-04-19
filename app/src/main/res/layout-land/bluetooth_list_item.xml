@@ -38,6 +38,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:text="strength"
-        android:textColor="@color/color_999999"
+        android:textColor="@color/color_01CA86"
         android:textSize="16sp" />
 </RelativeLayout>
