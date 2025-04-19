@@ -48,13 +48,38 @@ public class WifiConnectFragment extends BaseFragment {
     @Override
     public void setArguments(@Nullable Bundle args) {
         super.setArguments(args);
+        Log.d(TAG, "WifiConnectFragment: " + (args != null));
         if (args != null){
+
             list = args.getStringArrayList("wifiList");
+            Log.d(TAG, "WifiConnectFragment: " + (list==null?null:list.size()));
             if (list != null && list.size() >0){
                 setSpinnerData(list);
             }
         }
     }
+    private static final String ARG_WIFI_LIST = "wifiList";
+
+    public static WifiConnectFragment newInstance(ArrayList<String> wifiList) {
+        WifiConnectFragment fragment = new WifiConnectFragment();
+        Bundle args = new Bundle();
+        args.putStringArrayList(ARG_WIFI_LIST, wifiList);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            list = getArguments().getStringArrayList(ARG_WIFI_LIST);
+        }
+        if (list == null || list.isEmpty()) {
+//            Toast.makeText(getContext(), "无可用WiFi列表", Toast.LENGTH_SHORT).show();
+//            requireActivity().onBackPressed(); // 关闭Fragment
+        }
+    }
+
 
     @Nullable
     @Override
@@ -74,7 +99,9 @@ public class WifiConnectFragment extends BaseFragment {
                 android.R.layout.simple_spinner_item, new ArrayList<>());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.ssidSpinner.setAdapter(adapter);
-
+        if (list != null && list.size() >0){
+            setSpinnerData(list);
+        }
         binding.autoConnectIv.setImageResource(R.drawable.ic_check);
         binding.pwtOpenIv.setImageResource(R.drawable.ic_pwd_open);
         // 切换为密码隐藏（星号显示）

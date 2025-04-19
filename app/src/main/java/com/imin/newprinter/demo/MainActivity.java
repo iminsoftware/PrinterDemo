@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
 
         setContentView(binding.getRoot());
+        wifiScanner = WifiScannerSingleton.getInstance(getContext());
         initView();
         initData();
     }
@@ -134,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestPermissionCode);
 
         }
-        wifiScanner = WifiScannerSingleton.getInstance(getContext());
-        startWifiScan();
+
+
     }
     private void startWifiScan() {
         wifiScanner.startWifiScan(this);
@@ -236,13 +237,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                 preFragment = functionTestFragment;
             }else if (position == 10){
                 if (wifiConnectFragment == null){
-
-                    wifiConnectFragment = new WifiConnectFragment();
-                    if (!wifiList.isEmpty()){
-                        Bundle bundle = new Bundle();
-                        bundle.putStringArrayList("wifiList",wifiList);
-                        wifiConnectFragment.setArguments(bundle);
-                    }
+                    wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
                     wifiConnectFragment.setCallback(this);
                 }
                 preFragment = wifiConnectFragment;
@@ -385,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     protected void onResume() {
         super.onResume();
         updateStatus(PrinterHelper.getInstance().getPrinterStatus());
+        startWifiScan();
     }
 
     @Override
@@ -423,6 +419,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startWifiScan();
+                Log.d(TAG, "startWifiScan: ");
             } else {
                 Toast.makeText(this, "Location permission required for WiFi scanning",
                         Toast.LENGTH_LONG).show();
@@ -702,6 +699,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     @Override
     public void onWifiListUpdated(ArrayList<String> list) {
         runOnUiThread(() -> {
+            Log.e(TAG, "onWifiListUpdated results: " + (list == null?null:list.size()));
             wifiList = list;
             if (wifiConnectFragment != null){
                 wifiConnectFragment.setSpinnerData(list);

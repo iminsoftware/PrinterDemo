@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WifiScannerSingleton {
+    private static final String TAG = "PrintDemo_WifiScannerSingleton";
     private static volatile WifiScannerSingleton instance;
     private final Context context;
     private WifiScannerHelper wifiScannerHelper;
@@ -39,6 +40,8 @@ public class WifiScannerSingleton {
         wifiScannerHelper.setScanResultsListener(new WifiScannerHelper.OnScanResultsListener() {
             @Override
             public void onResultsReceived(List<ScanResult> results, boolean isFreshScan) {
+                Log.e(TAG, "onResultsReceived results: " + (results == null?null:results.size())+"   ,isFreshScan==>"+isFreshScan+"  , "+(wifiListListener != null));
+
                 if (wifiListListener != null) {
                     ArrayList<String> ssidList = new ArrayList<>();
                     for (ScanResult result : results) {
@@ -90,6 +93,7 @@ public class WifiScannerSingleton {
 
     public void startWifiScan(WifiListListener listener) {
         this.wifiListListener = listener;
+        Log.d(TAG, "startWifiScan: "+checkLocationPermission());
         if (checkLocationPermission()) {
             wifiScannerHelper.startScan();
         } else {
