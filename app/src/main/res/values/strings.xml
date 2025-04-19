@@ -388,4 +388,8 @@
     <string name="start_connect">开始连接</string>
     <string name="configuration">配置</string>
     <string name="toast1">请输入密码</string>
+    <string name="paired">paired</string>
+    <string name="unpaired">unpaired</string>
+
+    <string name="search_bt">搜索蓝牙</string>
 </resources>

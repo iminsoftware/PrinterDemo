@@ -6,7 +6,7 @@
     <string name="function_all">综合测试</string>
     <string name="function_qrcode">二维码</string>
     <string name="function_barcode">条形码</string>
-<!--    <string name="function_text">文字</string>-->
+    <!--    <string name="function_text">文字</string>-->
     <string name="function_text_pic">文字图片</string>
     <string name="function_tab">表格打印</string>
     <string name="add_tab_line">新增一行</string>
@@ -420,4 +420,7 @@
     <string name="start_connect">开始连接</string>
     <string name="configuration">配置</string>
     <string name="toast1">请输入密码</string>
+    <string name="paired">已配对</string>
+    <string name="unpaired">未配对</string>
+    <string name="search_bt">搜索蓝牙</string>
 </resources>
