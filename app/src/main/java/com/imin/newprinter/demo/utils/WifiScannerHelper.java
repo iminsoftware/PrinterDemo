@@ -193,7 +193,7 @@ public class WifiScannerHelper {
         }
     }
 
-    private void notifyPermissionRequired() {
+    public void notifyPermissionRequired() {
         if (scanResultsListener != null) {
             scanResultsListener.onPermissionRequired();
         }

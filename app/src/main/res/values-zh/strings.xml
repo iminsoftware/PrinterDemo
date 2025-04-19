@@ -415,8 +415,9 @@
     <string name="status_ip">IP:%s</string>
     <string name="start_connect_network">开始配网</string>
     <string name="automatically_connect">自动连接</string>
-    <string name="edit_hit">请输入...\n</string>
+    <string name="edit_hit">请输入...</string>
     <string name="active_connect">主动连接</string>
     <string name="start_connect">开始连接</string>
     <string name="configuration">配置</string>
+    <string name="toast1">请输入密码</string>
 </resources>
