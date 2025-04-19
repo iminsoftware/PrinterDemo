@@ -26,7 +26,7 @@ import java.util.List;
  */
 @SuppressLint("MissingPermission")
 public class WifiScannerHelper {
-    private static final String TAG = "WifiScannerHelper";
+    private static final String TAG = "PrintDemo_WifiScannerHelper";
     private static final int DEFAULT_SIGNAL_LEVELS = 5;
     private static final int REQUEST_CODE_LOCATION = 1001;
 
@@ -80,6 +80,7 @@ public class WifiScannerHelper {
 
     // ================== WiFi 扫描控制 ==================
     public void startScan() {
+        Log.e(TAG, "WifiManager is null 1");
         if (!checkLocationPermission()) {
             notifyPermissionRequired();
             return;
@@ -90,14 +91,15 @@ public class WifiScannerHelper {
             notifyScanFailed();
             return;
         }
-
+        Log.e(TAG, "WifiManager is  2");
         if (!wifiManager.isWifiEnabled()) {
             notifyWifiDisabled();
             return;
         }
-
+        Log.e(TAG, "WifiManager is null 3");
         registerReceiver();
         boolean scanStarted = wifiManager.startScan();
+        Log.e(TAG, "WifiManager is null 4 "+scanStarted);
         if (!scanStarted) {
             notifyScanFailed();
         }
@@ -131,6 +133,7 @@ public class WifiScannerHelper {
                 boolean isFresh = intent.getBooleanExtra(
                         WifiManager.EXTRA_RESULTS_UPDATED, false
                 );
+                Log.e(TAG, "Receiver not isFresh: " + isFresh);
                 processScanResults(isFresh);
             }
         }
@@ -139,6 +142,9 @@ public class WifiScannerHelper {
     private void processScanResults(boolean isFresh) {
         List<ScanResult> results = wifiManager.getScanResults();
         List<ScanResult> filteredResults = filterValidNetworks(results);
+
+        Log.e(TAG, "processScanResults results: " + (results == null?null:results.size()));
+
         notifyScanResults(filteredResults, isFresh);
     }
 

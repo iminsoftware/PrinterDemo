@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/bg_color_eff1f7"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.imin.newprinter.demo.view.TitleLayout
@@ -18,330 +19,341 @@
         app:rightVisible="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/wifiStatusTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginHorizontal="15dp"
-        android:textColor="@color/color_1D1D1F"
-        android:text="@string/status_wifi"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewTitle"/>
-    <TextView
-        android:id="@+id/wifiIPTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginHorizontal="15dp"
-        android:textColor="@color/color_1D1D1F"
-        android:text="@string/status_ip"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wifiStatusTv"/>
-
-    <TextView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:text="1"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:textColor="@color/white"
-        android:background="@drawable/ic_point_bg1"
-        app:layout_constraintLeft_toLeftOf="@+id/connectNetworkTv"
-        app:layout_constraintRight_toRightOf="@+id/connectNetworkTv"
-        app:layout_constraintBottom_toTopOf="@+id/connectNetworkTv"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="30dp"/>
-
-    <TextView
-        android:id="@+id/connectNetworkTv"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:textSize="17sp"
-        android:layout_marginHorizontal="15dp"
-        android:textColor="@color/white"
-        android:text="@string/distribution_network"
-        android:gravity="center"
-        android:layout_marginTop="45dp"
-        android:background="@drawable/dra_green_corner_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wifiIPTv"
-
-        />
-
-
-    <TextView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:text="2"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:textColor="@color/white"
-        android:background="@drawable/ic_point_bg1"
-        app:layout_constraintLeft_toLeftOf="@+id/connectTv"
-        app:layout_constraintRight_toRightOf="@+id/connectTv"
-        app:layout_constraintBottom_toTopOf="@+id/connectTv"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="30dp"/>
-
-    <TextView
-        android:id="@+id/connectTv"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:textSize="17sp"
-        android:textColor="@color/white"
-        android:text="@string/connect"
-        android:gravity="center"
-        android:layout_marginTop="45dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/dra_gray_corner_5"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wifiIPTv"
-        />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clConnectNetwork"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="30dp"
-        android:paddingVertical="30dp"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectTv"
-        android:background="@drawable/shape_item_normal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="16sp"
-            android:textColor="@color/text"
-            android:text="@string/connect_wifi_tips"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:textColor="@color/color_666666"
-            android:text="@string/wifi_ssid"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ssidSpinner"
-            app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"/>
-        <Spinner
-            android:id="@+id/ssidSpinner"
+        android:fillViewport="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:textSize="16dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="60dp"
-            android:paddingHorizontal="5dp"
-            android:layout_marginEnd="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/stri_bg_gray_5dp"/>
-        <ImageView
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginEnd="17dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ssidSpinner"
-            app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"
-            android:src="@drawable/ic_inverted_triangle"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:textColor="@color/color_666666"
-            android:text="@string/wifi_pwd"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pwdEt"
-            app:layout_constraintBottom_toBottomOf="@+id/pwdEt"/>
-        <EditText
-            android:id="@+id/pwdEt"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:textSize="16dp"
-            android:textColorHint="@color/color_999999"
-            android:hint="@string/edit_hit"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="20dp"
-            android:paddingHorizontal="5dp"
-            android:inputType="textPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ssidSpinner"
-            android:background="@drawable/stri_bg_gray_5dp"/>
-
-        <FrameLayout
-            android:id="@+id/flPwd"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pwdEt"
-            app:layout_constraintBottom_toBottomOf="@+id/pwdEt">
-            <ImageView
-                android:id="@+id/pwtOpenIv"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_pwd_close"/>
-        </FrameLayout>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:textColor="@color/color_666666"
-            android:text="DHCP"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/swichStatic"
-            app:layout_constraintBottom_toBottomOf="@+id/swichStatic"/>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swichStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="80dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pwdEt" />
-
-
-        <TextView
-            android:id="@+id/networkConfirmTv"
-            android:layout_width="200dp"
-            android:layout_height="45dp"
-            android:textSize="17sp"
-            android:textColor="@color/white"
-            android:text="@string/start_connect_network"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/dra_green_corner_5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/swichStatic"
-
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clConnectIP"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
-        android:visibility="gone"
-        android:layout_marginTop="30dp"
-        android:paddingVertical="30dp"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectTv"
-        android:background="@drawable/shape_item_normal">
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/autoLy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/autoTips"
-            app:layout_constraintBottom_toBottomOf="@+id/autoTips">
-            <ImageView
-                android:id="@+id/autoConnectIv"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_uncheck"
-                />
+            android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/wifiStatusTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="15dp"
                 android:textColor="@color/color_1D1D1F"
-                android:text="@string/automatically_connect"/>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-        <TextView
-            android:id="@+id/autoTips"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:textSize="16dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/text"
-            android:text="@string/connect_wifi_tips1"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="10dp"
-            android:paddingHorizontal="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/ipLy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ipEt"
-            app:layout_constraintBottom_toBottomOf="@+id/ipEt">
-            <ImageView
-                android:id="@+id/ipIv"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_uncheck"
-                />
+                android:text="@string/status_wifi"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
             <TextView
+                android:id="@+id/wifiIPTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="15dp"
                 android:textColor="@color/color_1D1D1F"
-                android:text="@string/active_connect"/>
+                android:text="@string/status_ip"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/wifiStatusTv"/>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:text="1"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:background="@drawable/ic_point_bg1"
+                app:layout_constraintLeft_toLeftOf="@+id/connectNetworkTv"
+                app:layout_constraintRight_toRightOf="@+id/connectNetworkTv"
+                app:layout_constraintBottom_toTopOf="@+id/connectNetworkTv"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="30dp"/>
 
-        <EditText
-            android:id="@+id/ipEt"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:textSize="16dp"
-            android:textColorHint="@color/color_999999"
-            android:hint="@string/edit_hit"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="20dp"
-            android:paddingHorizontal="5dp"
-            android:inputType="textPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autoTips"
-            android:background="@drawable/stri_bg_gray_5dp"/>
+            <TextView
+                android:id="@+id/connectNetworkTv"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:textSize="17sp"
+                android:layout_marginHorizontal="15dp"
+                android:textColor="@color/white"
+                android:text="@string/distribution_network"
+                android:gravity="center"
+                android:layout_marginTop="45dp"
+                android:background="@drawable/dra_green_corner_5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/wifiIPTv"
 
-        <TextView
-            android:id="@+id/ipConfirmTv"
-            android:layout_width="200dp"
-            android:layout_height="45dp"
-            android:textSize="17sp"
-            android:textColor="@color/white"
-            android:text="@string/start_connect"
-            android:gravity="center"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/dra_green_corner_5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ipEt"
-            />
+                />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:text="2"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:background="@drawable/ic_point_bg1"
+                app:layout_constraintLeft_toLeftOf="@+id/connectTv"
+                app:layout_constraintRight_toRightOf="@+id/connectTv"
+                app:layout_constraintBottom_toTopOf="@+id/connectTv"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="30dp"/>
+
+            <TextView
+                android:id="@+id/connectTv"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:textSize="17sp"
+                android:textColor="@color/white"
+                android:text="@string/connect"
+                android:gravity="center"
+                android:layout_marginTop="45dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/dra_gray_corner_5"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/wifiIPTv"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clConnectNetwork"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="30dp"
+                android:paddingVertical="30dp"
+                android:paddingHorizontal="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/connectTv"
+                android:background="@drawable/shape_item_normal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="16sp"
+                    android:textColor="@color/text"
+                    android:text="@string/connect_wifi_tips"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/color_666666"
+                    android:text="@string/wifi_ssid"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ssidSpinner"
+                    app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"/>
+                <Spinner
+                    android:id="@+id/ssidSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textSize="16dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="60dp"
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginEnd="15dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@drawable/stri_bg_gray_5dp"/>
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="17dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ssidSpinner"
+                    app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"
+                    android:src="@drawable/ic_inverted_triangle"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/color_666666"
+                    android:text="@string/wifi_pwd"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pwdEt"
+                    app:layout_constraintBottom_toBottomOf="@+id/pwdEt"/>
+                <EditText
+                    android:id="@+id/pwdEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textSize="16dp"
+                    android:textColorHint="@color/color_999999"
+                    android:hint="@string/edit_hit"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingHorizontal="5dp"
+                    android:inputType="textPassword"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ssidSpinner"
+                    android:background="@drawable/stri_bg_gray_5dp"/>
+
+                <FrameLayout
+                    android:id="@+id/flPwd"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pwdEt"
+                    app:layout_constraintBottom_toBottomOf="@+id/pwdEt">
+                    <ImageView
+                        android:id="@+id/pwtOpenIv"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_pwd_close"/>
+                </FrameLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/color_666666"
+                    android:text="DHCP"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/swichStatic"
+                    app:layout_constraintBottom_toBottomOf="@+id/swichStatic"/>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swichStatic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="80dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pwdEt" />
+
+
+                <TextView
+                    android:id="@+id/networkConfirmTv"
+                    android:layout_width="200dp"
+                    android:layout_height="45dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"
+                    android:text="@string/start_connect_network"
+                    android:gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/dra_green_corner_5"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/swichStatic"
+
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clConnectIP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:visibility="gone"
+                android:layout_marginTop="30dp"
+                android:paddingVertical="30dp"
+                android:paddingHorizontal="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/connectTv"
+                android:background="@drawable/shape_item_normal">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/autoLy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/autoTips"
+                    app:layout_constraintBottom_toBottomOf="@+id/autoTips">
+                    <ImageView
+                        android:id="@+id/autoConnectIv"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_uncheck"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_1D1D1F"
+                        android:text="@string/automatically_connect"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                <TextView
+                    android:id="@+id/autoTips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textSize="16dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:text="@string/connect_wifi_tips1"
+                    android:layout_marginStart="130dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/ipLy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ipEt"
+                    app:layout_constraintBottom_toBottomOf="@+id/ipEt">
+                    <ImageView
+                        android:id="@+id/ipIv"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_uncheck"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_1D1D1F"
+                        android:text="@string/active_connect"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <EditText
+                    android:id="@+id/ipEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textSize="16dp"
+                    android:textColorHint="@color/color_999999"
+                    android:hint="@string/edit_hit"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="130dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingHorizontal="5dp"
+                    android:inputType="textPassword"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/autoTips"
+                    android:background="@drawable/stri_bg_gray_5dp"/>
+
+                <TextView
+                    android:id="@+id/ipConfirmTv"
+                    android:layout_width="200dp"
+                    android:layout_height="45dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"
+                    android:text="@string/start_connect"
+                    android:gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:background="@drawable/dra_green_corner_5"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ipEt"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
