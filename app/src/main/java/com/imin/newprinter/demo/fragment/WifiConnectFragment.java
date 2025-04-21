@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
@@ -25,6 +26,7 @@ import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding;
+import com.imin.newprinter.demo.utils.LoadingDialogUtil;
 import com.imin.newprinter.demo.utils.NetworkValidator;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.utils.WifiScannerHelper;
@@ -39,6 +41,9 @@ import com.imin.printer.wireless.WirelessPrintStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 /**
  * @Author: hy
@@ -75,8 +80,7 @@ public class WifiConnectFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentWifiConnectBinding.inflate(inflater);
-        initView();
-        initData();
+
         return binding.getRoot();
     }
 
@@ -84,9 +88,38 @@ public class WifiConnectFragment extends BaseFragment {
     boolean outoConnect = true;//自动连接   手动输入ip连接
 
     private ArrayAdapter<String> adapter;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initView();
+        initData();
+        if (Utils.isEmpty(MainActivity.connectType)){
+            binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI"
+                    ,getString(R.string.un_normal)));
+            binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
+                    ,"-------"));
+        }else {
+            if (MainActivity.connectType.equals("WIFI")){
+                binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI"
+                        ,getString(R.string.normal)));
+                binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
+                        ,MainActivity.connectAddress));
+
+            }else {
+                binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI"
+                        ,getString(R.string.un_normal)));
+
+                binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
+                        ,"-------"));
+            }
+        }
+
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private void initView() {
-        Log.d(TAG, "加载页面: ");
+        Log.d(TAG, "加载页面: "+list.size());
         adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
                 android.R.layout.simple_spinner_item, new ArrayList<>());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -100,6 +133,9 @@ public class WifiConnectFragment extends BaseFragment {
         binding.pwdEt.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
         binding.ipEt.setEnabled(false);
+
+
+
         binding.connectNetworkTv.setOnClickListener(view -> {
             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
@@ -108,10 +144,13 @@ public class WifiConnectFragment extends BaseFragment {
         });
 
         binding.connectTv.setOnClickListener(v->{
+
             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
             binding.clConnectNetwork.setVisibility(View.GONE);
             binding.clConnectIP.setVisibility(View.VISIBLE);
+            binding.clConnectIP.requestLayout();
+            Log.d(TAG, "加载页面: "+binding.clConnectIP.getVisibility());
         });
 
         binding.autoLy.setOnClickListener(view -> {
@@ -228,7 +267,7 @@ public class WifiConnectFragment extends BaseFragment {
                             if (i == 0){
                                 MainActivity.connectType = "WIFI";
                                 MainActivity.connectContent = binding.wifiIPTv.getText().toString().trim();
-                                switchFragment(12);
+                                switchFragment(4);
                             }
                         }
                     });
@@ -400,6 +439,14 @@ public class WifiConnectFragment extends BaseFragment {
             @Override
             public void onResult(int i, String s) throws RemoteException {
                 Log.d(TAG, "配网回调==: i= " + i+" ,s=>"+s);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoadingDialogUtil.getInstance().show(getContext(),getString(R.string.loading));
+                    }
+                });
+
+
                 if (i == 0){
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -408,7 +455,6 @@ public class WifiConnectFragment extends BaseFragment {
                         }
                     });
 
-                    SystemClock.sleep(3000);
                     PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
                                     .setWirelessStyle(WirelessConfig.WIFI_CONNECT_STATUS)
                             , new Stub() {
@@ -433,11 +479,13 @@ public class WifiConnectFragment extends BaseFragment {
                                                 @Override
                                                 public void onReturnString(String s) throws RemoteException {
                                                     Log.d(TAG, "ip回调==: s= " + s);
-                                                    MainActivity.connectAddress = s;
+
                                                     getActivity().runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
                                                             if (s != null){
+                                                                LoadingDialogUtil.getInstance().hide();
+                                                                MainActivity.connectAddress = s;
                                                                 binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                                                                 binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                                                 binding.clConnectNetwork.setVisibility(View.GONE);
@@ -530,12 +578,29 @@ public class WifiConnectFragment extends BaseFragment {
     }
 
     public void setSpinnerData(List<String> wifiList){
+        Log.d(TAG, "setSpinnerData=  " + wifiList);
         if (adapter != null){
-            adapter.clear();
-            adapter.addAll(wifiList);
-            adapter.notifyDataSetChanged();
-        }
+            if (adapter.getCount() == 0){
+                adapter.clear();
+                adapter.addAll(wifiList);
+                adapter.notifyDataSetChanged();
+                binding.ssidSpinner.setAdapter(adapter);
+            }
 
+        }
+        binding.ssidSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String s = adapter.getItem(i);
+                Log.d(TAG, "加载页面: "+s);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
 }

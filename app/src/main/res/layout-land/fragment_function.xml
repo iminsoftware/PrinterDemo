@@ -98,6 +98,11 @@
                         android:overScrollMode="never" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <FrameLayout
+                    android:id="@+id/contentFy"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </FrameLayout>
 
     <RelativeLayout

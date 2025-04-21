@@ -53,11 +53,17 @@ public class WirelessPrintingFragment extends BaseFragment{
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initView();
+    }
+
     private void initView() {
         binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi),connectTypeStr,getString(R.string.normal)));
         binding.connectContentTv.setText(connectContentStr);
         binding.connectNetworkTv.setOnClickListener(view -> {
-            switchFragment(connectTypeStr.contains("WIFI")?10:11);
+            switchFragment(connectTypeStr.contains("WIFI")?1:2);
         });
         binding.printTest1.setOnClickListener(view -> {
             PrinterHelper.getInstance().sendRAWData(BytesUtils.getErlmoData(), null);

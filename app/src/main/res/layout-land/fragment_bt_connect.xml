@@ -19,7 +19,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             app:leftVisible="false"
-            app:rightVisible="true"
+            app:rightVisible="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -41,14 +41,28 @@
         android:layout_marginHorizontal="15dp"
         android:textColor="@color/color_1D1D1F"
         android:text="@string/status_ip"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         />
+
+    <TextView
+        android:id="@+id/search_bt"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:layout_margin="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp10"
+        android:text="@string/search"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:background="@drawable/dra_green_corner_5" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srlRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:refreshing="false"
             android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="30dp"
             android:layout_weight="1">
 
             <com.imin.newprinter.demo.view.RefreshListView
@@ -59,17 +73,6 @@
                 android:listSelector="@drawable/btn_white_selector" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/search_bt"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/dp10"
-        android:text="@string/search"
-        android:textSize="17sp"
-        android:textColor="@color/white"
-        android:background="@drawable/dra_green_corner_5" />
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>

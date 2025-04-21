@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -42,11 +44,12 @@ import com.imin.newprinter.demo.viewmodel.FunctionTestFragmentViewModel;
 import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FunctionFragment extends BaseFragment {
+public class FunctionFragment extends BaseFragment implements TitleLayout.LeftCallback {
 
-    private static final String TAG = "FunctionFragment";
+    private static final String TAG = "PrintDemo_FunctionFragment";
 
     private BaseQuickAdapter<FunctionTestBean, BaseViewHolder> adapter;
     BaseQuickAdapter<LabelTitleBean, BaseViewHolder> adapter1,adapter2;
@@ -73,9 +76,7 @@ public class FunctionFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getActivity() != null){
-            ((MainActivity)(getActivity())).showHomePage();
-        }
+
     }
 
     private void initView() {
@@ -378,8 +379,9 @@ public class FunctionFragment extends BaseFragment {
     public void switchFragment(int num) {
         Log.d(TAG, "switchPager :num=  " + num + (fragmentListener != null));
 
+//        updateFragment(num);
         if (fragmentListener != null) {
-            fragmentListener.switchFragment(num);
+            fragmentListener.switchFragment(num+100);
         }
     }
 
@@ -398,6 +400,114 @@ public class FunctionFragment extends BaseFragment {
                 binding.tvPrinterStatus.setText(printerStatusTip);
             }
         }
+
+    }
+
+    private LinkedHashMap<Integer, IminBaseFragment> fragmentMap = new LinkedHashMap<>();
+    private IminBaseFragment currentFragment;
+
+    public void showItem(){
+        binding.contentFy.setVisibility(View.GONE);
+        binding.llyLabel.setVisibility(Utils.isNingzLabel()? View.VISIBLE:View.GONE);
+        binding.recyclerView.setVisibility(Utils.isNingzLabel()?View.GONE:View.VISIBLE);
+        if (!Utils.isPortrait()){
+            binding.viewTitle.setVisibility(View.VISIBLE);
+        }
+
+    }
+    public void updateFragment(int position) {
+        Log.d(TAG, "updateFragment: num= " + position);
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (Utils.isPortrait()) {
+            binding.viewTitle.setVisibility(View.GONE);
+            binding.rlPrintStatus.setVisibility(View.GONE);
+
+        }
+        binding.viewTitle.setVisibility(View.GONE);
+        binding.contentFy.setVisibility(View.VISIBLE);
+        binding.recyclerView.setVisibility(View.GONE);
+        binding.llyLabel.setVisibility(View.GONE);
+
+        IminBaseFragment fragment = fragmentMap.get(position);
+        Log.d(TAG, "updateFragment:fragment is not null " + (fragment != null));
+        if (fragment == null) {
+
+            switch (position) {
+                case 0:
+                    fragment = new AllTestFragment();
+                    break;
+                case 1:
+                    fragment = new QrCodeFragment();
+                    break;
+                case 2:
+                    fragment = new BarcodeFragment();
+                    break;
+                case 3:
+                    fragment = new TextFragment();
+                    break;
+                case 4:
+                    fragment = new TableFormFragment();
+                    break;
+                case 5:
+                    fragment = new PictureFragment();
+                    break;
+                case 6:
+                    fragment = new TransFragment();
+                    break;
+                case 7:
+                    fragment = new PaperFeedFragment();
+                    break;
+                case 8:
+                    fragment = new PrinterParameterFragment();
+                    break;
+                case 9:
+                    fragment = new DoubleQrCodeFragment();
+                    break;
+                case 100: // setting
+                    fragment = new SettingFragment();
+                    break;
+            }
+
+            if (fragment != null) {
+                fragment.setLeftCallback(this);
+                fragmentMap.put(position, fragment);
+            }
+        }
+
+
+        transaction.replace(R.id.contentFy, fragment, String.valueOf(position));
+        transaction.addToBackStack(null);
+        transaction.show(fragment);
+        transaction.commit();
+
+        fragmentManager.executePendingTransactions();
+        currentFragment = fragment;
+
+    }
+
+    @Override
+    public void backPre() {
+        Log.d(TAG, "onBackPressed  currentTag= " + getChildFragmentManager().getBackStackEntryCount());
+        if (getChildFragmentManager().getBackStackEntryCount() <= 0) {
+
+        } else {
+            int backStackCount = getChildFragmentManager().getBackStackEntryCount();
+            FragmentManager.BackStackEntry topEntry = getChildFragmentManager().getBackStackEntryAt(backStackCount - 1);
+            String currentTag = topEntry.getName();
+            Log.d(TAG, "onBackPressed  currentTag= " + currentTag);
+            getChildFragmentManager().popBackStack();
+            showItem();
+        }
+
+
+        ((MainActivity)getActivity()).updateStatus(PrinterHelper.getInstance().getPrinterStatus());
+
+    }
+
+    @Override
+    public void nextPage(int num) {
 
     }
 }

@@ -40,6 +40,8 @@ public class MainPageAdapter extends FragmentStatePagerAdapter {
     // 核心优化点1：通过Tag复用Fragment视图
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        // 先移除容器内所有子视图（避免叠加）
+//        container.removeAllViews();
         // 尝试通过Tag查找已有Fragment
         String tag = fragmentTags.get(position);
         BaseFragment fragment = null;

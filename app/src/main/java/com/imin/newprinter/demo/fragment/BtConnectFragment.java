@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -33,6 +35,7 @@ import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
 import com.imin.newprinter.demo.bean.BluetoothBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding;
+import com.imin.newprinter.demo.utils.Utils;
 import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
 import com.imin.printer.enums.ConnectType;
@@ -52,7 +55,7 @@ import java.util.Set;
  */
 @SuppressLint("MissingPermission")
 public class BtConnectFragment extends BaseFragment implements AdapterView.OnItemClickListener {
-    private static final String TAG = BtConnectFragment.class.getSimpleName();
+    private static final String TAG = "PrintDemo_BtConnectFragment";
 
     private com.imin.newprinter.demo.databinding.FragmentBtConnectBinding binding;
     private int OPEN_BLUETOOTH_REQUEST_CODE = 0x00;
@@ -88,6 +91,12 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
             BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
 
             if (device.getBluetoothClass().getMajorDeviceClass() != 1536) {//只显示蓝牙打印机
+                return;
+            }
+            if (Utils.isEmpty(device.getName())){
+                return;
+            }
+            if (!device.getName().contains("80mm")){
                 return;
             }
             BluetoothBean bluetoothBean = new BluetoothBean();
@@ -152,6 +161,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         }
         pairedDevices.add(bluetoothBean);
         adapter.notifyDataSetChanged();
+        binding.srlRefresh.setRefreshing(false);
     }
 
     String mac = "";
@@ -183,7 +193,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
                         if (i == 0){
                             MainActivity.connectType = "BT";
                             MainActivity.connectContent = name+"\t"+mac;
-                            switchFragment(12);
+                            switchFragment(4);
                         }
                     }
                 });
@@ -213,15 +223,37 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentBtConnectBinding.inflate(inflater);
-        initView();
-        initData();
+
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initView();
+        initData();
+        if (Utils.isEmpty(MainActivity.connectType)){
+            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi),"BT"
+                    ,getString(R.string.un_normal)));
+        }else {
+            if (MainActivity.connectType.equals("BT")){
+                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi),"BT"
+                        ,getString(R.string.normal)));
+            }else {
+                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi),"BT"
+                        ,getString(R.string.un_normal)));
+            }
+        }
+
+    }
+
     private void initView() {
+
+        binding.srlRefresh.setRefreshing(true);
         binding.srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                searchBlueTooth();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -237,7 +269,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
                 startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
                 return;
             }
-            binding.srlRefresh.setRefreshing(true);
+
             binding.searchBt.setVisibility(View.GONE);
             searchBlueTooth();
         });
@@ -263,7 +295,11 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
             } else {//蓝牙已打开
-                binding.searchBt.performClick();
+
+                if (checkBluetoothPermissions()){
+                    binding.searchBt.performClick();
+                }
+
 //                getBoundDevices();
             }
         }
@@ -310,6 +346,18 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
             e.printStackTrace();
         }
     }
+
+    // 检查蓝牙基础权限（适配 Android 12+）
+    public boolean checkBluetoothPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
 
 
     /**

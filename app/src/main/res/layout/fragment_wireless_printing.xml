@@ -72,6 +72,7 @@
         android:layout_width="200dp"
         android:layout_height="80dp"
         android:textColor="@color/white"
+        android:layout_marginHorizontal="15dp"
         android:gravity="center"
         android:text="@string/print_ticket1"
         android:background="@drawable/dra_green_corner_5"

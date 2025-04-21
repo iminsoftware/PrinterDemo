@@ -49,6 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/color_1D1D1F"
         android:textSize="14sp"/>
 </LinearLayout>

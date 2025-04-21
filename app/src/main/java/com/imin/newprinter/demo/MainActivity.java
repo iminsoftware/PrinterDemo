@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -139,16 +140,22 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         registerReceiver(mReceiver, intentFilter);
         getPrinterParameter();
         functionTestFragment = new FunctionFragment();
+        functionTestFragment.setCallback(this);
         wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
+        wifiConnectFragment.setCallback(this);
         btConnectFragment = new BtConnectFragment();
+        btConnectFragment.setCallback(this);
+        wirelessPrintingFragment = WirelessPrintingFragment.newInstance(connectType,connectContent);
+        wirelessPrintingFragment.setCallback(this);
         List<BaseFragment> fragmentList = new ArrayList<>();
 
         fragmentList.add(functionTestFragment);
         fragmentList.add(wifiConnectFragment);
         fragmentList.add(btConnectFragment);
+        fragmentList.add(wirelessPrintingFragment);
         MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager(),fragmentList);
         binding.vp.setAdapter(mainPageAdapter);
-        binding.vp.setOffscreenPageLimit(3);
+        binding.vp.setOffscreenPageLimit(4);
         binding.vp.setCurrentItem(0);
 
 
@@ -216,128 +223,128 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 //    }
 
 
-//   synchronized private void updateFragment(int position) {
-//        Log.d(TAG, "updateFragment: num= " + position
-//                + ", fragment= " + (functionTestFragment != null)
-//        );
-//       FragmentManager fragmentManager = getSupportFragmentManager();
-//       FragmentTransaction transaction = fragmentManager.beginTransaction();
-//       if (position == -1 || position == 10 || position == 11 || position == 12) {
-//            if (Utils.isPortrait()) {
-//                if (binding.viewTitle != null) {
-//                    binding.viewTitle.setVisibility(View.VISIBLE);
-//                }
-//
-//                binding.clConnect.setVisibility(View.VISIBLE);
-//                binding.rlPrintStatus.setVisibility(View.VISIBLE);
-//            }
-//
-//            if (position == -1) {
-//                if (Utils.isNingzLabel()) {
-//                    functionTestFragment = null;
-//                }
-//                if (functionTestFragment == null) {
-//                    functionTestFragment = new FunctionFragment();
-//                    functionTestFragment.setCallback(this);
-//                }
-//                preFragment = functionTestFragment;
-//            } else if (position == 10) {
-//                if (wifiConnectFragment == null) {
-//                    wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
-//                    wifiConnectFragment.setCallback(this);
-//                }
-//                preFragment = wifiConnectFragment;
-//            } else if (position == 11) {
-//                if (btConnectFragment == null) {
-//                    btConnectFragment = new BtConnectFragment();
-//                    btConnectFragment.setCallback(this);
-//                }
-//                preFragment = btConnectFragment;
-//            } else {
-//                if (wirelessPrintingFragment == null) {
-//                    wirelessPrintingFragment = WirelessPrintingFragment.newInstance(connectType, connectContent);
-//                }
-//                preFragment = wirelessPrintingFragment;
-//            }
-//
-//            transaction.replace(R.id.fl_main, preFragment, String.valueOf(position));
-//            transaction.addToBackStack(null);
-//
-//            transaction.commit();
-//            fragmentManager.executePendingTransactions();
-//
-//            runOnUiThread(() -> {
-//
-//            });
-//
-//            selectFragment = preFragment;
-//        } else {
-//            if (Utils.isPortrait()) {
-//                binding.viewTitle.setVisibility(View.GONE);
-//                binding.clConnect.setVisibility(View.GONE);
-//                binding.rlPrintStatus.setVisibility(View.GONE);
-//
-//            }
-//
-//            IminBaseFragment fragment = fragmentMap.get(position);
-//            Log.d(TAG, "updateFragment:fragment is not null " + (fragment != null));
-//            if (fragment == null) {
-//
-//                switch (position) {
-//                    case 0:
-//                        fragment = new AllTestFragment();
-//                        break;
-//                    case 1:
-//                        fragment = new QrCodeFragment();
-//                        break;
-//                    case 2:
-//                        fragment = new BarcodeFragment();
-//                        break;
-//                    case 3:
-//                        fragment = new TextFragment();
-//                        break;
-//                    case 4:
-//                        fragment = new TableFormFragment();
-//                        break;
-//                    case 5:
-//                        fragment = new PictureFragment();
-//                        break;
-//                    case 6:
-//                        fragment = new TransFragment();
-//                        break;
-//                    case 7:
-//                        fragment = new PaperFeedFragment();
-//                        break;
-//                    case 8:
-//                        fragment = new PrinterParameterFragment();
-//                        break;
-//                    case 9:
-//                        fragment = new DoubleQrCodeFragment();
-//                        break;
-//                    case 100: // setting
-//                        fragment = new SettingFragment();
-//                        break;
-//                }
-//
-//                if (fragment != null) {
-//                    fragment.setLeftCallback(this);
-//                    fragmentMap.put(position, fragment);
-//                }
-//            }
-//
-//
-//            transaction.replace(R.id.fl_main, fragment, String.valueOf(position));
-//            transaction.addToBackStack(null);
-//
-//            runOnUiThread(() -> {
-//                transaction.commit();
-//                fragmentManager.executePendingTransactions();
-//            });
-//            currentFragment = fragment;
-//
-//        }
-//
-//    }
+    private void updateFragment(int position) {
+        Log.d(TAG, "updateFragment: num= " + position
+                + ", fragment= " + (functionTestFragment != null)
+        );
+       FragmentManager fragmentManager = getSupportFragmentManager();
+       FragmentTransaction transaction = fragmentManager.beginTransaction();
+       if (position == -1 || position == 10 || position == 11 || position == 12) {
+            if (Utils.isPortrait()) {
+                if (binding.viewTitle != null) {
+                    binding.viewTitle.setVisibility(View.VISIBLE);
+                }
+
+                binding.clConnect.setVisibility(View.VISIBLE);
+                binding.rlPrintStatus.setVisibility(View.VISIBLE);
+            }
+
+            if (position == -1) {
+                if (Utils.isNingzLabel()) {
+                    functionTestFragment = null;
+                }
+                if (functionTestFragment == null) {
+                    functionTestFragment = new FunctionFragment();
+                    functionTestFragment.setCallback(this);
+                }
+                preFragment = functionTestFragment;
+            } else if (position == 10) {
+                if (wifiConnectFragment == null) {
+                    wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
+                    wifiConnectFragment.setCallback(this);
+                }
+                preFragment = wifiConnectFragment;
+            } else if (position == 11) {
+                if (btConnectFragment == null) {
+                    btConnectFragment = new BtConnectFragment();
+                    btConnectFragment.setCallback(this);
+                }
+                preFragment = btConnectFragment;
+            } else {
+                if (wirelessPrintingFragment == null) {
+                    wirelessPrintingFragment = WirelessPrintingFragment.newInstance(connectType, connectContent);
+                }
+                preFragment = wirelessPrintingFragment;
+            }
+
+            transaction.replace(R.id.fl_main, preFragment, String.valueOf(position));
+            transaction.addToBackStack(null);
+
+            transaction.commit();
+            fragmentManager.executePendingTransactions();
+
+            runOnUiThread(() -> {
+
+            });
+
+            selectFragment = preFragment;
+        } else {
+            if (Utils.isPortrait()) {
+                binding.viewTitle.setVisibility(View.GONE);
+                binding.clConnect.setVisibility(View.GONE);
+                binding.rlPrintStatus.setVisibility(View.GONE);
+
+            }
+
+            IminBaseFragment fragment = fragmentMap.get(position);
+            Log.d(TAG, "updateFragment:fragment is not null " + (fragment != null));
+            if (fragment == null) {
+
+                switch (position) {
+                    case 0:
+                        fragment = new AllTestFragment();
+                        break;
+                    case 1:
+                        fragment = new QrCodeFragment();
+                        break;
+                    case 2:
+                        fragment = new BarcodeFragment();
+                        break;
+                    case 3:
+                        fragment = new TextFragment();
+                        break;
+                    case 4:
+                        fragment = new TableFormFragment();
+                        break;
+                    case 5:
+                        fragment = new PictureFragment();
+                        break;
+                    case 6:
+                        fragment = new TransFragment();
+                        break;
+                    case 7:
+                        fragment = new PaperFeedFragment();
+                        break;
+                    case 8:
+                        fragment = new PrinterParameterFragment();
+                        break;
+                    case 9:
+                        fragment = new DoubleQrCodeFragment();
+                        break;
+                    case 100: // setting
+                        fragment = new SettingFragment();
+                        break;
+                }
+
+                if (fragment != null) {
+                    fragment.setLeftCallback(this);
+                    fragmentMap.put(position, fragment);
+                }
+            }
+
+
+            transaction.replace(R.id.fl_main, fragment, String.valueOf(position));
+            transaction.addToBackStack(null);
+
+            runOnUiThread(() -> {
+                transaction.commit();
+                fragmentManager.executePendingTransactions();
+            });
+            currentFragment = fragment;
+
+        }
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -355,24 +362,28 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         updateStatus(PrinterHelper.getInstance().getPrinterStatus());
     }
 
-    public void showHomePage() {
-//        Log.d(TAG, "showHomePage: " + fragmentManager.getBackStackEntryCount());
-//
-//        // 获取当前回退栈的条目数量
-//        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-//        if (backStackCount > 0) {
-//            // 获取栈顶条目的 Tag
-//            FragmentManager.BackStackEntry topEntry = getSupportFragmentManager().getBackStackEntryAt(backStackCount - 1);
-//            String currentTag = topEntry.getName();
-//            // 执行回退操作
-//            // supportFragmentManager.popBackStack()
-//        }
-
-    }
 
     @Override
     public void switchFragment(int num) {
         Log.d(TAG, "switchPager: " + num);
+        if (num>=100){
+            if (Utils.isPortrait()){
+                binding.viewTitle.setVisibility(View.GONE);
+                binding.clConnect.setVisibility(View.GONE);
+                binding.rlPrintStatus.setVisibility(View.GONE);
+            }
+            functionTestFragment.updateFragment(num-100);
+        }else {
+            if (Utils.isPortrait()) {
+                if (binding.viewTitle != null) {
+                    binding.viewTitle.setVisibility(View.VISIBLE);
+                }
+
+                binding.clConnect.setVisibility(View.VISIBLE);
+                binding.rlPrintStatus.setVisibility(View.VISIBLE);
+            }
+            binding.vp.setCurrentItem(num);
+        }
 
 //        updateFragment(num);
 
@@ -478,11 +489,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     public void getPrinterParameter() {
 
+        Log.d(TAG, "getPrinterParameter1111111:===== "+(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()));
+
         if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()) {
             binding.lySerial.setVisibility(View.VISIBLE);
             binding.lyThermal.setVisibility(View.VISIBLE);
             binding.lyDistancee.setVisibility(View.VISIBLE);
-
+            Log.d(TAG, "getPrinterParameter2222:===== ");
             PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
                 @Override
                 public void onRunResult(boolean isSuccess) throws RemoteException {
@@ -730,4 +743,9 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                 "WiFi scan failed", Toast.LENGTH_SHORT).show());
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d(TAG, "initViewObservable version: " + newConfig);
+    }
 }

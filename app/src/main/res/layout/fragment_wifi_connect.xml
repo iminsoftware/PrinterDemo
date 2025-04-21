@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     android:background="@color/bg_color_eff1f7"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.imin.newprinter.demo.view.TitleLayout
@@ -139,7 +140,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/ssidSpinner"
                     app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"/>
-                <Spinner
+                <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/ssidSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
