@@ -3,6 +3,7 @@ package com.imin.newprinter.demo.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding;
@@ -29,6 +31,7 @@ import com.imin.newprinter.demo.utils.WifiScannerHelper;
 import com.imin.newprinter.demo.utils.WifiScannerSingleton;
 import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
+import com.imin.printer.enums.ConnectType;
 import com.imin.printer.enums.IpType;
 import com.imin.printer.enums.WirelessConfig;
 import com.imin.printer.wireless.WirelessPrintStyle;
@@ -43,23 +46,11 @@ import java.util.Objects;
  * @description:
  */
 public class WifiConnectFragment extends BaseFragment {
-    private static final String TAG = "WifiConnectFragment";
+    private static final String TAG = "PrintDemo_WifiConnectFragment";
     private com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding binding;
     ArrayList<String> list = new ArrayList<>();
 
-    @Override
-    public void setArguments(@Nullable Bundle args) {
-        super.setArguments(args);
-        Log.d(TAG, "WifiConnectFragment: " + (args != null));
-        if (args != null){
 
-            list = args.getStringArrayList("wifiList");
-            Log.d(TAG, "WifiConnectFragment: " + (list==null?null:list.size()));
-            if (list != null && list.size() >0){
-                setSpinnerData(list);
-            }
-        }
-    }
     private static final String ARG_WIFI_LIST = "wifiList";
 
     public static WifiConnectFragment newInstance(ArrayList<String> wifiList) {
@@ -76,10 +67,7 @@ public class WifiConnectFragment extends BaseFragment {
         if (getArguments() != null) {
             list = getArguments().getStringArrayList(ARG_WIFI_LIST);
         }
-        if (list == null || list.isEmpty()) {
-//            Toast.makeText(getContext(), "无可用WiFi列表", Toast.LENGTH_SHORT).show();
-//            requireActivity().onBackPressed(); // 关闭Fragment
-        }
+
     }
 
 
@@ -93,10 +81,12 @@ public class WifiConnectFragment extends BaseFragment {
     }
 
     boolean isOpenEasy = false;
+    boolean outoConnect = true;//自动连接   手动输入ip连接
+
     private ArrayAdapter<String> adapter;
     @SuppressLint("UseCompatLoadingForDrawables")
     private void initView() {
-
+        Log.d(TAG, "加载页面: ");
         adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
                 android.R.layout.simple_spinner_item, new ArrayList<>());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -128,12 +118,14 @@ public class WifiConnectFragment extends BaseFragment {
             binding.autoConnectIv.setImageResource(R.drawable.ic_check);
             binding.ipIv.setImageResource(R.drawable.ic_uncheck);
             binding.ipEt.setEnabled(false);
+            outoConnect = true;
 
         });
         binding.ipLy.setOnClickListener(view -> {
             binding.ipIv.setImageResource(R.drawable.ic_check);
             binding.autoConnectIv.setImageResource(R.drawable.ic_uncheck);
             binding.ipEt.setEnabled(true);
+            outoConnect = false;
         });
 
         binding.flPwd.setOnClickListener(view -> {
@@ -179,6 +171,7 @@ public class WifiConnectFragment extends BaseFragment {
                             return;
                         }
                     }
+                    Log.d(TAG,"WIFI_IP_TYPE ssid=>"+ssid+"  pwd="+pwd);
                     if (binding.swichStatic.isChecked()){
                         connectToWifi(ssid,pwd);
                     }else {
@@ -210,11 +203,52 @@ public class WifiConnectFragment extends BaseFragment {
         });
 
         binding.ipConfirmTv.setOnClickListener(v->{
-            String ip = binding.ipEt.getText().toString().trim();
-            if(Utils.isEmpty(ip)){
-                Toast.makeText(getContext(), "请先选择WiFi网络", Toast.LENGTH_SHORT).show();
-                return;
+            if (!outoConnect){
+                String ip = binding.ipEt.getText().toString().trim();
+                if(Utils.isEmpty(ip)){
+                    Toast.makeText(getContext(), "请先选择正确的ip", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!NetworkValidator.validateIP(ip)){
+                    Toast.makeText(getContext(), "请先选择正确的ip", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                MainActivity.connectAddress = ip;
             }
+
+            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                    .setConnectType(ConnectType.WIFI.getTypeName())
+                    .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
+                @Override
+                public void onResult(int i, String s) throws RemoteException {
+                    Log.d(TAG,"WIFI_CONNECT=>"+s+"  i="+i);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (i == 0){
+                                MainActivity.connectType = "WIFI";
+                                MainActivity.connectContent = binding.wifiIPTv.getText().toString().trim();
+                                switchFragment(12);
+                            }
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onReturnString(String s) throws RemoteException {
+                    Log.d(TAG,"WIFI_CONNECT =>"+s);
+                }
+            });
+
+
+
+
+        });
+
+        binding.viewTitle.setRightCallback(v -> {
+            Log.d(TAG, "setting: ");
+            switchFragment(100);
         });
 
     }
@@ -360,47 +394,118 @@ public class WifiConnectFragment extends BaseFragment {
             }
         });
         PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.WIRELESS_NET_SETUP)
                 .setSsid(ssid)
                 .setPwd(pwd), new IWirelessPrintResult.Stub() {
             @Override
             public void onResult(int i, String s) throws RemoteException {
                 Log.d(TAG, "配网回调==: i= " + i+" ,s=>"+s);
+                if (i == 0){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI",getString(R.string.normal)));
+                        }
+                    });
+
+                    SystemClock.sleep(3000);
+                    PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+                                    .setWirelessStyle(WirelessConfig.WIFI_CONNECT_STATUS)
+                            , new Stub() {
+                                @Override
+                                public void onResult(int i, String s) throws RemoteException {
+                                    Log.d(TAG, "WIFI_CONNECT_STATUS==: i= " + i+" ,s=>"+s);
+
+                                }
+
+                                @Override
+                                public void onReturnString(String s) throws RemoteException {
+                                    Log.d(TAG, "WIFI_CONNECT_STATUS==: s= " + s);
+                                    PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+                                                    .setWirelessStyle(WirelessConfig.WIFI_IP)
+                                            , new Stub() {
+                                                @Override
+                                                public void onResult(int i, String s) throws RemoteException {
+                                                    Log.d(TAG, "请求回去==: i= " + i+" ,s=>"+s);
+
+                                                }
+
+                                                @Override
+                                                public void onReturnString(String s) throws RemoteException {
+                                                    Log.d(TAG, "ip回调==: s= " + s);
+                                                    MainActivity.connectAddress = s;
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (s != null){
+                                                                binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+                                                                binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
+                                                                binding.clConnectNetwork.setVisibility(View.GONE);
+                                                                binding.clConnectIP.setVisibility(View.VISIBLE);
+
+                                                                binding.wifiIPTv.setText(String.format(getString(R.string.status_ip),s));
+                                                            }
+                                                        }
+                                                    });
+
+                                                }
+                                            });
+
+                                }
+                            });
+
+
+                }else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI",getString(R.string.un_normal)));
+                        }
+                    });
+                }
             }
 
             @Override
             public void onReturnString(String s) throws RemoteException {
                 Log.d(TAG, "配网回调==: s= " + s);
-                binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI",s));
 
-
-                PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
-                                .setWirelessStyle(WirelessConfig.WIFI_IP)
-                        , new Stub() {
-                            @Override
-                            public void onResult(int i, String s) throws RemoteException {
-
-                            }
-
-                            @Override
-                            public void onReturnString(String s) throws RemoteException {
-                                Log.d(TAG, "ip回调==: s= " + s);
-                                if (s != null){
-
-                                    binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
-                                    binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
-                                    binding.clConnectNetwork.setVisibility(View.GONE);
-                                    binding.clConnectIP.setVisibility(View.VISIBLE);
-
-                                    binding.wifiIPTv.setText(String.format(getString(R.string.status_ip),s));
-                                }
-                            }
-                        });
             }
         });
     }
 
     private void initData() {
 
+//        PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+//                        .setWirelessStyle(WirelessConfig.WIFI_CONNECT_STATUS)
+//                , new IWirelessPrintResult.Stub() {
+//                    @Override
+//                    public void onResult(int i, String s) throws RemoteException {
+//                        Log.d(TAG, "WIFI_CONNECT_STATUS==: i= " + i+" ,s=>"+s);
+//
+//                    }
+//
+//                    @Override
+//                    public void onReturnString(String s) throws RemoteException {
+//                        Log.d(TAG, "WIFI_CONNECT_STATUS==: s= " + s);//1已连接  0是没连接
+//                        if (!Utils.isEmpty(s) && s.equals("0")){
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI",getString(R.string.normal)));
+//                                    binding.wifiIPTv.setText(String.format(getString(R.string.status_ip),MainActivity.connectAddress));
+//                                }
+//                            });
+//                        }else {
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi),"WIFI",getString(R.string.un_normal)));
+//                                }
+//                            });
+//                        }
+//
+//                    }
+//                });
 
 
     }

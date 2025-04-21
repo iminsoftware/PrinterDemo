@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,10 +18,10 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -31,10 +30,10 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8sp"
                 android:text="@string/print_test"
-                android:visibility="gone"
                 android:textColor="@color/color_1D1D1F"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_print_status"
@@ -69,42 +68,45 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:background="@drawable/shape_item_normal"
-                android:paddingBottom="15dp"
-                android:layout_marginVertical="10dp">
+                android:paddingBottom="15dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:text="@string/printer_connection_method"
                     android:textColor="@color/color_1D1D1F"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="10dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/usbLy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="45dp"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginTop="45dp"
                     android:gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <ImageView
                         android:id="@+id/usbIv"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_check"
-                        />
+                        android:src="@drawable/ic_check" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16dp"
                         android:layout_marginLeft="10dp"
+                        android:text="USB"
                         android:textColor="@color/color_1D1D1F"
-                        android:text="USB"/>
+                        android:textSize="16dp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -117,19 +119,20 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <ImageView
                         android:id="@+id/wifiIv"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_uncheck"
-                        />
+                        android:src="@drawable/ic_uncheck" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16dp"
                         android:layout_marginLeft="10dp"
+                        android:text="WIFI"
                         android:textColor="@color/color_1D1D1F"
-                        android:text="WIFI"/>
+                        android:textSize="16dp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -147,15 +150,15 @@
                         android:id="@+id/btIv"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_uncheck"
-                        />
+                        android:src="@drawable/ic_uncheck" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16dp"
                         android:layout_marginLeft="10dp"
+                        android:text="BT"
                         android:textColor="@color/color_1D1D1F"
-                        android:text="BT"/>
+                        android:textSize="16dp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -165,9 +168,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/shape_item_normal"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginBottom="@dimen/dp10"
+                android:background="@drawable/shape_item_normal"
                 android:orientation="vertical">
 
                 <TextView
@@ -186,10 +189,237 @@
                     android:id="@+id/rv_parameter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="1"
                     android:overScrollMode="never"
-                    />
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:overScrollMode="never">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lySerial"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_serial_number"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_serial_number"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lyModel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_model_name"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_model_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lyThermal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_thermal_head"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_thermal_head"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lyFirmware"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_firmware_version"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_firmware_version"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lyService"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_service_version"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_service_version"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lyHeadType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_thermal_head_type"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_thermal_head_type"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/lyDistancee"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="2.5"
+                                android:gravity="right"
+                                android:text="@string/printer_distance"
+                                android:textColor="@color/color_777784"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_distance"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="3"
+                                android:gravity="center|left"
+                                android:maxWidth="@dimen/dp80"
+                                android:textColor="@color/color_1D1D1F"
+                                android:textSize="13sp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.core.widget.NestedScrollView>
             </LinearLayout>
 
 
@@ -199,14 +429,19 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/color_D1D1D1" />
-
-        <FrameLayout
-            android:id="@+id/fl_main"
+        <com.imin.newprinter.demo.view.NoScrollViewPager
+            android:id="@+id/vp"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="3" />
+            android:layout_weight="3"
+            android:layout_height="match_parent"/>
+
+<!--        <FrameLayout-->
+<!--            android:id="@+id/fl_main"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:layout_weight="3" />-->
 
     </LinearLayout>
 

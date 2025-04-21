@@ -395,4 +395,6 @@
     <string name="static_gw">GW：</string>
     <string name="static_mask">MASK：</string>
     <string name="static_dns">DNS：</string>
+    <string name="print_ticket1">打印小票1</string>
+    <string name="un_normal">异常</string>
 </resources>

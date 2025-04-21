@@ -77,9 +77,9 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
         printType = PrinterHelper.getInstance().getPrinterSupportConnectType();
         Log.d(TAG, "printType: " + printType);
         if (screenWidth > screenHeight) {
-            contentList = getResources().getStringArray(printType ==2?R.array.settings_list_wifi_land:R.array.settings_list_land);
+            contentList = getResources().getStringArray(/*printType ==2?R.array.settings_list_wifi_land:*/R.array.settings_list_land);
         } else {
-            contentList = getResources().getStringArray(printType ==2?R.array.settings_wifi_list:R.array.settings_list);
+            contentList = getResources().getStringArray(/*printType ==2?R.array.settings_wifi_list:*/R.array.settings_list);
         }
         super.initData();
 
@@ -106,14 +106,14 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
                 list.add(new FunctionTestBean(contentList[i], "AIDL"));
             }
             else {
-                if (i==2 && printType == 2){
-                    list.add(new FunctionTestBean(contentList[i], "USB"));
-
-                }else {
+//                if (i==2 && printType == 2){
+//                    list.add(new FunctionTestBean(contentList[i], "USB"));
+//
+//                }else {
 
                     list.add(new FunctionTestBean(contentList[i], 0));
 
-                }
+//                }
 
             }
         }

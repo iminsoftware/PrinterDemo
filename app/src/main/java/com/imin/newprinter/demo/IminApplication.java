@@ -133,7 +133,7 @@ public class IminApplication extends Application {
 
                             if (currentActivity != null){
                                 MainActivity activity = (MainActivity) currentActivity;
-                                activity.initViewData();
+//                                activity.initViewData();
                             }
                         }
 
@@ -156,7 +156,7 @@ public class IminApplication extends Application {
 
                     if (currentActivity != null){
                         MainActivity activity = (MainActivity) currentActivity;
-                        activity.initViewData();
+//                        activity.initViewData();
                     }
 
                 }
@@ -222,10 +222,7 @@ public class IminApplication extends Application {
 
                         break;
                     case PRINTER_UPDATE_PARAMETER:
-                        if (currentActivity != null){
-                            MainActivity activity = (MainActivity) currentActivity;
-                            activity.updateRv();
-                        }
+
                         break;
                 }
             }catch (Exception e){

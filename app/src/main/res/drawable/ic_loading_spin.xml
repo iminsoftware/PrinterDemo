@@ -1,0 +1,46 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+  <path
+      android:pathData="M469.3,85.3m42.7,0l0,0q42.7,0 42.7,42.7l0,128q0,42.7 -42.7,42.7l0,0q-42.7,0 -42.7,-42.7l0,-128q0,-42.7 42.7,-42.7Z"
+      android:strokeAlpha="0.8"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.8"/>
+  <path
+      android:pathData="M469.3,725.3m42.7,0l0,0q42.7,0 42.7,42.7l0,128q0,42.7 -42.7,42.7l0,0q-42.7,0 -42.7,-42.7l0,-128q0,-42.7 42.7,-42.7Z"
+      android:strokeAlpha="0.4"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.4"/>
+  <path
+      android:pathData="M938.7,469.3m0,42.7l0,0q0,42.7 -42.7,42.7l-128,0q-42.7,0 -42.7,-42.7l0,0q0,-42.7 42.7,-42.7l128,0q42.7,0 42.7,42.7Z"
+      android:strokeAlpha="0.2"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.2"/>
+  <path
+      android:pathData="M298.7,469.3m0,42.7l0,0q0,42.7 -42.7,42.7l-128,0q-42.7,0 -42.7,-42.7l0,0q0,-42.7 42.7,-42.7l128,0q42.7,0 42.7,42.7Z"
+      android:strokeAlpha="0.6"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.6"/>
+  <path
+      android:pathData="M783.5,180.1m30.2,30.2l0,0q30.2,30.2 0,60.3l-90.5,90.5q-30.2,30.2 -60.3,0l0,0q-30.2,-30.2 0,-60.3l90.5,-90.5q30.2,-30.2 60.3,0Z"
+      android:strokeAlpha="0.1"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.1"/>
+  <path
+      android:pathData="M331,632.7m30.2,30.2l0,0q30.2,30.2 0,60.3l-90.5,90.5q-30.2,30.2 -60.3,0l0,0q-30.2,-30.2 0,-60.3l90.5,-90.5q30.2,-30.2 60.3,0Z"
+      android:strokeAlpha="0.5"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.5"/>
+  <path
+      android:pathData="M843.9,783.5m-30.2,30.2l0,0q-30.2,30.2 -60.3,0l-90.5,-90.5q-30.2,-30.2 0,-60.3l0,0q30.2,-30.2 60.3,0l90.5,90.5q30.2,30.2 0,60.3Z"
+      android:strokeAlpha="0.3"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.3"/>
+  <path
+      android:pathData="M391.3,331m-30.2,30.2l0,0q-30.2,30.2 -60.3,0l-90.5,-90.5q-30.2,-30.2 0,-60.3l0,0q30.2,-30.2 60.3,0l90.5,90.5q30.2,30.2 0,60.3Z"
+      android:strokeAlpha="0.7"
+      android:fillColor="#01ca86"
+      android:fillAlpha="0.7"/>
+</vector>

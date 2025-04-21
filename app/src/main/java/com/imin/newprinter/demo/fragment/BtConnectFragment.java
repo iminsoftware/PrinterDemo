@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +27,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
 import com.imin.newprinter.demo.bean.BluetoothBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding;
+import com.imin.printer.IWirelessPrintResult;
+import com.imin.printer.PrinterHelper;
+import com.imin.printer.enums.ConnectType;
+import com.imin.printer.wireless.WirelessPrintStyle;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -148,13 +154,14 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         adapter.notifyDataSetChanged();
     }
 
+    String mac = "";
+    String name = "";
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0 || position == pairedDevices.size() + 1) {
             return;
         }
-        String mac = null;
-        String name = null;
+
         if (position <= pairedDevices.size()) {//点击已配对设备列表
             mac = pairedDevices.get(position - 1).getBluetoothMac();
             name = pairedDevices.get(position - 1).getBluetoothName();
@@ -162,7 +169,35 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
             mac = newDevices.get(position - 2 - pairedDevices.size()).getBluetoothMac();
             name = newDevices.get(position - 2 - pairedDevices.size()).getBluetoothName();
         }
+        MainActivity.connectAddress = mac;
         Toast.makeText(getContext(), name + mac, Toast.LENGTH_SHORT).show();
+        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                .setConnectType(ConnectType.BT.getTypeName())
+                .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
+            @Override
+            public void onResult(int i, String s) throws RemoteException {
+                Log.d(TAG,"WIFI_CONNECT=>"+s+"  i="+i);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (i == 0){
+                            MainActivity.connectType = "BT";
+                            MainActivity.connectContent = name+"\t"+mac;
+                            switchFragment(12);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onReturnString(String s) throws RemoteException {
+                Log.d(TAG,"WIFI_CONNECT =>"+s);
+            }
+        });
+
+
+
     }
 
     // 自定义比较器：按信号强度排序
@@ -209,7 +244,10 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         adapter = new BluetoothListAdapter(pairedDevices, newDevices, getContext());
         binding.lvBluetoothDevice.setAdapter(adapter);
         binding.lvBluetoothDevice.setOnItemClickListener(this);
-
+        binding.viewTitle.setRightCallback(v -> {
+            Log.d(TAG, "setting: ");
+            switchFragment(100);
+        });
 
     }
 

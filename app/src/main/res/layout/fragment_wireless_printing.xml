@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_color_eff1f7"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.imin.newprinter.demo.view.TitleLayout
         android:id="@+id/viewTitle"
@@ -64,11 +65,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/connectLy"
 
         />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wirelessRv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+
+    <TextView
+        android:id="@+id/printTest1"
         android:layout_marginTop="15dp"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="@string/print_ticket1"
+        android:background="@drawable/dra_green_corner_5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectLy"/>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/wirelessRv"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/connectLy"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -389,12 +389,15 @@ public class FunctionFragment extends BaseFragment {
         Log.d(TAG, "updateStatus: " + status + ", isNormal= " + isNormal);
 
         Drawable drawable = IminApplication.mContext.getResources().getDrawable(isNormal ? R.drawable.bg_printer_normal : R.drawable.bg_printer_exception);
-        if (binding.rlPrintStatus != null) {
-            binding.rlPrintStatus.setBackground(drawable);
+        if (binding != null){
+            if (binding.rlPrintStatus != null) {
+                binding.rlPrintStatus.setBackground(drawable);
+            }
+
+            if (binding.tvPrinterStatus != null) {
+                binding.tvPrinterStatus.setText(printerStatusTip);
+            }
         }
 
-        if (binding.tvPrinterStatus != null) {
-            binding.tvPrinterStatus.setText(printerStatusTip);
-        }
     }
 }

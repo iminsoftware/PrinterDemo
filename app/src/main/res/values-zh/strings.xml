@@ -429,4 +429,6 @@
     <string name="static_dns">DNS：</string>
     <string name="wifi_ssid">SSID:</string>
     <string name="wifi_pwd">密码：</string>
+    <string name="print_ticket1">打印小票1</string>
+    <string name="un_normal">异常</string>
 </resources>
