@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWirelessPrintingBinding;
@@ -26,26 +27,17 @@ public class WirelessPrintingFragment extends BaseFragment{
     private static final String CONNECT_CONTENT = "connectContent";
     private com.imin.newprinter.demo.databinding.FragmentWirelessPrintingBinding binding;
 
-    public static WirelessPrintingFragment newInstance(String connectType,String connectContent) {
-        WirelessPrintingFragment fragment = new WirelessPrintingFragment();
-        Bundle args = new Bundle();
-        args.putString(CONNECT_TYPE, connectType);
-        args.putString(CONNECT_CONTENT, connectContent);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    String connectTypeStr,connectContentStr;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            connectTypeStr = getArguments().getString(CONNECT_TYPE);
-            connectContentStr = getArguments().getString(CONNECT_CONTENT);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.d(TAG, "setUserVisibleHint: "+isVisibleToUser+"    "+isResumed());
+        if (isVisibleToUser && isResumed()) {
+            // 当 Fragment 对用户可见时执行操作（兼容旧版本）
+            binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.normal)));
+            binding.connectContentTv.setText(MainActivity.connectContent);
         }
-
     }
-
 
     @Nullable
     @Override
@@ -55,17 +47,12 @@ public class WirelessPrintingFragment extends BaseFragment{
         return binding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initView();
-    }
 
     private void initView() {
-        binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi),connectTypeStr,getString(R.string.normal)));
-        binding.connectContentTv.setText(connectContentStr);
+
         binding.connectNetworkTv.setOnClickListener(view -> {
-            switchFragment(connectTypeStr.contains("WIFI")?1:2);
+            Log.d(TAG, "connectNetworkTv: "+"    "+MainActivity.connectType);
+            switchFragment(MainActivity.connectType.contains("WIFI")?1:2);
         });
         binding.printTest1.setOnClickListener(view -> {
             PrinterHelper.getInstance().printerSelfChecking(new INeoPrinterCallback() {
@@ -100,6 +87,7 @@ public class WirelessPrintingFragment extends BaseFragment{
         fragmentListener = listener;
         Log.d(TAG, "setCallback: " + (fragmentListener != null));
     }
+
 
 
     public void switchFragment(int num) {

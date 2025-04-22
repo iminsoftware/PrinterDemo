@@ -137,7 +137,6 @@ public class WifiScannerHelper {
                         WifiManager.EXTRA_RESULTS_UPDATED, false
                 );
                 final List<ScanResult> results = wifiManager.getScanResults();
-
                 // 使用子线程处理扫描结果
                 new Thread(() -> {
                     List<ScanResult> filteredResults = filterValidNetworks(results);

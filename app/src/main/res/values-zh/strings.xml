@@ -438,4 +438,5 @@
     <string name="ip_tips2">网关与 IP 不能为空</string>
     <string name="ip_tips3">网关与 IP 不在同一子网</string>
     <string name="ip_tips4">格式错误</string>
+    <string name="connect_fail">连接失败</string>
 </resources>

@@ -54,9 +54,19 @@ public class AllFragment extends BaseFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.d(TAG, "setUserVisibleHint: "+isVisibleToUser+"    "+isResumed());
+        if (isVisibleToUser && isResumed()) {
+            // 当 Fragment 对用户可见时执行操作（兼容旧版本）
+            updatePrinterStatus(PrinterHelper.getInstance().getPrinterStatus());
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        updatePrinterStatus(PrinterHelper.getInstance().getPrinterStatus());
+
     }
 
     private void initView() {

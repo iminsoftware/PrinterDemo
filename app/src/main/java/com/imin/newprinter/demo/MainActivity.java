@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     private static final String TAG = "PrintDemo_MainActivity";
     private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
-
+    private static final String ACTION_PRITER_STATUS_CHANGE1 = "com.imin.printerservice.PRITER_CONNECT_STATUS_CHANGE";
 
     private static final String ACTION_PRITER_STATUS = "status";
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     private BtConnectFragment btConnectFragment;
     private com.imin.newprinter.demo.databinding.ActivityMainBinding binding;
 //    private WifiScannerSingleton wifiScanner;
-    public static String connectType = "", connectContent = "", connectAddress = "";
+    public static String connectType = "", connectContent = "", connectAddress = "",ipConnect = "",btContent="";
     private WirelessPrintingFragment wirelessPrintingFragment;
     private AllFragment allFragment;
     private int selectCurrentItem = 0;
@@ -142,20 +142,22 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
+        intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE1);
         registerReceiver(mReceiver, intentFilter);
         getPrinterParameter();
 //        functionTestFragment = new FunctionFragment();
 //        functionTestFragment.setCallback(this);
         allFragment = new AllFragment();
         allFragment.setUserVisibleHint(false);
-        wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
+        wifiConnectFragment = new WifiConnectFragment();
         wifiConnectFragment.setCallback(this);
         wifiConnectFragment.setUserVisibleHint(false);
         btConnectFragment = new BtConnectFragment();
         btConnectFragment.setCallback(this);
         btConnectFragment.setUserVisibleHint(false);
-        wirelessPrintingFragment = WirelessPrintingFragment.newInstance(connectType,connectContent);
+        wirelessPrintingFragment = new WirelessPrintingFragment();
         wirelessPrintingFragment.setCallback(this);
+        wirelessPrintingFragment.setUserVisibleHint(false);
         List<BaseFragment> fragmentList = new ArrayList<>();
 
         fragmentList.add(allFragment);
@@ -175,6 +177,21 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             @Override
             public void onPageSelected(int position) {
                 Log.d(TAG, "onPageSelected: " + position);
+//                if (position == 0){
+                    PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                            .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                            .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
+                        @Override
+                        public void onResult(int i, String s) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onReturnString(String s) throws RemoteException {
+
+                        }
+                    });
+//                }
             }
 
             @Override
@@ -345,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             );
 
             updateStatus(status);
+
         }
     };
 

@@ -37,6 +37,7 @@ import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
 import com.imin.newprinter.demo.bean.BluetoothBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding;
+import com.imin.newprinter.demo.utils.LoadingDialogUtil;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
@@ -199,7 +200,14 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
             mac = newDevices.get(position - 2 - pairedDevices.size()).getBluetoothMac();
             name = newDevices.get(position - 2 - pairedDevices.size()).getBluetoothName();
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LoadingDialogUtil.getInstance().show(getContext(), "");
+            }
+        });
         MainActivity.connectAddress = mac;
+        MainActivity.btContent = mac;
         Toast.makeText(getContext(), name + mac, Toast.LENGTH_SHORT).show();
 
         PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
@@ -218,7 +226,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
 
         PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                 .setWirelessStyle(WirelessConfig.BT_CONNECT_ADDR)
-                .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
+                .setConfig(MainActivity.btContent), new IWirelessPrintResult.Stub() {
             @Override
             public void onResult(int i, String s) throws RemoteException {
                 Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
@@ -229,7 +237,11 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
                             MainActivity.connectType = "BT";
                             MainActivity.connectContent = name + "\t" + mac;
                             switchFragment(4);
+                        }else {
+                            getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
+                                    getText(R.string.connect_fail), Toast.LENGTH_LONG).show());
                         }
+                        LoadingDialogUtil.getInstance().hide();
                     }
                 });
 
@@ -264,10 +276,6 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint()){
-
-
-        }
 
     }
 

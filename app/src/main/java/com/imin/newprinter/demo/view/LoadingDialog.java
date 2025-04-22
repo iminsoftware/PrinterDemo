@@ -16,6 +16,9 @@ import androidx.annotation.NonNull;
 
 import com.imin.newprinter.demo.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author: hy
  * @date: 2025/4/21
@@ -24,6 +27,9 @@ import com.imin.newprinter.demo.R;
 public class LoadingDialog extends android.app.Dialog {
 
     public enum AnimationType { SPIN, DOTS }
+
+    private ObjectAnimator spinAnimator;
+    private List<ValueAnimator> dotAnimators = new ArrayList<>();
 
     public LoadingDialog(Context context) {
         super(context, R.style.LoadingDialogStyle);
@@ -37,7 +43,7 @@ public class LoadingDialog extends android.app.Dialog {
     }
 
     public LoadingDialog setText(String text) {
-        TextView textView = (TextView) findViewById(R.id.tv_text);
+        TextView textView = findViewById(R.id.tv_text);
         if (textView != null) {
             textView.setText(text);
         }
@@ -45,10 +51,12 @@ public class LoadingDialog extends android.app.Dialog {
     }
 
     public LoadingDialog setAnimationType(AnimationType type) {
-        ImageView ivLoading = (ImageView) findViewById(R.id.iv_loading);
-        ViewGroup dotContainer = (ViewGroup) findViewById(R.id.dot_container);
+        ImageView ivLoading = findViewById(R.id.iv_loading);
+        ViewGroup dotContainer = findViewById(R.id.dot_container);
 
         if (ivLoading == null || dotContainer == null) return this;
+
+        stopAllAnimations();
 
         switch (type) {
             case SPIN:
@@ -66,28 +74,60 @@ public class LoadingDialog extends android.app.Dialog {
     }
 
     private void startSpinAnimation(ImageView view) {
-        RotateAnimation rotate = new RotateAnimation(
-                0f, 360f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-        );
-        rotate.setDuration(1000);
-        rotate.setRepeatCount(Animation.INFINITE);
-        rotate.setInterpolator(new LinearInterpolator());
-        view.startAnimation(rotate);
+        stopSpinAnimation();
+
+        spinAnimator = ObjectAnimator.ofFloat(view, "rotation", 0f, 360f);
+        spinAnimator.setDuration(1000);
+        spinAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        spinAnimator.setInterpolator(new LinearInterpolator());
+        spinAnimator.start();
     }
 
     private void startDotAnimation(ViewGroup container) {
+        stopDotAnimations();
+
         for (int i = 0; i < container.getChildCount(); i++) {
             View dot = container.getChildAt(i);
-            ObjectAnimator anim = ObjectAnimator.ofFloat(
-                    dot, "translationY", 0f, -20f, 0f
-            );
-            anim.setDuration(600);
-            anim.setRepeatCount(ValueAnimator.INFINITE);
-            anim.setStartDelay(i * 200L);
-            anim.start();
+
+            ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+            animator.setDuration(400);
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.setStartDelay(i * 200L);
+            animator.addUpdateListener(animation -> {
+                float value = (float) animation.getAnimatedValue();
+                float translationY = -20f * (float) Math.sin(value * Math.PI);
+                dot.setTranslationY(translationY);
+            });
+
+            animator.start();
+            dotAnimators.add(animator);
         }
+    }
+
+    @Override
+    public void dismiss() {
+        stopAllAnimations();
+        super.dismiss();
+    }
+
+    private void stopAllAnimations() {
+        stopSpinAnimation();
+        stopDotAnimations();
+    }
+
+    private void stopSpinAnimation() {
+        if (spinAnimator != null && spinAnimator.isRunning()) {
+            spinAnimator.cancel();
+        }
+    }
+
+    private void stopDotAnimations() {
+        for (ValueAnimator animator : dotAnimators) {
+            if (animator != null && animator.isRunning()) {
+                animator.cancel();
+            }
+        }
+        dotAnimators.clear();
     }
 }
 
