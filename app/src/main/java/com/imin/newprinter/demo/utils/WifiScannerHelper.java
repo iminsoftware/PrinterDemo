@@ -10,20 +10,16 @@ import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @Author: hy
- * @date: 2025/4/17
- * @description:
- */
 @SuppressLint("MissingPermission")
 public class WifiScannerHelper {
     private static final String TAG = "PrintDemo_WifiScannerHelper";
@@ -34,6 +30,7 @@ public class WifiScannerHelper {
     private WifiManager wifiManager;
     private WifiScanReceiver wifiScanReceiver;
     private OnScanResultsListener scanResultsListener;
+    private volatile boolean isScanning = false;
 
     public WifiScannerHelper(Context context) {
         this.context = context.getApplicationContext();
@@ -80,7 +77,6 @@ public class WifiScannerHelper {
 
     // ================== WiFi 扫描控制 ==================
     public void startScan() {
-        Log.e(TAG, "WifiManager is null 1");
         if (!checkLocationPermission()) {
             notifyPermissionRequired();
             return;
@@ -91,18 +87,25 @@ public class WifiScannerHelper {
             notifyScanFailed();
             return;
         }
-        Log.e(TAG, "WifiManager is  2");
+
         if (!wifiManager.isWifiEnabled()) {
             notifyWifiDisabled();
             return;
         }
-        Log.e(TAG, "WifiManager is null 3");
+
         registerReceiver();
+        isScanning = true;
         boolean scanStarted = wifiManager.startScan();
-        Log.e(TAG, "WifiManager is null 4 "+scanStarted);
         if (!scanStarted) {
+            isScanning = false;
+            unregisterReceiver();
             notifyScanFailed();
         }
+    }
+
+    public void stopScan() {
+        isScanning = false;
+        unregisterReceiver();
     }
 
     // ================== 广播接收器管理 ==================
@@ -130,22 +133,23 @@ public class WifiScannerHelper {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(intent.getAction())) {
-                boolean isFresh = intent.getBooleanExtra(
+                final boolean isFresh = intent.getBooleanExtra(
                         WifiManager.EXTRA_RESULTS_UPDATED, false
                 );
-                Log.e(TAG, "Receiver not isFresh: " + isFresh);
-                processScanResults(isFresh);
+                final List<ScanResult> results = wifiManager.getScanResults();
+
+                // 使用子线程处理扫描结果
+                new Thread(() -> {
+                    List<ScanResult> filteredResults = filterValidNetworks(results);
+                    // 切换到主线程回调结果
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (isScanning && scanResultsListener != null) {
+                            scanResultsListener.onResultsReceived(filteredResults, isFresh);
+                        }
+                    });
+                }).start();
             }
         }
-    }
-
-    private void processScanResults(boolean isFresh) {
-        List<ScanResult> results = wifiManager.getScanResults();
-        List<ScanResult> filteredResults = filterValidNetworks(results);
-
-        Log.e(TAG, "processScanResults results: " + (results == null?null:results.size()));
-
-        notifyScanResults(filteredResults, isFresh);
     }
 
     private List<ScanResult> filterValidNetworks(List<ScanResult> rawResults) {
@@ -176,7 +180,7 @@ public class WifiScannerHelper {
 
     // ================== 资源释放 ==================
     public void release() {
-        unregisterReceiver();
+        stopScan();
         scanResultsListener = null;
     }
 

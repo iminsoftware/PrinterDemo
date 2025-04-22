@@ -399,4 +399,9 @@
     <string name="un_normal">异常</string>
     <string name="loading">配网中，请稍等</string>
     <string name="search_finish">Search finish</string>
+    <string name="tips1">请先选择WiFi网络</string>
+    <string name="ip_tips">请先选择正确的ip</string>
+    <string name="ip_tips2">网关与 IP 不能为空</string>
+    <string name="ip_tips3">网关与 IP 不在同一子网</string>
+    <string name="ip_tips4">格式错误</string>
 </resources>

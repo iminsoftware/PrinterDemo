@@ -41,6 +41,7 @@ import com.imin.newprinter.demo.utils.Utils;
 import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
 import com.imin.printer.enums.ConnectType;
+import com.imin.printer.enums.WirelessConfig;
 import com.imin.printer.wireless.WirelessPrintStyle;
 
 import java.util.ArrayList;
@@ -69,6 +70,16 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     private List<BluetoothBean> newDevices = new ArrayList<>();
     private Set<BluetoothDevice> boundDevices = new HashSet<>();
     private BluetoothListAdapter adapter;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.d(TAG, "setUserVisibleHint: "+isVisibleToUser+"    "+isResumed());
+        if (isVisibleToUser && isResumed()) {
+            // 当 Fragment 对用户可见时执行操作（兼容旧版本）
+            initData();
+        }
+    }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
@@ -159,6 +170,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
      * @param bluetoothBean
      */
     private void updateBlueToothSignal(BluetoothBean bluetoothBean) {
+        Log.d(TAG, "updateBlueToothSignal=>" );
         for (int i = 0; i < pairedDevices.size(); i++) {
             if (pairedDevices.get(i).getBluetoothMac().equals(bluetoothBean.getBluetoothMac())) {
                 pairedDevices.get(i).setBluetoothStrength(bluetoothBean.getBluetoothStrength());
@@ -189,8 +201,23 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         }
         MainActivity.connectAddress = mac;
         Toast.makeText(getContext(), name + mac, Toast.LENGTH_SHORT).show();
+
         PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                .setConnectType(ConnectType.BT.getTypeName())
+                .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                .setConfig(ConnectType.BT.getTypeName()), new IWirelessPrintResult.Stub() {
+            @Override
+            public void onResult(int i, String s) throws RemoteException {
+
+            }
+
+            @Override
+            public void onReturnString(String s) throws RemoteException {
+
+            }
+        });
+
+        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                .setWirelessStyle(WirelessConfig.BT_CONNECT_ADDR)
                 .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
             @Override
             public void onResult(int i, String s) throws RemoteException {
@@ -230,26 +257,16 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentBtConnectBinding.inflate(inflater);
-
+        initView();
         return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initView();
-        initData();
-        if (Utils.isEmpty(MainActivity.connectType)) {
-            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
-                    , getString(R.string.un_normal)));
-        } else {
-            if (MainActivity.connectType.equals("BT")) {
-                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
-                        , getString(R.string.normal)));
-            } else {
-                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
-                        , getString(R.string.un_normal)));
-            }
+        if (getUserVisibleHint()){
+
+
         }
 
     }
@@ -287,6 +304,23 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initData() {
+
+
+        if (Utils.isEmpty(MainActivity.connectType)) {
+            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                    , getString(R.string.un_normal)));
+        } else {
+            if (MainActivity.connectType.equals("BT")) {
+                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                        , getString(R.string.normal)));
+            } else {
+                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                        , getString(R.string.un_normal)));
+            }
+        }
+
+        Log.e(TAG, "Don't support BlueTooth"+binding.btStatusTv.getText());
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Log.e(TAG, "Don't support BlueTooth");

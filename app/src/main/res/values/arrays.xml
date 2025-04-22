@@ -6,9 +6,9 @@
         <item>@string/print_elme</item>
         <item>@string/print_baidu</item>
         <item>@string/print_mt</item>
-        <item>@string/print_jdhk</item>
-        <item>@string/print_hk</item>
     </string-array>
+<!--    <item>@string/print_jdhk</item>-->
+<!--    <item>@string/print_hk</item>-->
 
     <string-array name="qr_code_list">
         <item>@string/content</item>

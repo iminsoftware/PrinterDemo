@@ -1,6 +1,7 @@
 package com.imin.newprinter.demo.fragment;
 
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWirelessPrintingBinding;
 import com.imin.newprinter.demo.utils.BytesUtils;
+import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
 
 import java.util.ArrayList;
@@ -66,8 +68,28 @@ public class WirelessPrintingFragment extends BaseFragment{
             switchFragment(connectTypeStr.contains("WIFI")?1:2);
         });
         binding.printTest1.setOnClickListener(view -> {
-            PrinterHelper.getInstance().sendRAWData(BytesUtils.getErlmoData(), null);
-            PrinterHelper.getInstance().partialCut();
+            PrinterHelper.getInstance().printerSelfChecking(new INeoPrinterCallback() {
+                @Override
+                public void onRunResult(boolean isSuccess) throws RemoteException {
+
+                }
+
+                @Override
+                public void onReturnString(String result) throws RemoteException {
+
+                }
+
+                @Override
+                public void onRaiseException(int code, String msg) throws RemoteException {
+
+                }
+
+                @Override
+                public void onPrintResult(int code, String msg) throws RemoteException {
+
+                    Log.d(TAG, "onPrintResult: " + code +  ", msg = " + msg);
+                }
+            });
         });
     }
 

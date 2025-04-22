@@ -55,6 +55,7 @@ public class Utils {
     public static final int PRINTER_OVER_HEAT = 5;
     public static final int PRINTER_CUTTING_ERROR = 6;
     public static final int PRINTER_PAPER_OUT = 7;
+    public static final int PRINTER_UNKNOWN = -1;
 
     /**
      * 判断两次点击的间隔，如果小于1000，则认为是多次无效点击

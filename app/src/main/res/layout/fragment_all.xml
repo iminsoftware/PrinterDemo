@@ -1,0 +1,41 @@
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color_eff1f7"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <com.imin.newprinter.demo.view.TitleLayout
+        android:id="@+id/view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="gone"
+        app:back="false"
+        app:leftVisible="false"
+        app:title="@string/print_test"
+        tools:ignore="MissingClass" />
+
+    <TextView
+        android:id="@+id/usbStatusTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_marginHorizontal="15dp"
+        android:textColor="@color/color_1D1D1F"
+        android:text="@string/status_wifi"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/tv_function_test"
+        android:overScrollMode="never" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

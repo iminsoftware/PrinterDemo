@@ -31,10 +31,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import com.imin.newprinter.demo.adapter.MainPageAdapter;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.ActivityMainBinding;
+import com.imin.newprinter.demo.fragment.AllFragment;
 import com.imin.newprinter.demo.fragment.AllTestFragment;
 import com.imin.newprinter.demo.fragment.BarcodeFragment;
 import com.imin.newprinter.demo.fragment.BaseFragment;
@@ -59,6 +61,7 @@ import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
 import com.imin.printer.enums.ConnectType;
+import com.imin.printer.enums.WirelessConfig;
 import com.imin.printer.wireless.WirelessPrintStyle;
 
 import java.util.ArrayList;
@@ -66,7 +69,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements SwitchFragmentListener, TitleLayout.LeftCallback, IBinder.DeathRecipient, WifiScannerSingleton.WifiListListener {
+public class MainActivity extends AppCompatActivity implements SwitchFragmentListener, TitleLayout.LeftCallback, IBinder.DeathRecipient{
 
     private static final String TAG = "PrintDemo_MainActivity";
     private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     private static final String ACTION_PRITER_STATUS = "status";
 
 
-    private FunctionFragment functionTestFragment;
+//    private FunctionFragment functionTestFragment;
 
     private LinkedHashMap<Integer, IminBaseFragment> fragmentMap = new LinkedHashMap<>();
     private IminBaseFragment currentFragment;
@@ -85,13 +88,15 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     //    private RecyclerView rvParameter;
     private String[] contentArray;
 
-    int requestPermissionCode = 10;
+    public static int requestPermissionCode = 10;
     private WifiConnectFragment wifiConnectFragment;
     private BtConnectFragment btConnectFragment;
     private com.imin.newprinter.demo.databinding.ActivityMainBinding binding;
-    private WifiScannerSingleton wifiScanner;
+//    private WifiScannerSingleton wifiScanner;
     public static String connectType = "", connectContent = "", connectAddress = "";
     private WirelessPrintingFragment wirelessPrintingFragment;
+    private AllFragment allFragment;
+    private int selectCurrentItem = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
 
         setContentView(binding.getRoot());
-        wifiScanner = WifiScannerSingleton.getInstance(getContext());
+
         initView();
         initData();
     }
@@ -139,33 +144,56 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
         registerReceiver(mReceiver, intentFilter);
         getPrinterParameter();
-        functionTestFragment = new FunctionFragment();
-        functionTestFragment.setCallback(this);
+//        functionTestFragment = new FunctionFragment();
+//        functionTestFragment.setCallback(this);
+        allFragment = new AllFragment();
+        allFragment.setUserVisibleHint(false);
         wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
         wifiConnectFragment.setCallback(this);
+        wifiConnectFragment.setUserVisibleHint(false);
         btConnectFragment = new BtConnectFragment();
         btConnectFragment.setCallback(this);
+        btConnectFragment.setUserVisibleHint(false);
         wirelessPrintingFragment = WirelessPrintingFragment.newInstance(connectType,connectContent);
         wirelessPrintingFragment.setCallback(this);
         List<BaseFragment> fragmentList = new ArrayList<>();
 
-        fragmentList.add(functionTestFragment);
+        fragmentList.add(allFragment);
         fragmentList.add(wifiConnectFragment);
         fragmentList.add(btConnectFragment);
         fragmentList.add(wirelessPrintingFragment);
         MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager(),fragmentList);
         binding.vp.setAdapter(mainPageAdapter);
         binding.vp.setOffscreenPageLimit(4);
-        binding.vp.setCurrentItem(0);
+        binding.vp.setCurrentItem(selectCurrentItem);
+        binding.vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(TAG, "onPageSelected: " + position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 
         binding.usbLy.setOnClickListener(view -> {
-            binding.vp.setCurrentItem(0);
+            selectCurrentItem = 0;
+            binding.vp.setCurrentItem(selectCurrentItem);
             binding.usbIv.setImageResource(R.drawable.ic_check);
             binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
             binding.btIv.setImageResource(R.drawable.ic_uncheck);
+
             PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setConnectType(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
+                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                    .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
                 @Override
                 public void onResult(int i, String s) throws RemoteException {
 
@@ -180,7 +208,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         });
 
         binding.wifiLy.setOnClickListener(view -> {
-            binding.vp.setCurrentItem(1);
+            selectCurrentItem = 1;
+            binding.vp.setCurrentItem(selectCurrentItem);
             binding.usbIv.setImageResource(R.drawable.ic_uncheck);
             binding.wifiIv.setImageResource(R.drawable.ic_check);
             binding.btIv.setImageResource(R.drawable.ic_uncheck);
@@ -188,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         });
 
         binding.btLy.setOnClickListener(view -> {
-            binding.vp.setCurrentItem(2);
+            selectCurrentItem = 2;
+            binding.vp.setCurrentItem(selectCurrentItem);
             binding.usbIv.setImageResource(R.drawable.ic_uncheck);
             binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
             binding.btIv.setImageResource(R.drawable.ic_check);
@@ -198,151 +228,11 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     }
 
-    private void startWifiScan() {
-        wifiScanner.startWifiScan(this);
-    }
 
 
     public void initData() {
 //        updateFragment(-1);
 
-
-    }
-
-    //初始化页面以及数据
-//    public void initViewData() {
-//        int screenWidth = XUiDisplayHelper.getScreenWidth(getContext());
-//        int screenHeight = XUiDisplayHelper.getScreenHeight(getContext());
-//
-//        Log.d(TAG, "initData: screenWidth= " + screenWidth + ", h= " + screenHeight + "       " + PrinterHelper.getInstance().getPrinterSupplierName());
-//        if (screenWidth > screenHeight) {
-//
-//
-//        }
-//
-//    }
-
-
-    private void updateFragment(int position) {
-        Log.d(TAG, "updateFragment: num= " + position
-                + ", fragment= " + (functionTestFragment != null)
-        );
-       FragmentManager fragmentManager = getSupportFragmentManager();
-       FragmentTransaction transaction = fragmentManager.beginTransaction();
-       if (position == -1 || position == 10 || position == 11 || position == 12) {
-            if (Utils.isPortrait()) {
-                if (binding.viewTitle != null) {
-                    binding.viewTitle.setVisibility(View.VISIBLE);
-                }
-
-                binding.clConnect.setVisibility(View.VISIBLE);
-                binding.rlPrintStatus.setVisibility(View.VISIBLE);
-            }
-
-            if (position == -1) {
-                if (Utils.isNingzLabel()) {
-                    functionTestFragment = null;
-                }
-                if (functionTestFragment == null) {
-                    functionTestFragment = new FunctionFragment();
-                    functionTestFragment.setCallback(this);
-                }
-                preFragment = functionTestFragment;
-            } else if (position == 10) {
-                if (wifiConnectFragment == null) {
-                    wifiConnectFragment = WifiConnectFragment.newInstance(wifiList);
-                    wifiConnectFragment.setCallback(this);
-                }
-                preFragment = wifiConnectFragment;
-            } else if (position == 11) {
-                if (btConnectFragment == null) {
-                    btConnectFragment = new BtConnectFragment();
-                    btConnectFragment.setCallback(this);
-                }
-                preFragment = btConnectFragment;
-            } else {
-                if (wirelessPrintingFragment == null) {
-                    wirelessPrintingFragment = WirelessPrintingFragment.newInstance(connectType, connectContent);
-                }
-                preFragment = wirelessPrintingFragment;
-            }
-
-            transaction.replace(R.id.fl_main, preFragment, String.valueOf(position));
-            transaction.addToBackStack(null);
-
-            transaction.commit();
-            fragmentManager.executePendingTransactions();
-
-            runOnUiThread(() -> {
-
-            });
-
-            selectFragment = preFragment;
-        } else {
-            if (Utils.isPortrait()) {
-                binding.viewTitle.setVisibility(View.GONE);
-                binding.clConnect.setVisibility(View.GONE);
-                binding.rlPrintStatus.setVisibility(View.GONE);
-
-            }
-
-            IminBaseFragment fragment = fragmentMap.get(position);
-            Log.d(TAG, "updateFragment:fragment is not null " + (fragment != null));
-            if (fragment == null) {
-
-                switch (position) {
-                    case 0:
-                        fragment = new AllTestFragment();
-                        break;
-                    case 1:
-                        fragment = new QrCodeFragment();
-                        break;
-                    case 2:
-                        fragment = new BarcodeFragment();
-                        break;
-                    case 3:
-                        fragment = new TextFragment();
-                        break;
-                    case 4:
-                        fragment = new TableFormFragment();
-                        break;
-                    case 5:
-                        fragment = new PictureFragment();
-                        break;
-                    case 6:
-                        fragment = new TransFragment();
-                        break;
-                    case 7:
-                        fragment = new PaperFeedFragment();
-                        break;
-                    case 8:
-                        fragment = new PrinterParameterFragment();
-                        break;
-                    case 9:
-                        fragment = new DoubleQrCodeFragment();
-                        break;
-                    case 100: // setting
-                        fragment = new SettingFragment();
-                        break;
-                }
-
-                if (fragment != null) {
-                    fragment.setLeftCallback(this);
-                    fragmentMap.put(position, fragment);
-                }
-            }
-
-
-            transaction.replace(R.id.fl_main, fragment, String.valueOf(position));
-            transaction.addToBackStack(null);
-
-            runOnUiThread(() -> {
-                transaction.commit();
-                fragmentManager.executePendingTransactions();
-            });
-            currentFragment = fragment;
-
-        }
 
     }
 
@@ -366,26 +256,26 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     @Override
     public void switchFragment(int num) {
         Log.d(TAG, "switchPager: " + num);
-        if (num>=100){
-            if (Utils.isPortrait()){
-                binding.viewTitle.setVisibility(View.GONE);
-                binding.clConnect.setVisibility(View.GONE);
-                binding.rlPrintStatus.setVisibility(View.GONE);
-            }
-            functionTestFragment.updateFragment(num-100);
-        }else {
-            if (Utils.isPortrait()) {
-                if (binding.viewTitle != null) {
-                    binding.viewTitle.setVisibility(View.VISIBLE);
-                }
+//        if (num>=100){
+//            if (Utils.isPortrait()){
+//                binding.viewTitle.setVisibility(View.GONE);
+//                binding.clConnect.setVisibility(View.GONE);
+//                binding.rlPrintStatus.setVisibility(View.GONE);
+//            }
+//            functionTestFragment.updateFragment(num-100);
+//        }else {
+//            if (Utils.isPortrait()) {
+//                if (binding.viewTitle != null) {
+//                    binding.viewTitle.setVisibility(View.VISIBLE);
+//                }
+//
+//                binding.clConnect.setVisibility(View.VISIBLE);
+//                binding.rlPrintStatus.setVisibility(View.VISIBLE);
+//            }
+            selectCurrentItem = num;
+            binding.vp.setCurrentItem(selectCurrentItem);
+//        }
 
-                binding.clConnect.setVisibility(View.VISIBLE);
-                binding.rlPrintStatus.setVisibility(View.VISIBLE);
-            }
-            binding.vp.setCurrentItem(num);
-        }
-
-//        updateFragment(num);
 
     }
 
@@ -393,7 +283,14 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     protected void onResume() {
         super.onResume();
         updateStatus(PrinterHelper.getInstance().getPrinterStatus());
-        startWifiScan();
+//        startWifiScan();
+        binding.vp.setCurrentItem(selectCurrentItem);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        wifiScanner.stopWifiScan();
     }
 
     @Override
@@ -413,9 +310,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiver);
-        if (wifiScanner != null) {
-            wifiScanner.release();
-        }
+
         Log.e(TAG, "main onDestroy: ");
     }
 
@@ -431,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         if (requestCode == requestPermissionCode) {
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startWifiScan();
+//                startWifiScan();
                 Log.d(TAG, "startWifiScan: ");
             } else {
                 Toast.makeText(this, "Location permission required for WiFi scanning",
@@ -471,10 +366,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                     binding.tvPrinterStatus.setText(statusTip);
                 }
 
-
-                if (functionTestFragment != null) {
-                    functionTestFragment.updatePrinterStatus(value);
+                if (allFragment != null){
+                    allFragment.updatePrinterStatus(value);
                 }
+//if (functionTestFragment != null) {
+//                    functionTestFragment.updatePrinterStatus(value);
+//                }
+
             }
         });
     }
@@ -706,42 +604,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     ArrayList<String> wifiList = new ArrayList<>();
 
-    @Override
-    public void onWifiListUpdated(ArrayList<String> list) {
-        runOnUiThread(() -> {
-            Log.e(TAG, "onWifiListUpdated results: " + (list == null ? null : list.size()));
-            wifiList = list;
-            if (wifiConnectFragment != null) {
-                wifiConnectFragment.setSpinnerData(list);
-            }
-        });
 
-    }
-
-    @Override
-    public void onPermissionRequired() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                requestPermissionCode);
-    }
-
-    @Override
-    public void onPermissionDenied() {
-        runOnUiThread(() -> Toast.makeText(this,
-                "Location permission denied", Toast.LENGTH_LONG).show());
-    }
-
-    @Override
-    public void onWifiDisabled() {
-        runOnUiThread(() -> Toast.makeText(this,
-                "Please enable WiFi", Toast.LENGTH_LONG).show());
-    }
-
-    @Override
-    public void onScanFailed() {
-        runOnUiThread(() -> Toast.makeText(this,
-                "WiFi scan failed", Toast.LENGTH_SHORT).show());
-    }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {

@@ -1,6 +1,5 @@
 package com.imin.newprinter.demo.utils;
 
-// WifiScannerSingleton.java
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,6 +17,7 @@ public class WifiScannerSingleton {
     private final Context context;
     private WifiScannerHelper wifiScannerHelper;
     private WifiListListener wifiListListener;
+    private boolean isScanning = false;
 
     private WifiScannerSingleton(Context context) {
         this.context = context.getApplicationContext();
@@ -42,10 +42,9 @@ public class WifiScannerSingleton {
             public void onResultsReceived(List<ScanResult> results, boolean isFreshScan) {
                 Log.e(TAG, "onResultsReceived results: " + (results == null?null:results.size())+"   ,isFreshScan==>"+isFreshScan+"  , "+(wifiListListener != null));
 
-                if (wifiListListener != null) {
+                if (wifiListListener != null && isScanning) {
                     ArrayList<String> ssidList = new ArrayList<>();
                     for (ScanResult result : results) {
-//                        ssidList.add(result.SSID + " (" + result.BSSID + ")");
                         String securityType;
                         if (result.capabilities.contains("WPA2")) {
                             securityType = "WPA2-PSK";
@@ -54,11 +53,11 @@ public class WifiScannerSingleton {
                         } else {
                             securityType = "OPEN";
                         }
-
                         ssidList.add(result.SSID + " (" + securityType + ")");
                     }
                     wifiListListener.onWifiListUpdated(ssidList);
                 }
+                isScanning = false;
             }
 
             @Override
@@ -87,17 +86,29 @@ public class WifiScannerSingleton {
                 if (wifiListListener != null) {
                     wifiListListener.onScanFailed();
                 }
+                isScanning = false;
             }
         });
     }
 
     public void startWifiScan(WifiListListener listener) {
+        if (isScanning) return;
+
         this.wifiListListener = listener;
         Log.d(TAG, "startWifiScan: "+checkLocationPermission());
         if (checkLocationPermission()) {
+            isScanning = true;
             wifiScannerHelper.startScan();
         } else {
             wifiScannerHelper.notifyPermissionRequired();
+        }
+    }
+
+    public void stopWifiScan() {
+        isScanning = false;
+        this.wifiListListener = null;
+        if (wifiScannerHelper != null) {
+            wifiScannerHelper.stopScan();
         }
     }
 
@@ -107,7 +118,7 @@ public class WifiScannerSingleton {
     }
 
     public void release() {
-        wifiScannerHelper.release();
+        stopWifiScan();
         instance = null;
     }
 
