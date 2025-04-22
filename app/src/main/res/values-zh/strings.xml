@@ -432,4 +432,5 @@
     <string name="print_ticket1">打印小票1</string>
     <string name="un_normal">异常</string>
     <string name="loading">配网中，请稍等</string>
+    <string name="search_finish">搜索完成</string>
 </resources>

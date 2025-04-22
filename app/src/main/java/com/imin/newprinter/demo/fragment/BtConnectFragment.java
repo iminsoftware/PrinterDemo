@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.feature.tui.util.ToastUtil;
 import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
@@ -74,12 +76,15 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (!BluetoothDevice.ACTION_FOUND.equals(action)) {
-                if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {//搜索完成
                     Log.d(TAG, "onReceive: Search finish");
+                    ToastUtil.showShort(context,getString(R.string.search_finish));
+                    binding.srlRefresh.setRefreshing(false);
                     return;
                 } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int bluetooth_state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, Integer.MIN_VALUE);
                     if (bluetooth_state == BluetoothAdapter.STATE_TURNING_OFF) {//蓝牙关闭
+                        binding.srlRefresh.setRefreshing(false);
                         Log.e(TAG, "BlueTooth Turn Off\n");
                         return;
                     }
@@ -93,10 +98,10 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
             if (device.getBluetoothClass().getMajorDeviceClass() != 1536) {//只显示蓝牙打印机
                 return;
             }
-            if (Utils.isEmpty(device.getName())){
+            if (Utils.isEmpty(device.getName())) {
                 return;
             }
-            if (!device.getName().contains("80mm")){
+            if (!device.getName().contains("80mm Wireless Printer")) {
                 return;
             }
             BluetoothBean bluetoothBean = new BluetoothBean();
@@ -116,11 +121,12 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
             updateBlueToothSignal(bluetoothBean);
         }
     };
+
     /**
      * 获取本机已配对列表
      */
-    private void getBoundDevices(){
-        boundDevices= mBluetoothAdapter.getBondedDevices();
+    private void getBoundDevices() {
+        boundDevices = mBluetoothAdapter.getBondedDevices();
         for (BluetoothDevice device : boundDevices) {
             BluetoothBean deviceInfo = new BluetoothBean();
             deviceInfo.setBluetoothName(device.getName());
@@ -130,6 +136,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         }
         adapter.notifyDataSetChanged();
     }
+
     /**
      * 添加新蓝牙设备
      *
@@ -166,6 +173,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
 
     String mac = "";
     String name = "";
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0 || position == pairedDevices.size() + 1) {
@@ -186,13 +194,13 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
                 .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
             @Override
             public void onResult(int i, String s) throws RemoteException {
-                Log.d(TAG,"WIFI_CONNECT=>"+s+"  i="+i);
+                Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (i == 0){
+                        if (i == 0) {
                             MainActivity.connectType = "BT";
-                            MainActivity.connectContent = name+"\t"+mac;
+                            MainActivity.connectContent = name + "\t" + mac;
                             switchFragment(4);
                         }
                     }
@@ -202,10 +210,9 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
 
             @Override
             public void onReturnString(String s) throws RemoteException {
-                Log.d(TAG,"WIFI_CONNECT =>"+s);
+                Log.d(TAG, "WIFI_CONNECT =>" + s);
             }
         });
-
 
 
     }
@@ -232,16 +239,16 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         super.onResume();
         initView();
         initData();
-        if (Utils.isEmpty(MainActivity.connectType)){
-            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi),"BT"
-                    ,getString(R.string.un_normal)));
-        }else {
-            if (MainActivity.connectType.equals("BT")){
-                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi),"BT"
-                        ,getString(R.string.normal)));
-            }else {
-                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi),"BT"
-                        ,getString(R.string.un_normal)));
+        if (Utils.isEmpty(MainActivity.connectType)) {
+            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                    , getString(R.string.un_normal)));
+        } else {
+            if (MainActivity.connectType.equals("BT")) {
+                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                        , getString(R.string.normal)));
+            } else {
+                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                        , getString(R.string.un_normal)));
             }
         }
 
@@ -253,13 +260,9 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
         binding.srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                searchBlueTooth();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.srlRefresh.setRefreshing(false);
-                    }
-                },3000);
+                binding.searchBt.performClick();
+                newDevices.clear();
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -296,7 +299,7 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
                 startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
             } else {//蓝牙已打开
 
-                if (checkBluetoothPermissions()){
+                if (checkBluetoothPermissions()) {
                     binding.searchBt.performClick();
                 }
 
@@ -341,7 +344,21 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     public void onDestroy() {
         super.onDestroy();
         try {
-            getActivity().unregisterReceiver(broadcastReceiver);
+            if (mBluetoothAdapter.isDiscovering()) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
+            if (mBluetoothAdapter != null) {
+                mBluetoothAdapter = null;
+            }
+            pairedDevices.clear();
+            pairedDevices = null;
+            newDevices.clear();
+            newDevices = null;
+            boundDevices = null;
+            manager = null;
+            if (broadcastReceiver != null) {
+                getActivity().unregisterReceiver(broadcastReceiver);
+            }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -359,12 +376,14 @@ public class BtConnectFragment extends BaseFragment implements AdapterView.OnIte
     }
 
 
-
     /**
      * 搜索设备
      */
     @SuppressLint("MissingPermission")
     public synchronized void searchBlueTooth() {
-        mBluetoothAdapter.startDiscovery();//开始搜索
+        binding.srlRefresh.setRefreshing(true);
+        if (!mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.startDiscovery();//开始搜索
+        }
     }
 }
