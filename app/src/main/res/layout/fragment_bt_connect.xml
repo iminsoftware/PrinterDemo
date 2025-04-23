@@ -42,34 +42,60 @@
         android:layout_marginTop="5dp"
         />
 
-    <TextView
-        android:id="@+id/search_bt"
-        android:layout_width="200dp"
-        android:layout_height="42dp"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="@string/search"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        android:background="@drawable/dra_green_corner_5" />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/search_bt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:text="@string/search"
+            android:textSize="15sp"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/white"
+            android:background="@drawable/dra_green_corner_5" />
+        <TextView
+            android:id="@+id/btDisconnect"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:text="@string/disconnect"
+            android:textSize="15sp"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/white"
+            android:background="@drawable/dra_red_corner_5" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srlRefresh"
         android:layout_width="match_parent"
-        app:refreshing="false"
-        android:layout_marginHorizontal="5dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:background="@drawable/btn_white_shape">
 
-        <com.imin.newprinter.demo.view.RefreshListView
+        <com.scwang.smart.refresh.header.MaterialHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ListView
             android:id="@+id/lv_bluetooth_device"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="15dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/btn_white_shape"
+            android:scrollbars="none"
             android:listSelector="@drawable/btn_white_selector" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
 
 
 

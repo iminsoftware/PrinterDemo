@@ -3,15 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:paddingVertical="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
         android:orientation="vertical"
-        android:padding="3dp">
+        >
 
         <TextView
             android:id="@+id/b_name"
@@ -36,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
         android:text="strength"
         android:textColor="@color/color_999999"
         android:textSize="16sp" />

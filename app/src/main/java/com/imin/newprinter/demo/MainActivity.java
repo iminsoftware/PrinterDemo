@@ -177,21 +177,32 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             @Override
             public void onPageSelected(int position) {
                 Log.d(TAG, "onPageSelected: " + position);
-//                if (position == 0){
-                    PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                            .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                            .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
-                        @Override
-                        public void onResult(int i, String s) throws RemoteException {
+                switch (position){
+                    case 0:
+                        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                                .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                                .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
+                            @Override
+                            public void onResult(int i, String s) throws RemoteException {
 
-                        }
+                            }
 
-                        @Override
-                        public void onReturnString(String s) throws RemoteException {
+                            @Override
+                            public void onReturnString(String s) throws RemoteException {
 
-                        }
-                    });
-//                }
+                            }
+                        });
+                        break;
+                    case 1:
+
+                        wifiConnectFragment.updateUi();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
+
             }
 
             @Override
@@ -225,20 +236,74 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         });
 
         binding.wifiLy.setOnClickListener(view -> {
-            selectCurrentItem = 1;
-            binding.vp.setCurrentItem(selectCurrentItem);
-            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-            binding.wifiIv.setImageResource(R.drawable.ic_check);
-            binding.btIv.setImageResource(R.drawable.ic_uncheck);
+
+            PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+                    .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
+                @Override
+                public void onResult(int i, String s) throws RemoteException {
+                    Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + i+"    "+s);
+                    if (i==0){
+                        ipConnect = s;
+                        connectAddress = s;
+                        connectType = "WIFI";
+                        connectContent = s;
+                        selectCurrentItem = 4;
+                        wirelessPrintingFragment.updateStatus();
+
+                    }else {
+                        selectCurrentItem = 1;
+
+                    }
+                    binding.vp.setCurrentItem(selectCurrentItem);
+
+                    binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                    binding.wifiIv.setImageResource(R.drawable.ic_check);
+                    binding.btIv.setImageResource(R.drawable.ic_uncheck);
+                }
+
+                @Override
+                public void onReturnString(String s) throws RemoteException {
+
+                }
+            });
+
+
+
+
 
         });
 
         binding.btLy.setOnClickListener(view -> {
-            selectCurrentItem = 2;
-            binding.vp.setCurrentItem(selectCurrentItem);
-            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
-            binding.btIv.setImageResource(R.drawable.ic_check);
+
+            PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+                    .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_BT_MAC), new IWirelessPrintResult.Stub() {
+                @Override
+                public void onResult(int i, String s) throws RemoteException {
+                    Log.d(TAG, "CURRENT_CONNECT_BT_MAC  = " + i+"    "+s);
+                    if (i==0){
+                        btContent = s;
+                        connectAddress = s;
+                        connectType = "BT";
+                        selectCurrentItem = 4;
+                        wirelessPrintingFragment.updateStatus();
+
+                    }else {
+                        selectCurrentItem = 2;
+
+                    }
+                    binding.vp.setCurrentItem(selectCurrentItem);
+                    binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                    binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+                    binding.btIv.setImageResource(R.drawable.ic_check);
+                }
+
+                @Override
+                public void onReturnString(String s) throws RemoteException {
+
+                }
+            });
+
+
         });
 
 
@@ -248,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
 
     public void initData() {
-//        updateFragment(-1);
 
 
     }
@@ -408,37 +472,37 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         Log.d(TAG, "getPrinterParameter1111111:===== "+(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()));
 
         if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()) {
-            binding.lySerial.setVisibility(View.VISIBLE);
+//            binding.lySerial.setVisibility(View.VISIBLE);
             binding.lyThermal.setVisibility(View.VISIBLE);
-            binding.lyDistancee.setVisibility(View.VISIBLE);
+//            binding.lyDistancee.setVisibility(View.VISIBLE);
             Log.d(TAG, "getPrinterParameter2222:===== ");
-            PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
-                @Override
-                public void onRunResult(boolean isSuccess) throws RemoteException {
-
-                }
-
-                @Override
-                public void onReturnString(String result) throws RemoteException {
-
-                    Log.d(TAG, "getPrinterSerialNumber: " + result);
-//                    updateParameterList(0, result);
-                    binding.tvSerialNumber.setText(result);
-
-
-
-                }
-
-                @Override
-                public void onRaiseException(int code, String msg) throws RemoteException {
-
-                }
-
-                @Override
-                public void onPrintResult(int code, String msg) throws RemoteException {
-
-                }
-            });
+//            PrinterHelper.getInstance().getPrinterSerialNumber(new INeoPrinterCallback() {
+//                @Override
+//                public void onRunResult(boolean isSuccess) throws RemoteException {
+//
+//                }
+//
+//                @Override
+//                public void onReturnString(String result) throws RemoteException {
+//
+//                    Log.d(TAG, "getPrinterSerialNumber: " + result);
+////                    updateParameterList(0, result);
+//                    binding.tvSerialNumber.setText(result);
+//
+//
+//
+//                }
+//
+//                @Override
+//                public void onRaiseException(int code, String msg) throws RemoteException {
+//
+//                }
+//
+//                @Override
+//                public void onPrintResult(int code, String msg) throws RemoteException {
+//
+//                }
+//            });
 
 
             PrinterHelper.getInstance().getPrinterThermalHead(new INeoPrinterCallback() {
@@ -467,29 +531,29 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                 }
             });
 
-            PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
-                @Override
-                public void onRunResult(boolean isSuccess) throws RemoteException {
-
-                }
-
-                @Override
-                public void onReturnString(String result) throws RemoteException {
-                    Log.d(TAG, "getPrinterPaperDistance: " + result);
-//                    updateParameterList(6, result);
-                    binding.tvDistance.setText(result);
-                }
-
-                @Override
-                public void onRaiseException(int code, String msg) throws RemoteException {
-
-                }
-
-                @Override
-                public void onPrintResult(int code, String msg) throws RemoteException {
-
-                }
-            });
+//            PrinterHelper.getInstance().getPrinterPaperDistance(new INeoPrinterCallback() {
+//                @Override
+//                public void onRunResult(boolean isSuccess) throws RemoteException {
+//
+//                }
+//
+//                @Override
+//                public void onReturnString(String result) throws RemoteException {
+//                    Log.d(TAG, "getPrinterPaperDistance: " + result);
+////                    updateParameterList(6, result);
+//                    binding.tvDistance.setText(result);
+//                }
+//
+//                @Override
+//                public void onRaiseException(int code, String msg) throws RemoteException {
+//
+//                }
+//
+//                @Override
+//                public void onPrintResult(int code, String msg) throws RemoteException {
+//
+//                }
+//            });
         }else {
             binding.lySerial.setVisibility(View.GONE);
             binding.lyThermal.setVisibility(View.GONE);

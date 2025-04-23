@@ -38,7 +38,7 @@
             />
         <TextView
             android:id="@+id/connectContentTv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:layout_marginHorizontal="15dp"

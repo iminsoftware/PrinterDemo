@@ -54,7 +54,7 @@
 
                 <TextView
                     android:id="@+id/tv_printer_status"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="59dp"
                     android:layout_centerInParent="true"
                     android:gravity="center"
@@ -211,6 +211,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
+                            android:visibility="gone"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -219,7 +220,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_serial_number"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />
@@ -249,7 +250,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_model_name"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />
@@ -279,7 +280,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_thermal_head"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />
@@ -309,7 +310,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_firmware_version"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />
@@ -339,7 +340,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_service_version"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />
@@ -369,7 +370,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_thermal_head_type"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />
@@ -391,6 +392,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
+                            android:visibility="gone"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -399,7 +401,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="2.5"
-                                android:gravity="right"
+                                android:gravity="center|right"
                                 android:text="@string/printer_distance"
                                 android:textColor="@color/color_777784"
                                 android:textSize="13sp" />

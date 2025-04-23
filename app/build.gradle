@@ -52,7 +52,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation project(path: ':featureui')
-    implementation files('libs\\iMinPrinter_SDK2_V2.0.0.16_20250422.jar')
+    implementation files('libs\\iMinPrinter_SDK2_V2.0.0.16_20250423.jar')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -71,6 +71,8 @@ dependencies {
 
     implementation 'androidx.navigation:navigation-fragment:2.4.2'
     implementation 'androidx.navigation:navigation-ui:2.4.2'
+    implementation  'io.github.scwang90:refresh-layout-kernel:3.0.0-alpha'      //核心必须依赖
+    implementation  'io.github.scwang90:refresh-header-material:3.0.0-alpha'    //谷歌刷新头
 
 //    implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.15'
 

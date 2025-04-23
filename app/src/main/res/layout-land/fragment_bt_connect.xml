@@ -1,78 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/bg_color_eff1f7"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
 
-        <com.imin.newprinter.demo.view.TitleLayout
-            android:id="@+id/viewTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:leftTitleVisible="false"
-            android:visibility="visible"
-            app:leftTitle="@string/print_test"
-            app:back="true"
-            app:title="@string/print_test"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            app:leftVisible="false"
-            app:rightVisible="false"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <com.imin.newprinter.demo.view.TitleLayout
+        android:id="@+id/viewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="visible"
+        app:back="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:leftTitle="@string/print_test"
+        app:leftTitleVisible="false"
+        app:leftVisible="false"
+        app:rightVisible="false"
+        app:title="@string/print_test" />
 
     <TextView
         android:id="@+id/btStatusTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
         android:layout_marginHorizontal="15dp"
-        android:textColor="@color/color_1D1D1F"
         android:text="@string/status_wifi"
-       />
+        android:textColor="@color/color_1D1D1F"
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/btAddressTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:visibility="gone"
         android:layout_marginHorizontal="15dp"
-        android:textColor="@color/color_1D1D1F"
-        android:text="@string/status_ip"
         android:layout_marginTop="5dp"
-        />
+        android:text="@string/status_ip"
+        android:textColor="@color/color_1D1D1F"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/search_bt"
-        android:layout_width="200dp"
-        android:layout_height="42dp"
-        android:gravity="center"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/search_bt"
+            android:layout_width="200dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:text="@string/search"
+            android:textSize="15sp"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/white"
+            android:background="@drawable/dra_green_corner_5" />
+        <TextView
+            android:id="@+id/btDisconnect"
+            android:layout_width="200dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:text="@string/disconnect"
+            android:textSize="15sp"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/white"
+            android:background="@drawable/dra_red_corner_5" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/srlRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="15dp"
-        android:text="@string/search"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        android:background="@drawable/dra_green_corner_5" />
+        android:layout_marginBottom="30dp"
+        >
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srlRefresh"
+        <com.scwang.smart.refresh.header.MaterialHeader
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:refreshing="false"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginBottom="30dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content" />
 
-            <com.imin.newprinter.demo.view.RefreshListView
-                android:id="@+id/lv_bluetooth_device"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:listSelector="@drawable/btn_white_selector" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        <ListView
+            android:id="@+id/lv_bluetooth_device"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="15dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/btn_white_shape"
+            android:scrollbars="none"
+            android:listSelector="@drawable/btn_white_selector" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>
