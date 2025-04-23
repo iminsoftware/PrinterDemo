@@ -34,7 +34,7 @@ public class WirelessPrintingFragment extends BaseFragment{
         Log.d(TAG, "setUserVisibleHint: "+isVisibleToUser+"    "+isResumed()+"    ");
         if (isVisibleToUser && isResumed()) {
             // 当 Fragment 对用户可见时执行操作（兼容旧版本）
-            binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.normal)));
+            binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.connected)));
             binding.connectContentTv.setText(MainActivity.connectAddress);
         }
     }
@@ -49,7 +49,7 @@ public class WirelessPrintingFragment extends BaseFragment{
 
 
     public void updateStatus(){
-        binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.normal)));
+        binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.connected)));
         binding.connectContentTv.setText(MainActivity.connectAddress);
     }
     private void initView() {

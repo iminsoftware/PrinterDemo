@@ -515,7 +515,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                 public void onReturnString(String result) throws RemoteException {
                     Log.d(TAG, "getPrinterThermalHead: " + result);
 //                    updateParameterList(2, result);
-                    binding.tvThermalHead.setText(result);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.tvThermalHead.setText(result);
+                        }
+                    });
+
 
 
                 }
@@ -573,7 +579,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             public void onReturnString(String result) throws RemoteException {
                 Log.d(TAG, "getPrinterModelName: " + result);
 //                updateParameterList(Utils.isNingzLabel() ? 0 : 1, result);
-                binding.tvModelName.setText(result);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.tvModelName.setText(result);
+                    }
+                });
+
 
 
             }
@@ -599,7 +611,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             public void onReturnString(String result) throws RemoteException {
                 Log.d(TAG, "getPrinterFirmwareVersion: " + result);
 //                updateParameterList((Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()) ? 3 : 1, result);
-                binding.tvFirmwareVersion.setText(result);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.tvFirmwareVersion.setText(result);
+                    }
+                });
+
 
 
 

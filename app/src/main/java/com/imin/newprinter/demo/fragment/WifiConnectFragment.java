@@ -262,6 +262,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         });
 
         binding.ipConfirmTv.setOnClickListener(v -> {
+            LoadingDialogUtil.getInstance().show(v.getContext(),"");
             if (!outoConnect) {
                 String ip = binding.ipEt.getText().toString().trim();
                 if (Utils.isEmpty(ip)) {
@@ -274,46 +275,98 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                 }
                 MainActivity.connectAddress = ip;
                 MainActivity.ipConnect = ip;
+
+                PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                        .setConfig(ConnectType.WIFI.getTypeName()), new IWirelessPrintResult.Stub() {
+                    @Override
+                    public void onResult(int i, String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+
+                    }
+                });
+
+                PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.WIFI_CONNECT_IP)
+                        .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
+                    @Override
+                    public void onResult(int i, String s) throws RemoteException {
+                        Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LoadingDialogUtil.getInstance().hide();
+                                if (i == 0) {
+                                    MainActivity.connectType = "WIFI";
+                                    MainActivity.connectContent = binding.wifiIPTv.getText().toString().trim();
+                                    switchFragment(4);
+                                }
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+                        Log.d(TAG, "WIFI_CONNECT =>" + s);
+                    }
+                });
+
+
+            }else {
+                PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                        .setConfig(ConnectType.WIFI.getTypeName()), new IWirelessPrintResult.Stub() {
+                    @Override
+                    public void onResult(int i, String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+
+                    }
+                });
+
+                PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.WIFI_AUTO_CONNECT_IP)
+                        .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
+                    @Override
+                    public void onResult(int i, String s) throws RemoteException {
+                        Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LoadingDialogUtil.getInstance().hide();
+                                if (i == 0) {
+                                    MainActivity.connectAddress = s;
+                                    MainActivity.ipConnect = s;
+                                    MainActivity.connectType = "WIFI";
+                                    MainActivity.connectContent = binding.wifiIPTv.getText().toString().trim();
+                                    switchFragment(4);
+                                }else {
+                                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
+                                            s, Toast.LENGTH_LONG).show());
+                                }
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+                        Log.d(TAG, "WIFI_CONNECT =>" + s);
+                    }
+                });
+
+
+
             }
 
-            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                    .setConfig(ConnectType.WIFI.getTypeName()), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-
-                }
-
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-
-                }
-            });
-
-            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.WIFI_CONNECT_IP)
-                    .setConfig(MainActivity.connectAddress), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-                    Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (i == 0) {
-                                MainActivity.connectType = "WIFI";
-                                MainActivity.connectContent = binding.wifiIPTv.getText().toString().trim();
-                                switchFragment(4);
-                            }
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-                    Log.d(TAG, "WIFI_CONNECT =>" + s);
-                }
-            });
 
 
         });

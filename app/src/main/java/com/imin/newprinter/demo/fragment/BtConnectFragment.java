@@ -13,6 +13,8 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -29,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -90,6 +94,23 @@ public class BtConnectFragment extends BaseFragment {
         }
     }
 
+    Handler mainHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg != null){
+                BluetoothBean bean = (BluetoothBean) msg.obj;
+                if (bean != null){
+                    if (msg.what == 100){//未配对
+                        addNewBlueTooth(bean);
+                    }else {//配对
+                        updateBlueToothSignal(bean);
+                    }
+                }
+
+            }
+        }
+    };
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
         @Override
@@ -98,7 +119,7 @@ public class BtConnectFragment extends BaseFragment {
             if (!BluetoothDevice.ACTION_FOUND.equals(action)) {
                 if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {//搜索完成
                     Log.d(TAG, "onReceive: Search finish");
-                    ToastUtil.showShort(context, getString(R.string.search_finish));
+//                    ToastUtil.showShort(context, getString(R.string.search_finish));
                     binding.srlRefresh.finishRefresh();
                     adapter.notifyDataSetChanged();
                     adapter2.notifyDataSetChanged();
@@ -120,12 +141,10 @@ public class BtConnectFragment extends BaseFragment {
             if (device.getBluetoothClass().getMajorDeviceClass() != 1536) {//只显示蓝牙打印机
                 return;
             }
-            if (Utils.isEmpty(device.getName())) {
+            if (device == null || Utils.isEmpty(device.getName()) ||!device.getName().contains("80mm Wireless")) {
                 return;
             }
-            if (!device.getName().contains("80mm Wireless")) {
-                return;
-            }
+
             BluetoothBean bluetoothBean = new BluetoothBean();
             int rssi = intent.getExtras().getShort("android.bluetooth.device.extra.RSSI");
             if (device != null && device.getName() != null) {
@@ -136,12 +155,18 @@ public class BtConnectFragment extends BaseFragment {
             bluetoothBean.setBluetoothMac(device.getAddress());
             bluetoothBean.setBluetoothStrength(rssi + "");
             Log.d(TAG, "onReceive: \nBlueToothName:\t" + device.getName() + "\nMacAddress:\t" + device.getAddress() + "\nrssi:\t" + rssi);
-            if (device.getBondState() != BluetoothDevice.BOND_BONDED) {//未配对
-                addNewBlueTooth(bluetoothBean);
+            Message message = Message.obtain();
+            message.obj = bluetoothBean;
 
+
+            if (device.getBondState() != BluetoothDevice.BOND_BONDED) {//未配对
+//                addNewBlueTooth(bluetoothBean);
+                message.what = 100;
             }else {
-                updateBlueToothSignal(bluetoothBean);
+//                updateBlueToothSignal(bluetoothBean);
+                message.what = 101;
             }
+            mainHandler.sendMessage(message);
 
         }
     };
@@ -150,6 +175,7 @@ public class BtConnectFragment extends BaseFragment {
      * 获取本机已配对列表
      */
     private void getBoundDevices() {
+        pairedDevices.clear();
         boundDevices = mBluetoothAdapter.getBondedDevices();
         for (BluetoothDevice device : boundDevices) {
             if (!device.getName().contains("80mm Wireless Printer")) {
@@ -193,25 +219,23 @@ public class BtConnectFragment extends BaseFragment {
      */
     private void updateBlueToothSignal(BluetoothBean bluetoothBean) {
         Log.d(TAG, "updateBlueToothSignal=>");
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                boolean isContain = true;
-                for (int i = 0; i < pairedDevices.size(); i++) {
-                    if (pairedDevices.get(i).getBluetoothMac().equals(bluetoothBean.getBluetoothMac())) {
-                        pairedDevices.get(i).setBluetoothStrength(bluetoothBean.getBluetoothStrength());
-                        isContain = false;
-                    }
-                }
-
-                if (isContain){
-                    pairedDevices.add(bluetoothBean);
-                }
-
-                adapter.replaceData(pairedDevices);
-                Log.d(TAG, "updateBlueToothSignal=>"+adapter.getData().size()+"  i "+isContain);
+        boolean isContain = true;
+        for (int i = 0; i < pairedDevices.size(); i++) {
+            if (pairedDevices.get(i).getBluetoothMac().equals(bluetoothBean.getBluetoothMac())) {
+                pairedDevices.get(i).setBluetoothStrength(bluetoothBean.getBluetoothStrength());
+                int finalI = i;
+                getActivity().runOnUiThread(() ->
+                        adapter.notifyItemChanged(finalI));
+                isContain = false;
             }
-        });
+        }
+
+        if (isContain){
+            pairedDevices.add(bluetoothBean);
+        }
+
+        adapter.replaceData(pairedDevices);
+        Log.d(TAG, "updateBlueToothSignal=>"+adapter.getData().size()+"  i "+isContain+"    "+pairedDevices.size());
 
     }
 
@@ -231,41 +255,33 @@ public class BtConnectFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentBtConnectBinding.inflate(inflater);
-        registerBlueToothBroadcast();
         initView();
+        initData();
         return binding.getRoot();
     }
 
 
     private void initView() {
-        binding.srlRefresh.autoRefresh();
-        binding.srlRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-
-                searchBtData();
-
-//                binding.srlRefresh.finishRefresh(3000);
-            }
-        });
-
-
-        binding.searchBt.setOnClickListener(view -> {
-            searchBtData();
-
-        });
-
+        Log.d(TAG, "initView: ");
+        binding.lvBluetoothDevice.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.unPairedDeviceLv.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BaseQuickAdapter<BluetoothBean, BaseViewHolder>(R.layout.bluetooth_list_item) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, BluetoothBean functionBean) {
-                Log.d(TAG, "convert: functionBean= " + functionBean);
+                Log.d(TAG, "convert: functionBean= " );
                 if (functionBean != null) {
                     TextView tvName = (TextView) viewHolder.getView(R.id.b_name);
                     TextView tvMac = (TextView) viewHolder.getView(R.id.b_mac);
                     TextView tvStrength = (TextView) viewHolder.getView(R.id.b_info);
+                    RelativeLayout relativeLayout = viewHolder.findView(R.id.itemRl);
                     tvName.setText(functionBean.getBluetoothName());
                     tvMac.setText(functionBean.getBluetoothMac());
                     tvStrength.setText(functionBean.getBluetoothStrength());
+                    if (functionBean.getBluetoothMac().equals(MainActivity.btContent)){
+                        relativeLayout.setBackground(getResources().getDrawable(R.drawable.btn_green1_shap));
+                    }else {
+                        relativeLayout.setBackground(null);
+                    }
 
                 }
             }
@@ -274,22 +290,28 @@ public class BtConnectFragment extends BaseFragment {
         adapter2 = new BaseQuickAdapter<BluetoothBean, BaseViewHolder>(R.layout.bluetooth_list_item) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, BluetoothBean functionBean) {
-                Log.d(TAG, "convert: functionBean= " + functionBean);
+                Log.d(TAG, "convert: functionBean= " );
                 if (functionBean != null) {
                     TextView tvName = (TextView) viewHolder.getView(R.id.b_name);
                     TextView tvMac = (TextView) viewHolder.getView(R.id.b_mac);
                     TextView tvStrength = (TextView) viewHolder.getView(R.id.b_info);
+                    RelativeLayout relativeLayout = viewHolder.findView(R.id.itemRl);
                     tvName.setText(functionBean.getBluetoothName());
                     tvMac.setText(functionBean.getBluetoothMac());
                     tvStrength.setText(functionBean.getBluetoothStrength());
+                    if (functionBean.getBluetoothMac().equals(MainActivity.btContent)){
+                        relativeLayout.setBackground(getResources().getDrawable(R.drawable.btn_green1_shap));
+                    }else {
+                        relativeLayout.setBackground(null);
+                    }
 
                 }
+
+
+
             }
         };
 
-
-//        adapter = new BluetoothListAdapter(pairedDevices, getContext());
-//        adapter2 = new BluetoothListAdapter(newDevices,getContext());
         binding.lvBluetoothDevice.setAdapter(adapter);
         adapter.setNewInstance(pairedDevices);
 
@@ -311,31 +333,6 @@ public class BtConnectFragment extends BaseFragment {
 
             }
         });
-//        binding.lvBluetoothDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                if (position == 0 || position == pairedDevices.size() + 1) {
-//                    return;
-//                }
-//                if (mBluetoothAdapter != null){
-//                    mBluetoothAdapter.cancelDiscovery();
-//                }
-//
-//               String mac = pairedDevices.get(position).getBluetoothMac();
-//               String name = pairedDevices.get(position).getBluetoothName();
-//
-////                if (position <= pairedDevices.size()) {//点击已配对设备列表
-////                    mac = pairedDevices.get(position - 1).getBluetoothMac();
-////                    name = pairedDevices.get(position - 1).getBluetoothName();
-////                } else {//点击新设备列表
-////                    mac = newDevices.get(position - 2 - pairedDevices.size()).getBluetoothMac();
-////                    name = newDevices.get(position - 2 - pairedDevices.size()).getBluetoothName();
-////                }
-//
-//                connectBt(mac,name);
-//
-//            }
-//        });
 
         binding.unPairedDeviceLv.setAdapter(adapter2);
         adapter2.setNewInstance(newDevices);
@@ -354,20 +351,22 @@ public class BtConnectFragment extends BaseFragment {
 
             }
         });
-//        binding.unPairedDeviceLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                if (position == 0 || position == pairedDevices.size() + 1) {
-//                    return;
-//                }
-//                if (mBluetoothAdapter != null){
-//                    mBluetoothAdapter.cancelDiscovery();
-//                }
-//
-//                String mac = newDevices.get(position).getBluetoothMac();
-//                String name = newDevices.get(position).getBluetoothName();
-//            }
-//        });
+
+        binding.srlRefresh.autoRefresh();
+        binding.srlRefresh.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                searchBtData();
+            }
+        });
+
+
+        binding.searchBt.setOnClickListener(view -> {
+            searchBtData();
+
+        });
+
+        registerBlueToothBroadcast();
 
         binding.viewTitle.setRightCallback(v -> {
             Log.d(TAG, "setting: ");
@@ -446,8 +445,7 @@ public class BtConnectFragment extends BaseFragment {
     }
 
     private void initData() {
-
-
+        Log.e(TAG, "Don't support BlueTooth  "+checkBluetoothPermissions());
         if (Utils.isEmpty(MainActivity.btContent)) {
             binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
                     , getString(R.string.un_connected)));
@@ -458,27 +456,30 @@ public class BtConnectFragment extends BaseFragment {
 
         Log.e(TAG, "Don't support BlueTooth" + binding.btStatusTv.getText());
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            Log.e(TAG, "Don't support BlueTooth");
-            return;
-        } else {
+        if (checkBluetoothPermissions()){
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (mBluetoothAdapter == null) {
+                Log.e(TAG, "Don't support BlueTooth");
 
-            //蓝牙未打开
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
-            } else {//蓝牙已打开
-                if (checkBluetoothPermissions()) {
-                    searchBtData();
+            } else {
+
+                //蓝牙未打开
+                if (!mBluetoothAdapter.isEnabled()) {
+                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
+                } else {//蓝牙已打开
+                    if (checkBluetoothPermissions()) {
+                        searchBtData();
+                    }
                 }
-
-//                getBoundDevices();
             }
         }
+
     }
 
     private void searchBtData(){
+//        pairedDevices.clear();
+//        newDevices.clear();
         if (mBluetoothAdapter != null){
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

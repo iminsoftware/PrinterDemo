@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemRl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingVertical="10dp">
+    android:paddingHorizontal="15dp"
+    android:paddingTop="10dp">
 
     <LinearLayout
+        android:id="@+id/itemLy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -41,6 +44,8 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/color_666666"/>
+        android:layout_gravity="bottom"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/itemLy"
+        android:background="@color/color_999999"/>
 </RelativeLayout>
