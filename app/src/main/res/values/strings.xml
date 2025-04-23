@@ -405,5 +405,7 @@
     <string name="ip_tips3">Gateway and IP are not in the same subnet</string>
     <string name="ip_tips4">Format error</string>
     <string name="connect_fail">Connection failed</string>
-    <string name="disconnect">断开连接</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connected">Connected</string>
+    <string name="un_connected">Not connected</string>
 </resources>

@@ -207,10 +207,10 @@ public class AllFragment extends BaseFragment {
         if (binding != null && binding.usbStatusTv != null){
             if (isNormal){
                 binding.usbStatusTv.setText(String.format(getString(R.string.status_wifi),"USB"
-                        ,getString(R.string.normal)));
+                        ,getString(R.string.connected)));
             }else {
                 binding.usbStatusTv.setText(String.format(getString(R.string.status_wifi),"USB"
-                        ,getString(R.string.un_normal)));
+                        ,getString(R.string.un_connected)));
             }
         }
 

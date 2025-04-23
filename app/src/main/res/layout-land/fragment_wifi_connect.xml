@@ -38,7 +38,7 @@
 
                 <TextView
                     android:id="@+id/wifiStatusTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
                     android:text="@string/status_wifi"
@@ -49,7 +49,7 @@
 
                 <TextView
                     android:id="@+id/wifiIPTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/wifiStatusTv"
                     android:layout_marginHorizontal="15dp"
@@ -281,6 +281,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="80dp"
                             android:checked="true"
+                            android:enabled="false"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/pwdEt" />
                     </FrameLayout>

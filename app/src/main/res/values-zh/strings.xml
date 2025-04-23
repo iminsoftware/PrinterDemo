@@ -440,4 +440,6 @@
     <string name="ip_tips4">格式错误</string>
     <string name="connect_fail">连接失败</string>
     <string name="disconnect">断开连接</string>
+    <string name="connected">已连接</string>
+    <string name="un_connected">未连接</string>
 </resources>
