@@ -133,7 +133,7 @@ public class IminApplication extends Application {
 
                             if (currentActivity != null){
                                 MainActivity activity = (MainActivity) currentActivity;
-//                                activity.initViewData();
+                                activity.getPrinterParameter();
                             }
                         }
 
