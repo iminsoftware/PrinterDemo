@@ -408,4 +408,7 @@
     <string name="disconnect">Disconnect</string>
     <string name="connected">Connected</string>
     <string name="un_connected">Not connected</string>
+    <string name="get_connect_ip">Get base IP</string>
+    <string name="get_fail">Failed to obtain</string>
+    <string name="connect_fail_tips">Please enter the IP address or reconfigure the network.</string>
 </resources>

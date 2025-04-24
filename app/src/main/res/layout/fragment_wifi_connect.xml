@@ -172,7 +172,7 @@
                     android:layout_marginHorizontal="15dp"
                     android:orientation="vertical"
                     android:paddingVertical="20dp"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/connectTv">
 
@@ -476,7 +476,7 @@
                     android:orientation="vertical"
                     android:layout_marginHorizontal="15dp"
                     android:paddingVertical="30dp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -507,18 +507,57 @@
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                        <TextView
-                            android:id="@+id/autoTips"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="130dp"
                             android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="5dp"
-                            android:text="@string/connect_wifi_tips1"
-                            android:textColor="@color/text"
-                            android:textSize="15sp"
-                          />
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/autoTips"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:paddingHorizontal="5dp"
+                                android:text="@string/connect_wifi_tips1"
+                                android:textColor="@color/text"
+                                android:textSize="15sp" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center_vertical"
+                                android:layout_below="@+id/autoTips">
+
+                                <TextView
+                                    android:id="@+id/getConnectIPTv"
+                                    android:layout_width="80dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/dra_blue_corner_5"
+                                    android:gravity="center"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/get_connect_ip"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/baseIPTv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/status_ip"
+                                    android:visibility="invisible"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="13sp"
+                                    android:layout_toRightOf="@+id/getConnectIPTv"/>
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
                     </FrameLayout>
 
 

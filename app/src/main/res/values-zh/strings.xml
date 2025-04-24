@@ -442,4 +442,7 @@
     <string name="disconnect">断开连接</string>
     <string name="connected">已连接</string>
     <string name="un_connected">未连接</string>
+    <string name="get_connect_ip">获取底座IP</string>
+    <string name="get_fail">获取失败</string>
+    <string name="connect_fail_tips">请输入IP,或者重新配网</string>
 </resources>
