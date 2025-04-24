@@ -377,9 +377,15 @@ public class BtConnectFragment extends BaseFragment {
                     .setWirelessStyle(WirelessConfig.DISCONNECT_BT), new IWirelessPrintResult.Stub() {
                 @Override
                 public void onResult(int i, String s) throws RemoteException {
-                    binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
-                            , getString(R.string.un_connected)));
-                    MainActivity.btContent = "";
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                                    , getString(R.string.un_connected)));
+                            MainActivity.btContent = "";
+                        }
+                    });
+
 
                 }
 

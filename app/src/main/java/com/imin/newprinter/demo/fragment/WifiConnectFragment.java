@@ -369,11 +369,16 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                     .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
                 @Override
                 public void onResult(int i, String s) throws RemoteException {
-                    binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI"
-                            , getString(R.string.un_connected)));
-                    binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
-                            , "-------"));
-                    MainActivity.ipConnect = "";
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI"
+                                    , getString(R.string.un_connected)));
+                            binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
+                                    , "-------"));
+                            MainActivity.ipConnect = "";
+                        }
+                    });
 
                 }
 
