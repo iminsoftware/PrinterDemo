@@ -129,6 +129,14 @@ public class BtConnectFragment extends BaseFragment {
                     if (bluetooth_state == BluetoothAdapter.STATE_TURNING_OFF) {//蓝牙关闭
                         binding.srlRefresh.finishRefresh();
                         Log.e(TAG, "BlueTooth Turn Off\n");
+
+                        if (getActivity()!=null){
+                            ((MainActivity)getActivity()).disConnectWirelessPrint();
+                            disConnect();
+
+                        }
+
+
                         return;
                     }
                     return;
@@ -170,6 +178,28 @@ public class BtConnectFragment extends BaseFragment {
 
         }
     };
+
+    private void disConnect() {
+        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                .setWirelessStyle(WirelessConfig.DISCONNECT_BT), new IWirelessPrintResult.Stub() {
+            @Override
+            public void onResult(int i, String s) throws RemoteException {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                                , getString(R.string.un_connected)));
+                        MainActivity.btContent = "";
+                    }
+                });
+            }
+
+            @Override
+            public void onReturnString(String s) throws RemoteException {
+
+            }
+        });
+    }
 
     /**
      * 获取本机已配对列表
@@ -373,27 +403,7 @@ public class BtConnectFragment extends BaseFragment {
             switchFragment(100);
         });
         binding.btDisconnect.setOnClickListener(view -> {
-            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.DISCONNECT_BT), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
-                                    , getString(R.string.un_connected)));
-                            MainActivity.btContent = "";
-                        }
-                    });
-
-
-                }
-
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-
-                }
-            });
+            disConnect();
         });
 
     }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.feature.tui.util.ToastUtil;
 import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
@@ -46,6 +47,9 @@ public class WirelessPrintingFragment extends BaseFragment{
         }
     }
 
+    public void disConnect(){
+        binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.disconnected)));
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -109,6 +113,18 @@ public class WirelessPrintingFragment extends BaseFragment{
                 public void onPrintResult(int code, String msg) throws RemoteException {
 
                     Log.d(TAG, "onPrintResult: " + code +  ", msg = " + msg);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (code == 0){
+                                ToastUtil.showShort(getContext(),R.string.print_fail);
+                            }else {
+
+                            }
+
+                        }
+                    });
+
                 }
             });
         });

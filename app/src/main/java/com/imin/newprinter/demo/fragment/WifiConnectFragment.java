@@ -418,28 +418,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         });
 
         binding.btDisconnect.setOnClickListener(view -> {
-            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI"
-                                    , getString(R.string.un_connected)));
-                            binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
-                                    , "-------"));
-                            MainActivity.ipConnect = "";
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-
-                }
-            });
+            disConnect();
         });
 
     }
@@ -842,6 +821,32 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
     }
 
 
+    public void disConnect(){
+        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
+            @Override
+            public void onResult(int i, String s) throws RemoteException {
+                Log.d(TAG, "DISCONNECT_WIFI==:  " + s);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI"
+                                , getString(R.string.un_connected)));
+                        binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
+                                , "-------"));
+                        MainActivity.ipConnect = "";
+                    }
+                });
+
+            }
+
+            @Override
+            public void onReturnString(String s) throws RemoteException {
+
+            }
+        });
+    }
     public void updateUi() {
         getActivity().runOnUiThread(new Runnable() {
             @Override

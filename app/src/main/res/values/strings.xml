@@ -413,4 +413,6 @@
     <string name="connect_fail_tips">Please enter the IP address or reconfigure the network.</string>
     <string name="set_fail">Operation failed</string>
     <string name="search">Search</string>
+    <string name="print_fail">Printing failed</string>
+    <string name="disconnected">Connection has been lost</string>
 </resources>

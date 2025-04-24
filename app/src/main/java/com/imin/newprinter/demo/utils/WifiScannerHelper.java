@@ -1,5 +1,8 @@
 package com.imin.newprinter.demo.utils;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+import static android.net.NetworkCapabilities.TRANSPORT_WIFI;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -7,6 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -115,6 +121,8 @@ public class WifiScannerHelper {
         if (wifiScanReceiver == null) {
             wifiScanReceiver = new WifiScanReceiver();
             IntentFilter intentFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+            intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+            intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
             context.registerReceiver(wifiScanReceiver, intentFilter);
         }
     }
@@ -149,6 +157,9 @@ public class WifiScannerHelper {
                         }
                     });
                 }).start();
+            }else if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent.getAction())){
+
+
             }
         }
     }

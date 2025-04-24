@@ -1,5 +1,6 @@
 package com.imin.newprinter.demo;
 
+import static android.net.NetworkCapabilities.TRANSPORT_WIFI;
 import static me.goldze.mvvmhabit.utils.Utils.getContext;
 
 import android.Manifest;
@@ -11,6 +12,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -332,6 +336,11 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     }
 
 
+    public void disConnectWirelessPrint(){
+        if (wirelessPrintingFragment != null){
+            wirelessPrintingFragment.disConnect();
+        }
+    }
 
     public void initData() {
 
@@ -387,6 +396,28 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         updateStatus(PrinterHelper.getInstance().getPrinterStatus());
 //        startWifiScan();
         binding.vp.setCurrentItem(selectCurrentItem);
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        cm.registerNetworkCallback(
+                new NetworkRequest.Builder().addTransportType(TRANSPORT_WIFI).build(),
+                new ConnectivityManager.NetworkCallback() {
+                    @Override
+                    public void onLost(Network network) {
+                        // WiFi 断开处理
+                        Log.e(TAG, "WiFi Turn Off\n");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                disConnectWirelessPrint();
+                                if (wifiConnectFragment != null){
+                                    wifiConnectFragment.disConnect();
+                                }
+                            }
+                        });
+
+                    }
+                }
+        );
     }
 
     @Override
