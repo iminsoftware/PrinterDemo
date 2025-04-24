@@ -295,14 +295,11 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                     LoadingDialogUtil.getInstance().hide();
                     return;
                 }
-                MainActivity.connectAddress = ip;
-                MainActivity.ipConnect = ip;
-
 
 
                 PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                         .setWirelessStyle(WirelessConfig.WIFI_CONNECT_IP)
-                        .setConfig(MainActivity.ipConnect), new IWirelessPrintResult.Stub() {
+                        .setConfig(ip), new IWirelessPrintResult.Stub() {
                     @Override
                     public void onResult(int i, String s) throws RemoteException {
                         Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
@@ -311,8 +308,11 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                             public void run() {
                                 LoadingDialogUtil.getInstance().hide();
                                 if (i == 0) {
+                                    MainActivity.connectAddress = s;
+                                    MainActivity.ipConnect = s;
                                     MainActivity.connectType = "WIFI";
                                     MainActivity.connectContent = binding.wifiIPTv.getText().toString().trim();
+
                                     switchFragment(4);
 
                                     PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
