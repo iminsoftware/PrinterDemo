@@ -845,6 +845,9 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
 
         } else {
+            if (this.list.size()==0){
+                startWifiScan();
+            }
             updateUi();
 
         }

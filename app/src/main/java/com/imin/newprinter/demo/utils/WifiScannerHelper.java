@@ -18,7 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressLint("MissingPermission")
 public class WifiScannerHelper {
@@ -151,6 +153,49 @@ public class WifiScannerHelper {
         }
     }
 
+//    private List<ScanResult> filterValidNetworks(List<ScanResult> rawResults) {
+//        List<ScanResult> validResults = new ArrayList<>();
+//        for (ScanResult result : rawResults) {
+//            if (isValidNetwork(result)) {
+//                validResults.add(result);
+//            }
+//        }
+//        return validResults;
+//    }
+
+    // 在原有代码中添加以下方法
+
+    private List<ScanResult> filterDuplicatesByBand(List<ScanResult> results) {
+        Map<String, ScanResult> bestResults = new HashMap<>();
+
+        for (ScanResult result : results) {
+            // 生成组合键：SSID + 频段分类
+            String band = getFrequencyBand(result.frequency);
+            String compositeKey = result.SSID + "_" + band;
+
+            // 保留信号最强的结果
+            ScanResult existing = bestResults.get(compositeKey);
+            if (existing == null || existing.level < result.level) {
+                bestResults.put(compositeKey, result);
+            }
+        }
+
+        return new ArrayList<>(bestResults.values());
+    }
+
+    public String getFrequencyBand(int frequency) {
+        if (frequency >= 2400 && frequency <= 2500) {
+            return "2.4GHz";
+        } else if (frequency >= 4900 && frequency <= 5900) {
+            return "5GHz";
+        } else if (frequency >= 5925 && frequency <= 7125) { // WiFi 6E
+            return "6GHz";
+        } else {
+            return String.valueOf(frequency);
+        }
+    }
+
+    // 修改现有的过滤方法
     private List<ScanResult> filterValidNetworks(List<ScanResult> rawResults) {
         List<ScanResult> validResults = new ArrayList<>();
         for (ScanResult result : rawResults) {
@@ -158,8 +203,10 @@ public class WifiScannerHelper {
                 validResults.add(result);
             }
         }
-        return validResults;
+        // 添加频段过滤
+        return filterDuplicatesByBand(validResults);
     }
+
 
     private boolean isValidNetwork(ScanResult result) {
         return result.SSID != null

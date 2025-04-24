@@ -53,7 +53,9 @@ public class WifiScannerSingleton {
                         } else {
                             securityType = "OPEN";
                         }
-                        ssidList.add(result.SSID + " (" + securityType + ")");
+
+
+                        ssidList.add(result.SSID + " (" + securityType+"_"+ wifiScannerHelper.getFrequencyBand(result.frequency)+ ")");
                     }
                     wifiListListener.onWifiListUpdated(ssidList);
                 }
