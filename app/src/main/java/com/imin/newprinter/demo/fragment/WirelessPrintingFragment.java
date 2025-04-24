@@ -16,7 +16,11 @@ import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWirelessPrintingBinding;
 import com.imin.newprinter.demo.utils.BytesUtils;
 import com.imin.printer.INeoPrinterCallback;
+import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
+import com.imin.printer.enums.ConnectType;
+import com.imin.printer.enums.WirelessConfig;
+import com.imin.printer.wireless.WirelessPrintStyle;
 
 import java.util.ArrayList;
 
@@ -36,6 +40,9 @@ public class WirelessPrintingFragment extends BaseFragment{
             // 当 Fragment 对用户可见时执行操作（兼容旧版本）
             binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.connected)));
             binding.connectContentTv.setText(MainActivity.connectAddress);
+
+
+
         }
     }
 
@@ -49,8 +56,14 @@ public class WirelessPrintingFragment extends BaseFragment{
 
 
     public void updateStatus(){
-        binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.connected)));
-        binding.connectContentTv.setText(MainActivity.connectAddress);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.connectStatusTv.setText(String.format(getString(R.string.status_wifi), MainActivity.connectType,getString(R.string.connected)));
+                binding.connectContentTv.setText(MainActivity.connectAddress);
+            }
+        });
+
     }
     private void initView() {
 
@@ -59,6 +72,21 @@ public class WirelessPrintingFragment extends BaseFragment{
             switchFragment(MainActivity.connectType.contains("WIFI")?1:2);
         });
         binding.printTest1.setOnClickListener(view -> {
+
+            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                    .setConfig(MainActivity.connectType.contains("WIFI")? ConnectType.WIFI.getTypeName():ConnectType.BT.getTypeName()), new IWirelessPrintResult.Stub() {
+                @Override
+                public void onResult(int i, String s) throws RemoteException {
+
+                }
+
+                @Override
+                public void onReturnString(String s) throws RemoteException {
+
+                }
+            });
+
             PrinterHelper.getInstance().printerSelfChecking(new INeoPrinterCallback() {
                 @Override
                 public void onRunResult(boolean isSuccess) throws RemoteException {

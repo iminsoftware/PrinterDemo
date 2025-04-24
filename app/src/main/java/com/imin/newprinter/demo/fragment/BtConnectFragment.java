@@ -478,8 +478,6 @@ public class BtConnectFragment extends BaseFragment {
     }
 
     private void searchBtData(){
-//        pairedDevices.clear();
-//        newDevices.clear();
         if (mBluetoothAdapter != null){
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
