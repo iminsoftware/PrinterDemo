@@ -135,14 +135,14 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
             binding.clConnectNetwork.setVisibility(View.VISIBLE);
-            binding.clConnectIP.setVisibility(View.GONE);
+            binding.clConnectIP.setVisibility(View.INVISIBLE);
         });
 
         binding.connectTv.setOnClickListener(v -> {
 
             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
-            binding.clConnectNetwork.setVisibility(View.GONE);
+            binding.clConnectNetwork.setVisibility(View.INVISIBLE);
             binding.clConnectIP.setVisibility(View.VISIBLE);
             Log.d(TAG, "加载页面: " + binding.clConnectIP.getVisibility());
         });
@@ -182,7 +182,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 //            @Override
 //            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 //                if (b) {
-//                    binding.clStatic.setVisibility(View.GONE);
+//                    binding.clStatic.setVisibility(View.INVISIBLE);
 //                } else {
 //                    binding.clStatic.setVisibility(View.VISIBLE);
 //                }
@@ -505,7 +505,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                 if (s != null) {
                                     binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                                     binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
-                                    binding.clConnectNetwork.setVisibility(View.GONE);
+                                    binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                                     binding.clConnectIP.setVisibility(View.VISIBLE);
 
                                     binding.wifiIPTv.setText(String.format(getString(R.string.status_ip), s));
@@ -615,7 +615,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                                             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                             binding.clConnectNetwork.setVisibility(View.VISIBLE);
-                                            binding.clConnectIP.setVisibility(View.GONE);
+                                            binding.clConnectIP.setVisibility(View.INVISIBLE);
 
                                             LoadingDialogUtil.getInstance().hide();
                                             binding.networkConfirmTv.setEnabled(true);
@@ -660,7 +660,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                                             MainActivity.connectAddress = s;
                                                             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                                                             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
-                                                            binding.clConnectNetwork.setVisibility(View.GONE);
+                                                            binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                                                             binding.clConnectIP.setVisibility(View.VISIBLE);
 
                                                             binding.wifiIPTv.setText(String.format(getString(R.string.status_ip), s));
@@ -706,7 +706,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                     MainActivity.connectAddress = s;
                                     binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                                     binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
-                                    binding.clConnectNetwork.setVisibility(View.GONE);
+                                    binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                                     binding.clConnectIP.setVisibility(View.VISIBLE);
 
                                     binding.wifiIPTv.setText(String.format(getString(R.string.status_ip), s));
@@ -728,7 +728,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                 binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                                 binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                 binding.clConnectNetwork.setVisibility(View.VISIBLE);
-                                binding.clConnectIP.setVisibility(View.GONE);
+                                binding.clConnectIP.setVisibility(View.INVISIBLE);
 
                             }
                         });
@@ -762,7 +762,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                         , MainActivity.ipConnect));
                 binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
                 binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
-                binding.clConnectNetwork.setVisibility(View.GONE);
+                binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                 binding.clConnectIP.setVisibility(View.VISIBLE);
                 Log.d(TAG, "   " + binding.clConnectIP.getVisibility() + "   " + binding.clConnectNetwork.getVisibility());
             }
