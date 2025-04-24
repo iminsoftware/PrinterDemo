@@ -172,7 +172,11 @@ public class WifiScannerHelper {
             // 生成组合键：SSID + 频段分类
             String band = getFrequencyBand(result.frequency);
             String compositeKey = result.SSID + "_" + band;
-
+//            Log.d(TAG,
+//                    "WiFi结果  名称：" + result.SSID +
+//                            " 频段：" + getFrequencyBand(result.frequency) +
+//                            " 强度：" + result.level + "dBm"
+//            );
             // 保留信号最强的结果
             ScanResult existing = bestResults.get(compositeKey);
             if (existing == null || existing.level < result.level) {
@@ -213,6 +217,13 @@ public class WifiScannerHelper {
                 && !result.SSID.isEmpty()
                 && !"<unknown ssid>".equals(result.SSID);
     }
+
+    private boolean isOpenNetwork(ScanResult result) {
+        final String caps = result.capabilities;
+        // 匹配常见加密类型标识
+        return !caps.matches(".*WEP|PSK|EAP|SAE.*");
+    }
+
 
     // ================== 工具方法 ==================
     public static int convertSignalToLevel(int rssi) {

@@ -446,4 +446,5 @@
     <string name="get_fail">获取失败</string>
     <string name="connect_fail_tips">请输入IP,或者重新配网</string>
     <string name="set_fail">操作失败</string>
+    <string name="search">搜索</string>
 </resources>

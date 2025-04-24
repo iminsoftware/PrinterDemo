@@ -197,27 +197,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
         binding.networkConfirmTv.setOnClickListener(view -> {
             LoadingDialogUtil.getInstance().show(getContext(), "");
-//            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-//                    .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
-//                @Override
-//                public void onResult(int i, String s) throws RemoteException {
-//                    Log.d(TAG, "WirelessConfig.DISCONNECT: "+i+"  i=> "+s);
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            MainActivity.ipConnect = "";
-//                        }
-//                    });
-//
-//                }
-//
-//                @Override
-//                public void onReturnString(String s) throws RemoteException {
-//                    Log.d(TAG, "WirelessConfig.DISCONNECT: "+s);
-//                }
-//            });
-//
-//
+
             PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                     .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
                     .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
@@ -747,10 +727,15 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        LoadingDialogUtil.getInstance().hide();
+
                                                         binding.networkConfirmTv.setEnabled(true);
                                                         binding.networkConfirmTv.setAlpha(1f);
+
                                                         if (!Utils.isEmpty(s) && !s.equals("-1")){
+
+                                                            binding.baseIPTv.setVisibility(View.INVISIBLE);
+                                                            baseIp = "";
+                                                            binding.baseIPTv.setText("");
 
                                                             MainActivity.ipConnect = s;
                                                             MainActivity.connectAddress = s;
@@ -763,6 +748,8 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                                         }else {
                                                             ToastUtil.showShort(getContext(),R.string.connect_wifi_tips1);
                                                         }
+
+                                                        LoadingDialogUtil.getInstance().hide();
                                                     }
                                                 });
 
@@ -782,9 +769,9 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         baseIp = "";
         binding.baseIPTv.setText("");
         binding.baseIPTv.setVisibility(View.INVISIBLE);
-
+        startWifiScan();
         if (Utils.isEmpty(MainActivity.ipConnect)) {//判断SDK 是否有连接
-            startWifiScan();
+
             PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
                     .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
                 @Override
@@ -845,9 +832,9 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
 
         } else {
-            if (this.list.size()==0){
-                startWifiScan();
-            }
+//            if (this.list.size()==0){
+//                startWifiScan();
+//            }
             updateUi();
 
         }
