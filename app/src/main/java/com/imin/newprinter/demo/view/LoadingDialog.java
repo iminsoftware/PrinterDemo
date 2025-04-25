@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -26,6 +27,8 @@ import java.util.List;
  */
 public class LoadingDialog extends android.app.Dialog {
 
+    private TextView textView;
+
     public enum AnimationType { SPIN, DOTS }
 
     private ObjectAnimator spinAnimator;
@@ -38,13 +41,18 @@ public class LoadingDialog extends android.app.Dialog {
 
     private void initialize() {
         setContentView(R.layout.dialog_loading);
+        textView = findViewById(R.id.tv_text);
+        textView.setText(tips);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setCancelable(false);
     }
 
+    String tips = "";
     public LoadingDialog setText(String text) {
-        TextView textView = findViewById(R.id.tv_text);
+
         if (textView != null) {
+            tips = text;
+            Log.d("PrintDemo_", "WIFI_CONNECT =>" + text);
             textView.setText(text);
         }
         return this;

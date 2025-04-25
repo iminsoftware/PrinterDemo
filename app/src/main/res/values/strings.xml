@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PrinterDemo</string>
+    <string name="app_name">iMinPrinter</string>
     <string name="main_tab">Main Page</string>
     <string name="function_test">Function test</string>
     <string name="setting">Settings</string>
@@ -417,4 +417,7 @@
     <string name="disconnected">Connection has been lost</string>
     <string name="connect_wifi_tips2">The network configuration is successful, click "Start Connecting" to execute the printing function.</string>
     <string name="print_selft_test">Printer self-test page</string>
+    <string name="toast_tips1">IP is being acquired, the tablet cannot leave the base!</string>
+    <string name="toast_tips2">During the connection process, please note: the tablet cannot leave the base!</string>
+    <string name="toast_tips3">During the network configuration process, please note: the tablet cannot leave the base!</string>
 </resources>

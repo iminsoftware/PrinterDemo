@@ -204,7 +204,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         binding.networkConfirmTv.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                LoadingDialogUtil.getInstance().show(getContext(), "");
+                LoadingDialogUtil.getInstance().show(getContext(), getString(R.string.toast_tips3));
 
                 PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                         .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
@@ -256,7 +256,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         binding.ipConfirmTv.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                LoadingDialogUtil.getInstance().show(v.getContext(), "");
+                LoadingDialogUtil.getInstance().show(v.getContext(), getString(R.string.toast_tips2));
                 PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                         .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
                         .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
@@ -400,7 +400,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         binding.getConnectIPTv.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                LoadingDialogUtil.getInstance().show(getContext(), "");
+                LoadingDialogUtil.getInstance().show(getContext(), getString(R.string.toast_tips1));
 
                 PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                         .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
@@ -974,7 +974,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
         if (binding != null) {
             if (status != 0) {
-                ToastUtil.showShort(getContext(), R.string.connect_wifi_tips1);
+//                ToastUtil.showShort(getContext(), R.string.connect_wifi_tips1);
                 baseIp = "";
                 binding.baseIPTv.setVisibility(View.INVISIBLE);
                 binding.baseIPTv.setText("");

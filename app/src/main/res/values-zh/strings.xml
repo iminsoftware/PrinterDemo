@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PrinterDemo</string>
+    <string name="app_name">iMin打印机</string>
     <string name="main_tab">主页面</string>
     <string name="function_test">功能测试</string>
     <string name="setting">设置</string>
@@ -451,4 +451,7 @@
     <string name="disconnected">连接已断开</string>
     <string name="connect_wifi_tips2">配网成功，点击“开始连接”即可执行打印功能哦</string>
     <string name="print_selft_test">打印机自检页</string>
+    <string name="toast_tips1">IP获取中，平板不能离开底座哦！</string>
+    <string name="toast_tips2">连接过程中，注意：平板不能离开底座哦！</string>
+    <string name="toast_tips3">配网过程中，注意：平板不能离开底座哦！</string>
 </resources>

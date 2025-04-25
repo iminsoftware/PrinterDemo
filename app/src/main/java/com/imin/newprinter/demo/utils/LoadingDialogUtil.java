@@ -27,7 +27,7 @@ public class LoadingDialogUtil {
     }
 
     // 带配置参数的show方法
-    public void show(@NonNull Context context,LoadingConfig configObj) {
+//    public void show(@NonNull Context context,LoadingConfig configObj) {
 
 //        if (loadingDialog == null) {
 //            loadingDialog = new LoadingDialog(context);
@@ -46,7 +46,7 @@ public class LoadingDialogUtil {
 //            loadingDialog.show();
 //        }
 //        loadingCount++;
-    }
+//    }
 
     // 重载默认配置的show方法
     public void show(@NonNull Context context,String text) {
@@ -54,9 +54,8 @@ public class LoadingDialogUtil {
             loadingDialog.dismiss();
         }
         loadingDialog = new LoadingDialog(context)
-                .setText(text)
                 .setAnimationType(LoadingDialog.AnimationType.SPIN);
-
+        loadingDialog.setText(text);
         loadingDialog.show();
 
     }
