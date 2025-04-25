@@ -384,10 +384,12 @@ public class BtConnectFragment extends BaseFragment {
         binding.srlRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                Log.d(TAG, "setOnRefreshListener: ");
                 searchBtData();
+                binding.srlRefresh.finishRefresh(5000);
             }
         });
-
+        binding.srlRefresh.finishRefresh(5000);
 
         binding.searchBt.setOnClickListener(view -> {
             searchBtData();
@@ -498,8 +500,6 @@ public class BtConnectFragment extends BaseFragment {
                 startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
                 return;
             }
-
-
             searchBlueTooth();
         }
     }
@@ -578,7 +578,7 @@ public class BtConnectFragment extends BaseFragment {
      */
     @SuppressLint("MissingPermission")
     public synchronized void searchBlueTooth() {
-        binding.srlRefresh.autoRefresh();
+//        binding.srlRefresh.autoRefresh();
         if (!mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.startDiscovery();//开始搜索
         }
