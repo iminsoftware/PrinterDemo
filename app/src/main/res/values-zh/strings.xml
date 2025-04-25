@@ -449,4 +449,6 @@
     <string name="search">搜索</string>
     <string name="print_fail">打印失败</string>
     <string name="disconnected">连接已断开</string>
+    <string name="connect_wifi_tips2">配网成功，点击“开始连接”即可执行打印功能哦</string>
+    <string name="print_selft_test">打印机自检页</string>
 </resources>

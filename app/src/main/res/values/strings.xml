@@ -415,4 +415,6 @@
     <string name="search">Search</string>
     <string name="print_fail">Printing failed</string>
     <string name="disconnected">Connection has been lost</string>
+    <string name="connect_wifi_tips2">The network configuration is successful, click "Start Connecting" to execute the printing function.</string>
+    <string name="print_selft_test">Printer self-test page</string>
 </resources>

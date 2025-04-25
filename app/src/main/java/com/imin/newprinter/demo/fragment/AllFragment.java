@@ -47,6 +47,7 @@ public class AllFragment extends BaseFragment {
 
     private static final String TAG = "AllTestFragment";
     private String[] contents;
+    byte[] cmd = new byte[]{0x1A, 0x31, 0x33, 0x44, 0x55, 0x01, 0x02};
     private com.imin.newprinter.demo.databinding.FragmentAllBinding binding;
 
     @Nullable
@@ -208,9 +209,10 @@ public class AllFragment extends BaseFragment {
                         break;
 
                     case 4:
-                        PrinterHelper.getInstance().sendRAWData(BytesUtils.printBitmap(BytesUtils.initBlackBlock(
-                                PrinterHelper.getInstance().getPrinterPaperType() ==
-                                        BitmapUtils.PRINTER_TYPE_58 ? BitmapUtils.WIDTH_58_PIXEL : BitmapUtils.WIDTH_80_PIXEL)), null);
+                        PrinterHelper.getInstance().sendRAWData(cmd, null);
+//                        PrinterHelper.getInstance().sendRAWData(BytesUtils.printBitmap(BytesUtils.initBlackBlock(
+//                                PrinterHelper.getInstance().getPrinterPaperType() ==
+//                                        BitmapUtils.PRINTER_TYPE_58 ? BitmapUtils.WIDTH_58_PIXEL : BitmapUtils.WIDTH_80_PIXEL)), null);
                         break;
 
                     case 5:

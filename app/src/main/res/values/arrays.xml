@@ -6,6 +6,7 @@
         <item>@string/print_elme</item>
         <item>@string/print_baidu</item>
         <item>@string/print_mt</item>
+        <item>@string/print_selft_test</item>
     </string-array>
 <!--    <item>@string/print_jdhk</item>-->
 <!--    <item>@string/print_hk</item>-->
@@ -678,5 +679,6 @@
         <!--<item>50*40mm</item>
        <item>60*50mm</item>-->
     </string-array>
+
 
 </resources>
