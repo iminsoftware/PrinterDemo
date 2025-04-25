@@ -1035,7 +1035,6 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
     public void setSpinnerData(ArrayList<String> wifiList) {
         Log.d(TAG, "setSpinnerData=  " + wifiList);
-        this.list.clear();
         this.list = wifiList;
         if (list != null && list.size() > 0) {
             binding.ssidSpinner.setText(list.get(0));
@@ -1116,8 +1115,13 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         // 列表项点击事件
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             //Toast.makeText(context, "点击了: " + mList.get(position), Toast.LENGTH_SHORT).show();
-            if (mList != null && mList.size() > position) {
-                binding.ssidSpinner.setText(mList.get(position));
+            try {
+                if (mList != null && mList.size() > position) {
+                    binding.ssidSpinner.setText(mList.get(position));
+                }
+
+            }catch (Exception e){
+                Log.d(TAG,"  "+e.getMessage());
             }
 
             if (popupWindow != null) {
