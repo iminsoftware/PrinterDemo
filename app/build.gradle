@@ -11,7 +11,7 @@ android {
     def versionNames = "2.1_"+versioncode+"_" + date
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "Newprinterdemo-" + versioncode + "_V" + versionName + ".apk"
+            outputFileName = "Printerdemo-" + versioncode + "_V" + versionName + ".apk"
         }
     }
 

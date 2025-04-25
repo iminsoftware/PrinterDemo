@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.imin.newprinter.demo.R;
+import com.imin.newprinter.demo.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,11 @@ public class LoadingDialog extends android.app.Dialog {
         setContentView(R.layout.dialog_loading);
         textView = findViewById(R.id.tv_text);
         textView.setText(tips);
+        if (Utils.isEmpty(tips)){
+            textView.setVisibility(View.INVISIBLE);
+        }else {
+            textView.setVisibility(View.VISIBLE);
+        }
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setCancelable(false);
     }
@@ -54,6 +60,11 @@ public class LoadingDialog extends android.app.Dialog {
             tips = text;
             Log.d("PrintDemo_", "WIFI_CONNECT =>" + text);
             textView.setText(text);
+        }
+        if (Utils.isEmpty(text)){
+            textView.setVisibility(View.INVISIBLE);
+        }else {
+            textView.setVisibility(View.VISIBLE);
         }
         return this;
     }

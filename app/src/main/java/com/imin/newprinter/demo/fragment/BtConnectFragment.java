@@ -583,4 +583,11 @@ public class BtConnectFragment extends BaseFragment {
             mBluetoothAdapter.startDiscovery();//开始搜索
         }
     }
+
+    public synchronized void cancelSearchBlueTooth() {
+//        binding.srlRefresh.autoRefresh();
+        if (mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.cancelDiscovery();//开始搜索
+        }
+    }
 }

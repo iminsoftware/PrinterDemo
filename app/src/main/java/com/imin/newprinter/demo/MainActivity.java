@@ -249,33 +249,57 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             @Override
             public void onSingleClick(View v) {
                 Log.d(TAG, "isWifiConnected  = " + NetworkUtils.isWifiConnected(v.getContext()));
-                if (!NetworkUtils.isWifiConnected(v.getContext())) {
-                    PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                            .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
-                        @Override
-                        public void onResult(int i, String s) throws RemoteException {
-                            Log.d(TAG, "DISCONNECT_WIFI==:  " + s + "  , i= " + i);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    MainActivity.ipConnect = "";
-                                    selectCurrentItem = 1;
-                                    binding.vp.setCurrentItem(selectCurrentItem);
-                                    binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-                                    binding.wifiIv.setImageResource(R.drawable.ic_check);
-                                    binding.btIv.setImageResource(R.drawable.ic_uncheck);
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onReturnString(String s) throws RemoteException {
-
-                        }
-                    });
-                } else {
+                if (btConnectFragment != null){
+                    btConnectFragment.cancelSearchBlueTooth();
+                }
+//                if (i == 0) {
+//                    ipConnect = s;
+//                    connectAddress = s;
+//                    connectType = "WIFI";
+//                    connectContent = s;
+//                    selectCurrentItem = 4;
+//                    wirelessPrintingFragment.updateStatus();
+//
+//                } else {
+//                    ipConnect = "";
+//                    connectAddress = "";
+//                    connectType = "WIFI";
+//                    connectContent = "";
+//                    selectCurrentItem = 1;
+//
+//                }
+//                binding.vp.setCurrentItem(selectCurrentItem);
+//
+//                binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+//                binding.wifiIv.setImageResource(R.drawable.ic_check);
+//                binding.btIv.setImageResource(R.drawable.ic_uncheck);
+//                if (!NetworkUtils.isWifiConnected(v.getContext())) {
+//                    PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+//                            .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
+//                        @Override
+//                        public void onResult(int i, String s) throws RemoteException {
+//                            Log.d(TAG, "DISCONNECT_WIFI==:  " + s + "  , i= " + i);
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//
+//                                    MainActivity.ipConnect = "";
+//                                    selectCurrentItem = 1;
+//                                    binding.vp.setCurrentItem(selectCurrentItem);
+//                                    binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+//                                    binding.wifiIv.setImageResource(R.drawable.ic_check);
+//                                    binding.btIv.setImageResource(R.drawable.ic_uncheck);
+//                                }
+//                            });
+//
+//                        }
+//
+//                        @Override
+//                        public void onReturnString(String s) throws RemoteException {
+//
+//                        }
+//                    });
+//                } else {
 
                     PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
                             .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
@@ -317,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
                         }
                     });
-                }
+//                }
 
             }
         });
