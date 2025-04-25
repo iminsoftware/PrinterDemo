@@ -157,10 +157,27 @@ public class WifiScannerHelper {
                         }
                     });
                 }).start();
-            }else if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent.getAction())){
+            }else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())){
 
-
+                handleWifiStateChange(intent,context);
             }
+        }
+    }
+
+    private void handleWifiStateChange(Intent intent, Context context) {
+        int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+        switch (wifiState) {
+            case WifiManager.WIFI_STATE_ENABLED:
+               // Toast.makeText(context, "WiFi is enabled", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Receiver not wifi连接: ");
+                notifyWifiConnectStatus(true);
+                break;
+            case WifiManager.WIFI_STATE_DISABLED:
+                //wifi断开
+                Log.e(TAG, "Receiver not wifi断开: ");
+                notifyWifiConnectStatus(false);
+                //Toast.makeText(context, "WiFi is disabled", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -259,6 +276,7 @@ public class WifiScannerHelper {
         void onPermissionDenied();
         void onWifiDisabled();
         void onScanFailed();
+        void onWifiConnectStatus(boolean b);
     }
 
     public void setScanResultsListener(OnScanResultsListener listener) {
@@ -292,6 +310,12 @@ public class WifiScannerHelper {
     private void notifyScanFailed() {
         if (scanResultsListener != null) {
             scanResultsListener.onScanFailed();
+        }
+    }
+
+    private void notifyWifiConnectStatus(boolean b) {
+        if (scanResultsListener != null) {
+            scanResultsListener.onWifiConnectStatus(b);
         }
     }
 }

@@ -90,6 +90,13 @@ public class WifiScannerSingleton {
                 }
                 isScanning = false;
             }
+
+            @Override
+            public void onWifiConnectStatus(boolean b) {
+                if (wifiListListener != null) {
+                    wifiListListener.onWifiConnectStatus(b);
+                }
+            }
         });
     }
 
@@ -130,5 +137,6 @@ public class WifiScannerSingleton {
         void onPermissionDenied();
         void onWifiDisabled();
         void onScanFailed();
+        void onWifiConnectStatus(boolean b);
     }
 }

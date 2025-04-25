@@ -1024,6 +1024,18 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
     }
 
     @Override
+    public void onWifiConnectStatus(boolean b) {
+        Log.e(TAG, "onWifiConnectStatus results: " + b);
+
+        if (!b){
+            if (getActivity()!=null){
+                ((MainActivity)getActivity()).disConnectWirelessPrint();
+            }
+            disConnect();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         if (wifiScanner != null) {
             wifiScanner.release();

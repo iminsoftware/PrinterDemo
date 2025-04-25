@@ -58,6 +58,7 @@ import com.imin.newprinter.demo.fragment.TextFragment;
 import com.imin.newprinter.demo.fragment.TransFragment;
 import com.imin.newprinter.demo.fragment.WifiConnectFragment;
 import com.imin.newprinter.demo.fragment.WirelessPrintingFragment;
+import com.imin.newprinter.demo.utils.NetworkUtils;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.utils.WifiScannerSingleton;
 import com.imin.newprinter.demo.view.TitleLayout;
@@ -241,51 +242,75 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         });
 
         binding.wifiLy.setOnClickListener(view -> {
+            Log.d(TAG, "isWifiConnected  = " + NetworkUtils.isWifiConnected(view.getContext()));
+            if (!NetworkUtils.isWifiConnected(view.getContext())){
+                PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
+                    @Override
+                    public void onResult(int i, String s) throws RemoteException {
+                        Log.d(TAG, "DISCONNECT_WIFI==:  " + s+"  , i= "+i);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-            PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-                    Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + i+"    "+s);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (i==0){
-                                ipConnect = s;
-                                connectAddress = s;
-                                connectType = "WIFI";
-                                connectContent = s;
-                                selectCurrentItem = 4;
-                                wirelessPrintingFragment.updateStatus();
-
-                            }else {
-                                ipConnect = "";
-                                connectAddress = "";
-                                connectType = "WIFI";
-                                connectContent = "";
+                                MainActivity.ipConnect = "";
                                 selectCurrentItem = 1;
-
+                                binding.vp.setCurrentItem(selectCurrentItem);
+                                binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                                binding.wifiIv.setImageResource(R.drawable.ic_check);
+                                binding.btIv.setImageResource(R.drawable.ic_uncheck);
                             }
-                            binding.vp.setCurrentItem(selectCurrentItem);
+                        });
 
-                            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-                            binding.wifiIv.setImageResource(R.drawable.ic_check);
-                            binding.btIv.setImageResource(R.drawable.ic_uncheck);
-                        }
-                    });
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+
+                    }
+                });
+            }else {
+                PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+                        .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
+                    @Override
+                    public void onResult(int i, String s) throws RemoteException {
+                        Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + i+"    "+s);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (i==0){
+                                    ipConnect = s;
+                                    connectAddress = s;
+                                    connectType = "WIFI";
+                                    connectContent = s;
+                                    selectCurrentItem = 4;
+                                    wirelessPrintingFragment.updateStatus();
+
+                                }else {
+                                    ipConnect = "";
+                                    connectAddress = "";
+                                    connectType = "WIFI";
+                                    connectContent = "";
+                                    selectCurrentItem = 1;
+
+                                }
+                                binding.vp.setCurrentItem(selectCurrentItem);
+
+                                binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                                binding.wifiIv.setImageResource(R.drawable.ic_check);
+                                binding.btIv.setImageResource(R.drawable.ic_uncheck);
+                            }
+                        });
 
 
-                }
+                    }
 
-                @Override
-                public void onReturnString(String s) throws RemoteException {
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
 
-                }
-            });
-
-
-
-
+                    }
+                });
+            }
 
         });
 
@@ -394,30 +419,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     protected void onResume() {
         super.onResume();
         updateStatus(PrinterHelper.getInstance().getPrinterStatus());
-//        startWifiScan();
         binding.vp.setCurrentItem(selectCurrentItem);
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        cm.registerNetworkCallback(
-                new NetworkRequest.Builder().addTransportType(TRANSPORT_WIFI).build(),
-                new ConnectivityManager.NetworkCallback() {
-                    @Override
-                    public void onLost(Network network) {
-                        // WiFi 断开处理
-                        Log.e(TAG, "WiFi Turn Off\n");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                disConnectWirelessPrint();
-                                if (wifiConnectFragment != null){
-                                    wifiConnectFragment.disConnect();
-                                }
-                            }
-                        });
-
-                    }
-                }
-        );
     }
 
     @Override

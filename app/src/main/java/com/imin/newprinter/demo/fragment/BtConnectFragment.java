@@ -132,11 +132,9 @@ public class BtConnectFragment extends BaseFragment {
 
                         if (getActivity()!=null){
                             ((MainActivity)getActivity()).disConnectWirelessPrint();
-                            disConnect();
-
                         }
 
-
+                        disConnect();
                         return;
                     }
                     return;
