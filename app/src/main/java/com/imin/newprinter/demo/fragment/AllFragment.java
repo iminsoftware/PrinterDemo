@@ -216,9 +216,9 @@ public class AllFragment extends BaseFragment {
                         break;
 
                     case 5:
-                        PrinterHelper.getInstance().sendRAWData(BytesUtils.printBitmap(BytesUtils.initBlackBlock(160,
-                                PrinterHelper.getInstance().getPrinterPaperType() ==
-                                        BitmapUtils.PRINTER_TYPE_58 ? BitmapUtils.WIDTH_58_PIXEL : BitmapUtils.WIDTH_80_PIXEL)), null);
+//                        PrinterHelper.getInstance().sendRAWData(BytesUtils.printBitmap(BytesUtils.initBlackBlock(160,
+//                                PrinterHelper.getInstance().getPrinterPaperType() ==
+//                                        BitmapUtils.PRINTER_TYPE_58 ? BitmapUtils.WIDTH_58_PIXEL : BitmapUtils.WIDTH_80_PIXEL)), null);
                         break;
                 }
                 PrinterHelper.getInstance().printAndFeedPaper(70);
