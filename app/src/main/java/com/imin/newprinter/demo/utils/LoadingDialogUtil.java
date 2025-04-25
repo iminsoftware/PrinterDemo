@@ -50,6 +50,9 @@ public class LoadingDialogUtil {
 
     // 重载默认配置的show方法
     public void show(@NonNull Context context,String text) {
+        if (loadingDialog != null){
+            loadingDialog.dismiss();
+        }
         loadingDialog = new LoadingDialog(context)
                 .setText(text)
                 .setAnimationType(LoadingDialog.AnimationType.SPIN);

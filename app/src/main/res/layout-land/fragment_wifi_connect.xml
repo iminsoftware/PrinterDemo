@@ -108,7 +108,7 @@
                         android:id="@+id/connectNetworkTv"
                         android:layout_width="200dp"
                         android:layout_height="42dp"
-                        android:background="@drawable/dra_green_corner_5"
+                        android:background="@drawable/dra_green60_corner_5"
                         android:gravity="center"
                         android:text="@string/distribution_network"
                         android:textColor="@color/white"
@@ -441,6 +441,8 @@
                         android:text="@string/start_connect_network"
                         android:textColor="@color/white"
                         android:textSize="15sp"
+                        android:enabled="false"
+                        android:alpha="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/clStatic"
 
@@ -597,9 +599,11 @@
                         android:layout_marginTop="50dp"
                         android:background="@drawable/dra_green_corner_5"
                         android:gravity="center"
+                        android:enabled="false"
+                        android:alpha="0.5"
                         android:text="@string/start_connect"
                         android:textColor="@color/white"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
             </FrameLayout>

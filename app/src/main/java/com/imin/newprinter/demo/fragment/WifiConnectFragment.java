@@ -42,6 +42,7 @@ import com.imin.newprinter.demo.utils.NetworkValidator;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.utils.WifiScannerHelper;
 import com.imin.newprinter.demo.utils.WifiScannerSingleton;
+import com.imin.newprinter.demo.view.OnSingleClickListener;
 import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
 import com.imin.printer.enums.ConnectType;
@@ -86,10 +87,12 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
     private ArrayAdapter<String> adapter;
 
+    boolean isVisibleToView = false;
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         Log.d(TAG, "setUserVisibleHint: " + isVisibleToUser + "    " + isResumed());
+        isVisibleToView = isVisibleToUser;
         if (isVisibleToUser && isResumed()) {
             // 当 Fragment 对用户可见时执行操作（兼容旧版本）
             //loadData();
@@ -134,7 +137,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
         binding.connectNetworkTv.setOnClickListener(view -> {
 
-            binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+            binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
             binding.clConnectNetwork.setVisibility(View.VISIBLE);
             binding.clConnectIP.setVisibility(View.INVISIBLE);
@@ -142,7 +145,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
         binding.connectTv.setOnClickListener(v -> {
 
-            binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+            binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
             binding.clConnectNetwork.setVisibility(View.INVISIBLE);
             binding.clConnectIP.setVisibility(View.VISIBLE);
@@ -193,9 +196,14 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 //                    binding.clStatic.setVisibility(View.VISIBLE);
 //                }
 //            }
+
 //        });
 
-        binding.networkConfirmTv.setOnClickListener(view -> {
+
+
+        binding.networkConfirmTv.setOnClickListener(new OnSingleClickListener() {
+                                                        @Override
+                                                        public void onSingleClick(View v){
             LoadingDialogUtil.getInstance().show(getContext(), "");
 
             PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
@@ -212,8 +220,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                 }
             });
 
-            binding.networkConfirmTv.setEnabled(false);
-            binding.networkConfirmTv.setAlpha(0.5f);
+
             String selectedWifi = binding.ssidSpinner.getText().toString().trim();
             if (!Utils.isEmpty(selectedWifi)) {
                 // 解析SSID和BSSID
@@ -225,8 +232,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                     if (!bssid.equals("OPEN")) {
                         if (Utils.isEmpty(pwd)) {
                             Toast.makeText(getContext(), getString(R.string.toast1), Toast.LENGTH_SHORT).show();
-                            binding.networkConfirmTv.setEnabled(true);
-                            binding.networkConfirmTv.setAlpha(1f);
+
                             LoadingDialogUtil.getInstance().hide();
                             return;
                         }
@@ -240,14 +246,15 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                 }
             } else {
                 LoadingDialogUtil.getInstance().hide();
-                binding.networkConfirmTv.setEnabled(true);
-                binding.networkConfirmTv.setAlpha(1f);
+
                 Toast.makeText(getContext(), getText(R.string.tips1), Toast.LENGTH_SHORT).show();
             }
 
-        });
+        }});
 
-        binding.ipConfirmTv.setOnClickListener(v -> {
+        binding.ipConfirmTv.setOnClickListener(new OnSingleClickListener() {
+                                                   @Override
+                                                   public void onSingleClick(View v) {
             LoadingDialogUtil.getInstance().show(v.getContext(),"");
             PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
                     .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
@@ -386,9 +393,11 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                 });
 
             }
-        });
+        }});
 
-        binding.getConnectIPTv.setOnClickListener(view -> {
+        binding.getConnectIPTv.setOnClickListener(new OnSingleClickListener() {
+                                                      @Override
+                                                      public void onSingleClick(View v) {
             LoadingDialogUtil.getInstance().show(getContext(),"");
 
             PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
@@ -411,15 +420,17 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
             binding.baseIPTv.setVisibility(View.INVISIBLE);
             checkWifiConnect();
 
-        });
+        }});
         binding.viewTitle.setRightCallback(v -> {
             Log.d(TAG, "setting: ");
             switchFragment(100);
         });
 
-        binding.btDisconnect.setOnClickListener(view -> {
+        binding.btDisconnect.setOnClickListener(new OnSingleClickListener() {
+                                                    @Override
+                                                    public void onSingleClick(View v) {
             disConnect();
-        });
+        }});
 
     }
 
@@ -540,7 +551,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 //                            @Override
 //                            public void run() {
 //                                if (!Utils.isEmpty(s) && !s.equals("-1")){
-//                                    binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+//                                    binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
 //                                    binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
 //                                    binding.clConnectNetwork.setVisibility(View.INVISIBLE);
 //                                    binding.clConnectIP.setVisibility(View.VISIBLE);
@@ -598,8 +609,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.networkConfirmTv.setEnabled(true);
-                                    binding.networkConfirmTv.setAlpha(1f);
+
                                     LoadingDialogUtil.getInstance().hide();
                                     binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI", getString(R.string.un_connected)));
                                     ToastUtil.showShort(getContext(),R.string.set_fail);
@@ -655,14 +665,13 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                             binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI", getString(R.string.un_connected)));
                                             binding.wifiIPTv.setText(String.format(getString(R.string.status_ip), "------"));
 
-                                            binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+                                            binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
                                             binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                             binding.clConnectNetwork.setVisibility(View.VISIBLE);
                                             binding.clConnectIP.setVisibility(View.INVISIBLE);
 
                                             LoadingDialogUtil.getInstance().hide();
-                                            binding.networkConfirmTv.setEnabled(true);
-                                            binding.networkConfirmTv.setAlpha(1f);
+
 
                                         }
                                     });
@@ -707,8 +716,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                                     @Override
                                                     public void run() {
 
-                                                        binding.networkConfirmTv.setEnabled(true);
-                                                        binding.networkConfirmTv.setAlpha(1f);
+
 
                                                         if (!Utils.isEmpty(s) && !s.equals("-1")){
 
@@ -718,7 +726,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
                                                             MainActivity.ipConnect = s;
                                                             MainActivity.connectAddress = s;
-                                                            binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+                                                            binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
                                                             binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                                             binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                                                             binding.clConnectIP.setVisibility(View.VISIBLE);
@@ -743,8 +751,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
     public void initData() {
         Log.d(TAG, "initData==: " + MainActivity.ipConnect);
-        binding.networkConfirmTv.setEnabled(true);
-        binding.networkConfirmTv.setAlpha(1f);
+
         baseIp = "";
         binding.baseIPTv.setText("");
         binding.baseIPTv.setVisibility(View.INVISIBLE);
@@ -770,7 +777,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                             , MainActivity.ipConnect));
 
                                     LoadingDialogUtil.getInstance().hide();
-                                    binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+                                    binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
                                     binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                     binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                                     binding.clConnectIP.setVisibility(View.VISIBLE);
@@ -791,7 +798,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                 binding.wifiStatusTv.setText(String.format(getString(R.string.status_wifi), "WIFI", getString(R.string.un_connected)));
                                 binding.wifiIPTv.setText(String.format(getString(R.string.status_ip), "------"));
 
-                                binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+                                binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
                                 binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                                 binding.clConnectNetwork.setVisibility(View.VISIBLE);
                                 binding.clConnectIP.setVisibility(View.INVISIBLE);
@@ -855,7 +862,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                         , getString(R.string.connected)));
                 binding.wifiIPTv.setText(String.format(getString(R.string.status_ip)
                         , MainActivity.ipConnect));
-                binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green_corner_5));
+                binding.connectTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_green60_corner_5));
                 binding.connectNetworkTv.setBackground(getContext().getResources().getDrawable(R.drawable.dra_gray_corner_5));
                 binding.clConnectNetwork.setVisibility(View.INVISIBLE);
                 binding.clConnectIP.setVisibility(View.VISIBLE);
@@ -904,8 +911,9 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        LoadingDialogUtil.getInstance().hide();
+
                                         ToastUtil.showShort(getContext(),R.string.get_fail);
+                                        LoadingDialogUtil.getInstance().hide();
 
                                     }
                                 });
@@ -960,6 +968,32 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
     }
 
+
+    public void updatePrinterStatus(int status) {
+        Log.d(TAG, "updatePrinterStatus: " + status+"  ,  "+getUserVisibleHint()+" ,isVisibleToView= "+isVisibleToView);
+
+        if (binding != null){
+            if (status != 0){
+                ToastUtil.showShort(getContext(),R.string.connect_wifi_tips1);
+                baseIp = "";
+                binding.baseIPTv.setVisibility(View.INVISIBLE);
+                binding.baseIPTv.setText("");
+                binding.networkConfirmTv.setEnabled(false);
+                binding.networkConfirmTv.setAlpha(0.5f);
+                binding.ipConfirmTv.setEnabled(false);
+                binding.ipConfirmTv.setAlpha(0.5f);
+                binding.getConnectIPTv.setEnabled(false);
+                binding.getConnectIPTv.setAlpha(0.5f);
+            }else {
+                binding.networkConfirmTv.setEnabled(true);
+                binding.networkConfirmTv.setAlpha(1f);
+                binding.ipConfirmTv.setEnabled(true);
+                binding.ipConfirmTv.setAlpha(1f);
+                binding.getConnectIPTv.setEnabled(true);
+                binding.getConnectIPTv.setAlpha(1f);
+            }
+        }
+    }
 
     private SwitchFragmentListener fragmentListener;
 
@@ -1091,6 +1125,5 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         // 显示在按钮下方
         popupWindow.showAsDropDown(view);
     }
-
 
 }

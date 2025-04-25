@@ -61,6 +61,7 @@ import com.imin.newprinter.demo.fragment.WirelessPrintingFragment;
 import com.imin.newprinter.demo.utils.NetworkUtils;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.utils.WifiScannerSingleton;
+import com.imin.newprinter.demo.view.OnSingleClickListener;
 import com.imin.newprinter.demo.view.TitleLayout;
 import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.IWirelessPrintResult;
@@ -74,7 +75,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements SwitchFragmentListener, TitleLayout.LeftCallback, IBinder.DeathRecipient{
+public class MainActivity extends AppCompatActivity implements SwitchFragmentListener, TitleLayout.LeftCallback, IBinder.DeathRecipient {
 
     private static final String TAG = "PrintDemo_MainActivity";
     private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     private WifiConnectFragment wifiConnectFragment;
     private BtConnectFragment btConnectFragment;
     private com.imin.newprinter.demo.databinding.ActivityMainBinding binding;
-//    private WifiScannerSingleton wifiScanner;
-    public static String connectType = "", connectContent = "", connectAddress = "",ipConnect = "",btContent="";
+    //    private WifiScannerSingleton wifiScanner;
+    public static String connectType = "", connectContent = "", connectAddress = "", ipConnect = "", btContent = "";
     private WirelessPrintingFragment wirelessPrintingFragment;
     private AllFragment allFragment;
     private int selectCurrentItem = 0;
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         fragmentList.add(wifiConnectFragment);
         fragmentList.add(btConnectFragment);
         fragmentList.add(wirelessPrintingFragment);
-        MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager(),fragmentList);
+        MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager(), fragmentList);
         binding.vp.setAdapter(mainPageAdapter);
 
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             @Override
             public void onPageSelected(int position) {
                 Log.d(TAG, "onPageSelected: " + position);
-                switch (position){
+                switch (position) {
                     case 0:
 //                        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
 //                                .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
@@ -217,50 +218,21 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         });
         binding.vp.setOffscreenPageLimit(4);
         binding.vp.setCurrentItem(selectCurrentItem);
-        binding.usbLy.setOnClickListener(view -> {
-            selectCurrentItem = 0;
-            binding.vp.setCurrentItem(selectCurrentItem);
-            binding.usbIv.setImageResource(R.drawable.ic_check);
-            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
-            binding.btIv.setImageResource(R.drawable.ic_uncheck);
+        binding.usbLy.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                selectCurrentItem = 0;
+                binding.vp.setCurrentItem(selectCurrentItem);
+                binding.usbIv.setImageResource(R.drawable.ic_check);
+                binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+                binding.btIv.setImageResource(R.drawable.ic_uncheck);
 
 
-            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                    .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-
-                }
-
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-
-                }
-            });
-
-        });
-
-        binding.wifiLy.setOnClickListener(view -> {
-            Log.d(TAG, "isWifiConnected  = " + NetworkUtils.isWifiConnected(view.getContext()));
-            if (!NetworkUtils.isWifiConnected(view.getContext())){
                 PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                        .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
+                        .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
+                        .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
                     @Override
                     public void onResult(int i, String s) throws RemoteException {
-                        Log.d(TAG, "DISCONNECT_WIFI==:  " + s+"  , i= "+i);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                MainActivity.ipConnect = "";
-                                selectCurrentItem = 1;
-                                binding.vp.setCurrentItem(selectCurrentItem);
-                                binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-                                binding.wifiIv.setImageResource(R.drawable.ic_check);
-                                binding.btIv.setImageResource(R.drawable.ic_uncheck);
-                            }
-                        });
 
                     }
 
@@ -269,39 +241,119 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
                     }
                 });
-            }else {
+
+            }
+        });
+
+        binding.wifiLy.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Log.d(TAG, "isWifiConnected  = " + NetworkUtils.isWifiConnected(v.getContext()));
+                if (!NetworkUtils.isWifiConnected(v.getContext())) {
+                    PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
+                            .setWirelessStyle(WirelessConfig.DISCONNECT_WIFI), new IWirelessPrintResult.Stub() {
+                        @Override
+                        public void onResult(int i, String s) throws RemoteException {
+                            Log.d(TAG, "DISCONNECT_WIFI==:  " + s + "  , i= " + i);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    MainActivity.ipConnect = "";
+                                    selectCurrentItem = 1;
+                                    binding.vp.setCurrentItem(selectCurrentItem);
+                                    binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                                    binding.wifiIv.setImageResource(R.drawable.ic_check);
+                                    binding.btIv.setImageResource(R.drawable.ic_uncheck);
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onReturnString(String s) throws RemoteException {
+
+                        }
+                    });
+                } else {
+
+                    PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
+                            .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
+                        @Override
+                        public void onResult(int i, String s) throws RemoteException {
+                            Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + i + "    " + s);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (i == 0) {
+                                        ipConnect = s;
+                                        connectAddress = s;
+                                        connectType = "WIFI";
+                                        connectContent = s;
+                                        selectCurrentItem = 4;
+                                        wirelessPrintingFragment.updateStatus();
+
+                                    } else {
+                                        ipConnect = "";
+                                        connectAddress = "";
+                                        connectType = "WIFI";
+                                        connectContent = "";
+                                        selectCurrentItem = 1;
+
+                                    }
+                                    binding.vp.setCurrentItem(selectCurrentItem);
+
+                                    binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                                    binding.wifiIv.setImageResource(R.drawable.ic_check);
+                                    binding.btIv.setImageResource(R.drawable.ic_uncheck);
+                                }
+                            });
+
+
+                        }
+
+                        @Override
+                        public void onReturnString(String s) throws RemoteException {
+
+                        }
+                    });
+                }
+
+            }
+        });
+
+        binding.btLy.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
                 PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
-                        .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_WIFI_IP), new IWirelessPrintResult.Stub() {
+                        .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_BT_MAC), new IWirelessPrintResult.Stub() {
                     @Override
                     public void onResult(int i, String s) throws RemoteException {
-                        Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + i+"    "+s);
+                        Log.d(TAG, "CURRENT_CONNECT_BT_MAC  = " + i + "    " + s);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (i==0){
-                                    ipConnect = s;
+                                if (i == 0) {
+                                    btContent = s;
                                     connectAddress = s;
-                                    connectType = "WIFI";
-                                    connectContent = s;
+                                    connectType = "BT";
                                     selectCurrentItem = 4;
                                     wirelessPrintingFragment.updateStatus();
 
-                                }else {
-                                    ipConnect = "";
+                                } else {
+                                    btContent = "";
                                     connectAddress = "";
-                                    connectType = "WIFI";
-                                    connectContent = "";
-                                    selectCurrentItem = 1;
+                                    connectType = "BT";
+                                    selectCurrentItem = 2;
 
                                 }
                                 binding.vp.setCurrentItem(selectCurrentItem);
-
                                 binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-                                binding.wifiIv.setImageResource(R.drawable.ic_check);
-                                binding.btIv.setImageResource(R.drawable.ic_uncheck);
+                                binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
+                                binding.btIv.setImageResource(R.drawable.ic_check);
                             }
                         });
-
 
                     }
 
@@ -310,59 +362,17 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
                     }
                 });
+
+
             }
-
         });
-
-        binding.btLy.setOnClickListener(view -> {
-
-            PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_BT_MAC), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
-                    Log.d(TAG, "CURRENT_CONNECT_BT_MAC  = " + i+"    "+s);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (i==0){
-                                btContent = s;
-                                connectAddress = s;
-                                connectType = "BT";
-                                selectCurrentItem = 4;
-                                wirelessPrintingFragment.updateStatus();
-
-                            }else {
-                                btContent = "";
-                                connectAddress = "";
-                                connectType = "BT";
-                                selectCurrentItem = 2;
-
-                            }
-                            binding.vp.setCurrentItem(selectCurrentItem);
-                            binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-                            binding.wifiIv.setImageResource(R.drawable.ic_uncheck);
-                            binding.btIv.setImageResource(R.drawable.ic_check);
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-
-                }
-            });
-
-
-        });
-
 
 
     }
 
 
-    public void disConnectWirelessPrint(){
-        if (wirelessPrintingFragment != null){
+    public void disConnectWirelessPrint() {
+        if (wirelessPrintingFragment != null) {
             wirelessPrintingFragment.disConnect();
         }
     }
@@ -408,8 +418,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 //                binding.clConnect.setVisibility(View.VISIBLE);
 //                binding.rlPrintStatus.setVisibility(View.VISIBLE);
 //            }
-            selectCurrentItem = num;
-            binding.vp.setCurrentItem(selectCurrentItem);
+        selectCurrentItem = num;
+        binding.vp.setCurrentItem(selectCurrentItem);
 //        }
 
 
@@ -503,8 +513,11 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                     binding.tvPrinterStatus.setText(statusTip);
                 }
 
-                if (allFragment != null){
+                if (allFragment != null) {
                     allFragment.updatePrinterStatus(value);
+                }
+                if (wifiConnectFragment != null) {
+                    wifiConnectFragment.updatePrinterStatus(value);
                 }
 //if (functionTestFragment != null) {
 //                    functionTestFragment.updatePrinterStatus(value);
@@ -524,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     public void getPrinterParameter() {
 
-        Log.d(TAG, "getPrinterParameter1111111:===== "+(Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()));
+        Log.d(TAG, "getPrinterParameter1111111:===== " + (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()));
 
         if (Utils.getPrinterType() != Utils.PrinterFirmwareBy.JIMMY && !Utils.isNingzLabel()) {
 //            binding.lySerial.setVisibility(View.VISIBLE);
@@ -578,7 +591,6 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                     });
 
 
-
                 }
 
                 @Override
@@ -615,7 +627,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 //
 //                }
 //            });
-        }else {
+        } else {
             binding.lySerial.setVisibility(View.GONE);
             binding.lyThermal.setVisibility(View.GONE);
             binding.lyDistancee.setVisibility(View.GONE);
@@ -640,7 +652,6 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                         binding.tvModelName.setText(result);
                     }
                 });
-
 
 
             }
@@ -674,8 +685,6 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                 });
 
 
-
-
             }
 
             @Override
@@ -700,13 +709,12 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
             binding.tvThermalHeadType.setText(paperType);
             Log.d(TAG, "initViewObservable version: " + serviceVersion + ", type= " + paperType);
-        }else {
+        } else {
             binding.lyHeadType.setVisibility(View.GONE);
         }
 
 
     }
-
 
 
     /**
@@ -758,7 +766,6 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
 
     ArrayList<String> wifiList = new ArrayList<>();
-
 
 
     @Override
