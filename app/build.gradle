@@ -5,7 +5,7 @@ plugins {
 android {
     namespace 'com.imin.newprinter.demo'
     compileSdk 33
-    def versioncode = 8
+    def versioncode = 9
 
     def date = new Date().format("yyMMdd_HHmm", TimeZone.getTimeZone("GMT+08"))
     def versionNames = "2.1_"+versioncode+"_" + date

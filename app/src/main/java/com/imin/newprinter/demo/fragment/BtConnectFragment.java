@@ -45,6 +45,7 @@ import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
 import com.imin.newprinter.demo.bean.BluetoothBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding;
+import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.LoadingDialogUtil;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.printer.IWirelessPrintResult;
@@ -585,9 +586,18 @@ public class BtConnectFragment extends BaseFragment {
     }
 
     public synchronized void cancelSearchBlueTooth() {
-//        binding.srlRefresh.autoRefresh();
-        if (mBluetoothAdapter.isDiscovering()) {
-            mBluetoothAdapter.cancelDiscovery();//开始搜索
-        }
+        ExecutorServiceManager.getExecutorService().submit(() -> {
+            try {
+                if (mBluetoothAdapter != null){
+                    if (mBluetoothAdapter.isDiscovering()) {
+                        mBluetoothAdapter.cancelDiscovery();//取消搜索
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error playing audio: " + e.getMessage());
+            }
+        });
+
+
     }
 }

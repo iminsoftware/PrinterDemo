@@ -58,6 +58,7 @@ import com.imin.newprinter.demo.fragment.TextFragment;
 import com.imin.newprinter.demo.fragment.TransFragment;
 import com.imin.newprinter.demo.fragment.WifiConnectFragment;
 import com.imin.newprinter.demo.fragment.WirelessPrintingFragment;
+import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.NetworkUtils;
 import com.imin.newprinter.demo.utils.Utils;
 import com.imin.newprinter.demo.utils.WifiScannerSingleton;
@@ -350,6 +351,12 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             @Override
             public void onSingleClick(View v) {
 
+                if (wifiConnectFragment != null){
+                    ExecutorServiceManager.shutdownExecutorService();
+                    if (wifiConnectFragment.getWifiScanner() != null){
+                        wifiConnectFragment.getWifiScanner().stopWifiScan();
+                    }
+                }
                 PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
                         .setWirelessStyle(WirelessConfig.CURRENT_CONNECT_BT_MAC), new IWirelessPrintResult.Stub() {
                     @Override

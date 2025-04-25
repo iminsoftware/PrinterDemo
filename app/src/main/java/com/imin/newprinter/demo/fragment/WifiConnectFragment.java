@@ -37,6 +37,7 @@ import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding;
+import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.LoadingDialogUtil;
 import com.imin.newprinter.demo.utils.NetworkValidator;
 import com.imin.newprinter.demo.utils.Utils;
@@ -96,7 +97,16 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         isVisibleToView = isVisibleToUser;
         if (isVisibleToUser && isResumed()) {
             // 当 Fragment 对用户可见时执行操作（兼容旧版本）
-            //loadData();
+
+            ExecutorServiceManager.shutdownExecutorService();
+            ExecutorServiceManager.getExecutorService().submit(() -> {
+                try {
+                    startWifiScan();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error playing audio: " + e.getMessage());
+                }
+            });
+
             initData();
         }
     }
@@ -110,8 +120,17 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
     WifiScannerSingleton wifiScanner;
 
+    public WifiScannerSingleton getWifiScanner() {
+        return wifiScanner;
+    }
+
+
     private void startWifiScan() {
-        wifiScanner.startWifiScan(this);
+        if (wifiScanner != null){
+            wifiScanner.stopWifiScan();
+            wifiScanner.startWifiScan(this);
+        }
+
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -758,7 +777,8 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         baseIp = "";
         binding.baseIPTv.setText("");
         binding.baseIPTv.setVisibility(View.INVISIBLE);
-        startWifiScan();
+
+
         if (Utils.isEmpty(MainActivity.ipConnect)) {//判断SDK 是否有连接
 
             PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
