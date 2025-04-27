@@ -772,7 +772,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
     }
 
     public void initData() {
-        Log.d(TAG, "initData==: " + MainActivity.ipConnect);
+        Log.d(TAG, "initData==: " + MainActivity.ipConnect+"  ,打印机状态==》   "+PrinterHelper.getInstance().getPrinterStatus());
 
         baseIp = "";
         binding.baseIPTv.setText("");
@@ -843,6 +843,8 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
             updateUi();
 
         }
+
+        updatePrinterStatus(PrinterHelper.getInstance().getPrinterStatus());
 
     }
 
