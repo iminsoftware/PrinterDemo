@@ -45,6 +45,7 @@ import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
 import com.imin.newprinter.demo.bean.BluetoothBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding;
+import com.imin.newprinter.demo.utils.BytesUtils;
 import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.LoadingDialogUtil;
 import com.imin.newprinter.demo.utils.Utils;
@@ -57,6 +58,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -574,6 +576,7 @@ public class BtConnectFragment extends BaseFragment {
     }
 
 
+    boolean aBoolean = true;
     /**
      * 搜索设备
      */
@@ -582,6 +585,56 @@ public class BtConnectFragment extends BaseFragment {
 //        binding.srlRefresh.autoRefresh();
         if (!mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.startDiscovery();//开始搜索
+
+//            if (aBoolean){
+//                aBoolean = !aBoolean;
+//                ExecutorServiceManager.getExecutorService().submit(() -> {
+//                    mBluetoothAdapter.startLeScan(new BluetoothAdapter.LeScanCallback() {
+//                        @Override
+//                        public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
+//                            if (bluetoothDevice != null){
+//                                Log.d(TAG, "onLeScan: address=> " + bluetoothDevice.getAddress()
+//                                        +" \n,name=> "+bluetoothDevice.getName()
+//                                        +" \n,BondState"+bluetoothDevice.getBondState()
+//                                        +" \n i= "+i
+//                                        +"\n,hex=> "+ BytesUtils.bytesToHex(bytes)
+//                                        +"\n byte="+Arrays.toString(bytes));
+//                            }
+//
+//                            parseScanRecord(bytes);
+//                        }
+//                    });
+//                });
+//            }
+
+        }
+
+
+
+    }
+
+
+    private void parseScanRecord(byte[] scanRecord) {
+        int index = 0;
+        while (index < scanRecord.length) {
+            int length = scanRecord[index++] & 0xFF;
+            if (length == 0) break;
+
+            int type = scanRecord[index++] & 0xFF;
+            byte[] data = Arrays.copyOfRange(scanRecord, index, index + length - 1); // 数据段
+            index += length - 1;
+
+            switch (type) {
+                case 0x09: // 设备名称
+                    String deviceName = new String(data);
+                    Log.d(TAG, "onLeScan :deviceName=  " + deviceName);
+                    break;
+                case 0x03: // 16位UUID列表
+                    break;
+                case 0xFF: // 厂商自定义数据
+
+                    break;
+            }
         }
     }
 

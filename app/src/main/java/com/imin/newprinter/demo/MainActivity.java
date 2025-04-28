@@ -1,6 +1,5 @@
 package com.imin.newprinter.demo;
 
-import static android.net.NetworkCapabilities.TRANSPORT_WIFI;
 import static me.goldze.mvvmhabit.utils.Utils.getContext;
 
 import android.Manifest;
@@ -12,9 +11,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -34,34 +30,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.imin.newprinter.demo.adapter.MainPageAdapter;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.ActivityMainBinding;
 import com.imin.newprinter.demo.fragment.AllFragment;
-import com.imin.newprinter.demo.fragment.AllTestFragment;
-import com.imin.newprinter.demo.fragment.BarcodeFragment;
 import com.imin.newprinter.demo.fragment.BaseFragment;
-import com.imin.newprinter.demo.fragment.BtConnectFragment;
-import com.imin.newprinter.demo.fragment.DoubleQrCodeFragment;
-import com.imin.newprinter.demo.fragment.FunctionFragment;
+import com.imin.newprinter.demo.fragment.BtFragment;
 import com.imin.newprinter.demo.fragment.IminBaseFragment;
-import com.imin.newprinter.demo.fragment.PaperFeedFragment;
-import com.imin.newprinter.demo.fragment.PictureFragment;
-import com.imin.newprinter.demo.fragment.PrinterParameterFragment;
-import com.imin.newprinter.demo.fragment.QrCodeFragment;
-import com.imin.newprinter.demo.fragment.SettingFragment;
-import com.imin.newprinter.demo.fragment.TableFormFragment;
-import com.imin.newprinter.demo.fragment.TextFragment;
-import com.imin.newprinter.demo.fragment.TransFragment;
-import com.imin.newprinter.demo.fragment.WifiConnectFragment;
+import com.imin.newprinter.demo.fragment.WifiFragment;
 import com.imin.newprinter.demo.fragment.WirelessPrintingFragment;
 import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.NetworkUtils;
 import com.imin.newprinter.demo.utils.Utils;
-import com.imin.newprinter.demo.utils.WifiScannerSingleton;
 import com.imin.newprinter.demo.view.OnSingleClickListener;
 import com.imin.newprinter.demo.view.TitleLayout;
 import com.imin.printer.INeoPrinterCallback;
@@ -96,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
     private String[] contentArray;
 
     public static int requestPermissionCode = 10;
-    private WifiConnectFragment wifiConnectFragment;
-    private BtConnectFragment btConnectFragment;
+    private WifiFragment wifiConnectFragment;
+    private BtFragment btConnectFragment;
     private com.imin.newprinter.demo.databinding.ActivityMainBinding binding;
     //    private WifiScannerSingleton wifiScanner;
     public static String connectType = "", connectContent = "", connectAddress = "", ipConnect = "", btContent = "";
@@ -156,10 +138,10 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 //        functionTestFragment.setCallback(this);
         allFragment = new AllFragment();
         allFragment.setUserVisibleHint(false);
-        wifiConnectFragment = new WifiConnectFragment();
+        wifiConnectFragment = new WifiFragment();
         wifiConnectFragment.setCallback(this);
         wifiConnectFragment.setUserVisibleHint(false);
-        btConnectFragment = new BtConnectFragment();
+        btConnectFragment = new BtFragment();
         btConnectFragment.setCallback(this);
         btConnectFragment.setUserVisibleHint(false);
         wirelessPrintingFragment = new WirelessPrintingFragment();

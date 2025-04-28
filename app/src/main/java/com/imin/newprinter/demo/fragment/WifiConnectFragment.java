@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment;
 import com.feature.tui.util.ToastUtil;
 import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
+import com.imin.newprinter.demo.adapter.ListAdapter;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding;
 import com.imin.newprinter.demo.utils.ExecutorServiceManager;
@@ -54,6 +55,7 @@ import com.imin.printer.wireless.WirelessPrintStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Future;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -71,6 +73,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
     private static final String ARG_WIFI_LIST = "wifiList";
     private String baseIp = "";//获取当前连接USB底座的IP
+    private Future wifiListFuture;
 
 
     @Nullable
@@ -98,14 +101,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         if (isVisibleToUser && isResumed()) {
             // 当 Fragment 对用户可见时执行操作（兼容旧版本）
 
-            ExecutorServiceManager.shutdownExecutorService();
-            ExecutorServiceManager.getExecutorService().submit(() -> {
-                try {
-                    startWifiScan();
-                } catch (Exception e) {
-                    Log.e(TAG, "Error playing audio: " + e.getMessage());
-                }
-            });
+
 
             initData();
         }
@@ -248,13 +244,16 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
                         String ssid = parts[0];
                         String bssid = parts[1].replace(")", "");
                         String pwd = binding.pwdEt.getText().toString().trim();
-                        if (!bssid.equals("OPEN")) {
+                        if (!bssid.contains("OPEN")) {
                             if (Utils.isEmpty(pwd)) {
                                 Toast.makeText(getContext(), getString(R.string.toast1), Toast.LENGTH_SHORT).show();
 
                                 LoadingDialogUtil.getInstance().hide();
                                 return;
                             }
+                        }
+                        if (bssid.contains("OPEN")){
+                            pwd = "";
                         }
                         Log.d(TAG, "WIFI_IP_TYPE ssid=>" + ssid + "  pwd=" + pwd);
                         if (binding.swichStatic.isChecked()) {
@@ -778,7 +777,14 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         binding.baseIPTv.setText("");
         binding.baseIPTv.setVisibility(View.INVISIBLE);
 
-
+        ExecutorServiceManager.cancelTask(wifiListFuture);
+        wifiListFuture = ExecutorServiceManager.getExecutorService().submit(() -> {
+            try {
+                startWifiScan();
+            } catch (Exception e) {
+                Log.e(TAG, "Error playing audio: " + e.getMessage());
+            }
+        });
         if (Utils.isEmpty(MainActivity.ipConnect)) {//判断SDK 是否有连接
 
             PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
@@ -837,9 +843,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
 
 
         } else {
-//            if (this.list.size()==0){
-//                startWifiScan();
-//            }
+
             updateUi();
 
         }
@@ -1096,6 +1100,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         if (wifiScanner != null) {
             wifiScanner.release();
         }
+        ExecutorServiceManager.shutdownExecutorService();
         super.onDestroyView();
     }
 
@@ -1112,7 +1117,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         // 初始化ListView
         ListView listView = popupView.findViewById(R.id.listView);
 
-        listView.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, mList));
+        listView.setAdapter(new ListAdapter(getContext(),mList));
 
         // 列表项点击事件
         listView.setOnItemClickListener((parent, view1, position, id) -> {
