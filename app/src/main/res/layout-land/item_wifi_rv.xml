@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="10dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:layout_marginHorizontal="15dp"
+    tools:ignore="MissingDefaultResource">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivRvIcon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_printer_normal"/>
+        <ImageView
+            android:id="@+id/ivRvTag"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="33dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_printer_busy_tag"/>
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvRvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_alignParentStart="true"
+                android:text="80mm Printer"
+                android:textColor="@color/color_666666"/>
+
+            <TextView
+                android:id="@+id/tvRvMac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="MAC:11:22:33:44:55"
+                android:textColor="@color/color_1D1D1F"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tvRvTitle"/>
+
+            <TextView
+                android:id="@+id/tvRvBtRssi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="strength"
+                android:layout_marginLeft="140dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tvRvTitle"
+                android:textColor="@color/color_01CA86"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvRvBtConnect"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:layout_marginLeft="220dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:text="@string/connect"
+                android:background="@drawable/dra_blue_corner_5"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvRvWifiName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="wifimingc"
+                android:textColor="@color/color_666666"
+                android:layout_marginTop="5dp" />
+            <TextView
+                android:id="@+id/tvRvIp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="IP:10.0.22.1"
+                android:textColor="@color/color_1D1D1F"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tvRvWifiName"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/io_status"
+                android:layout_marginLeft="170dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:textColor="@color/color_666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvRvIoStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="170dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:textColor="@color/color_01CA86"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivRvWifi"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="140dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tvRvWifiName"
+                android:background="@drawable/ic_wifi_0"
+                />
+
+            <TextView
+                android:id="@+id/tvRvWifiConnect"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:visibility="gone"
+                android:layout_marginLeft="220dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:text="@string/connect"
+                android:background="@drawable/dra_blue_corner_5"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRvPrint"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:layout_alignParentEnd="true"
+            android:text="@string/print"
+            android:background="@drawable/dra_green_corner_5"/>
+
+        <TextView
+            android:id="@+id/tvRvConnect"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:layout_alignParentEnd="true"
+            android:text="@string/disconnect"
+            android:background="@drawable/dra_red1_corner_5"/>
+
+    </LinearLayout>
+
+</LinearLayout>

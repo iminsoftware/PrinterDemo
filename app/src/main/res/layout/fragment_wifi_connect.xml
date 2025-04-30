@@ -22,20 +22,21 @@
         app:leftVisible="false"
         app:rightVisible="true" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fillViewport="true">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical">
+
                 <TextView
                     android:id="@+id/wifiStatusTv"
                     android:layout_width="match_parent"
@@ -51,12 +52,12 @@
                     android:id="@+id/wifiIPTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/wifiStatusTv"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginTop="5dp"
                     android:text="@string/status_ip"
                     android:textColor="@color/color_1D1D1F"
                     android:textSize="16sp"
-                    android:layout_below="@+id/wifiStatusTv"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/wifiStatusTv" />
 
@@ -64,291 +65,283 @@
                     android:id="@+id/btDisconnect"
                     android:layout_width="150dp"
                     android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/dra_red_corner_5"
                     android:gravity="center"
-                    android:layout_centerVertical="true"
                     android:text="@string/disconnect"
                     android:textColor="@color/white"
                     android:textSize="15sp"
-                    android:layout_alignParentRight="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </RelativeLayout>
 
-
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                android:id="@+id/srlBtRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="@drawable/ic_point_bg1"
-                        android:gravity="center"
-                        android:text="1"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toTopOf="@+id/connectNetworkTv"
-                        app:layout_constraintLeft_toLeftOf="@+id/connectNetworkTv"
-                        app:layout_constraintRight_toRightOf="@+id/connectNetworkTv" />
-
-                    <TextView
-                        android:id="@+id/connectNetworkTv"
-                        android:layout_width="150dp"
-                        android:layout_height="42dp"
-                        android:layout_marginHorizontal="15dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/dra_green60_corner_5"
-                        android:gravity="center"
-                        android:text="@string/distribution_network"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/wifiIPTv"
-
-                        />
-
-                </LinearLayout>
-
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="@drawable/ic_point_bg1"
-                        android:gravity="center"
-                        android:text="2"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toTopOf="@+id/connectTv"
-                        app:layout_constraintLeft_toLeftOf="@+id/connectTv"
-                        app:layout_constraintRight_toRightOf="@+id/connectTv" />
-
-                    <TextView
-                        android:id="@+id/connectTv"
-                        android:layout_width="150dp"
-                        android:layout_height="42dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/dra_gray_corner_5"
-                        android:gravity="center"
-                        android:text="@string/connect"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/wifiIPTv" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="30dp"
-                android:background="@drawable/shape_item_normal"
-                android:layout_marginHorizontal="15dp">
-                <LinearLayout
-                    android:id="@+id/clConnectNetwork"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/btn_white_shape">
+
+                <com.scwang.smart.refresh.header.MaterialHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15dp"
-                    android:orientation="vertical"
-                    android:paddingVertical="20dp"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/connectTv">
+                    android:fillViewport="true">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/btn_white_shape"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|left"
+                            android:paddingHorizontal="15dp"
+                            android:paddingVertical="10dp"
+                            android:textSize="14sp"
+                            android:text="@string/wifi_connected"
+                            android:background="@drawable/dra_title_bg_corner_5"
+                            android:textColor="@color/color_1D1D1F" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvWifiConnected"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:scrollbars="none"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:nestedScrollingEnabled="false"
+                            android:listSelector="@drawable/btn_white_selector" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|left"
+                            android:paddingHorizontal="15dp"
+                            android:background="@drawable/dra_title_bg_corner_5"
+                            android:paddingVertical="10dp"
+                            android:textSize="14sp"
+                            android:text="@string/bt_connected"
+                            android:textColor="@color/color_1D1D1F" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvBtConnected"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:scrollbars="none"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:nestedScrollingEnabled="false"
+                            android:listSelector="@drawable/btn_white_selector" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|left"
+                            android:paddingHorizontal="15dp"
+                            android:background="@drawable/dra_title_bg_corner_5"
+                            android:paddingVertical="10dp"
+                            android:textSize="14sp"
+                            android:text="@string/wait_connect"
+                            android:textColor="@color/color_1D1D1F" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvNotConnect"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:scrollbars="none"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:nestedScrollingEnabled="false"
+                            android:listSelector="@drawable/btn_white_selector" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|left"
+                            android:paddingHorizontal="15dp"
+                            android:background="@drawable/dra_title_bg_corner_5"
+                            android:paddingVertical="10dp"
+                            android:textSize="14sp"
+                            android:text="@string/un_connected"
+                            android:textColor="@color/color_1D1D1F" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvWaitConnect"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:scrollbars="none"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:nestedScrollingEnabled="false"
+                            android:listSelector="@drawable/btn_white_selector" />
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+            <LinearLayout
+                android:id="@+id/lyEditNetWork"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/connect_wifi_tips"
-                        android:textColor="@color/text"
-                        android:textSize="15sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <FrameLayout
+                        <TextView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="@drawable/ic_point_bg1"
+                            android:gravity="center"
+                            android:text="1"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toTopOf="@+id/connectNetworkTv"
+                            app:layout_constraintLeft_toLeftOf="@+id/connectNetworkTv"
+                            app:layout_constraintRight_toRightOf="@+id/connectNetworkTv" />
+
+                        <TextView
+                            android:id="@+id/connectNetworkTv"
+                            android:layout_width="150dp"
+                            android:layout_height="42dp"
+                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/dra_green60_corner_5"
+                            android:gravity="center"
+                            android:text="@string/distribution_network"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/wifiIPTv"
+
+                            />
+
+                    </LinearLayout>
+
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="@drawable/ic_point_bg1"
+                            android:gravity="center"
+                            android:text="2"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toTopOf="@+id/connectTv"
+                            app:layout_constraintLeft_toLeftOf="@+id/connectTv"
+                            app:layout_constraintRight_toRightOf="@+id/connectTv" />
+
+                        <TextView
+                            android:id="@+id/connectTv"
+                            android:layout_width="150dp"
+                            android:layout_height="42dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/dra_gray_corner_5"
+                            android:gravity="center"
+                            android:text="@string/connect"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/wifiIPTv" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/shape_item_normal">
+
+                    <LinearLayout
+                        android:id="@+id/clConnectNetwork"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp">
+                        android:layout_marginHorizontal="15dp"
+                        android:orientation="vertical"
+                        android:paddingVertical="20dp"
+                        android:visibility="invisible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/connectTv">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/wifi_ssid"
-                            android:textColor="@color/color_666666"
-                            android:textSize="15sp"
-                            android:layout_gravity="center_vertical"
-                            app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/ssidSpinner" />
-
-                        <TextView
-                            android:id="@+id/ssidSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="80dp"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/stri_bg_gray_5dp"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="5dp"
-                            android:textColor="@color/color_1D1D1F"
+                            android:text="@string/connect_wifi_tips"
+                            android:textColor="@color/text"
                             android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:layout_marginEnd="17dp"
-                            android:layout_gravity="right"
-                            android:layout_marginTop="3dp"
-                            android:src="@drawable/ic_inverted_triangle"
-                            app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/ssidSpinner" />
-                    </FrameLayout>
-
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/wifi_pwd"
-                            android:textColor="@color/color_666666"
-                            android:textSize="15sp"
-                            android:layout_gravity="center_vertical"
-                            app:layout_constraintBottom_toBottomOf="@+id/pwdEt"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/pwdEt" />
-
-                        <EditText
-                            android:id="@+id/pwdEt"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="80dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/stri_bg_gray_5dp"
-                            android:hint="@string/edit_hit"
-                            android:inputType="textPassword"
-                            android:paddingHorizontal="5dp"
-                            android:textColor="@color/color_1D1D1F"
-                            android:textColorHint="@color/color_999999"
-                            android:textSize="15sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/ssidSpinner" />
-
-                        <FrameLayout
-                            android:id="@+id/flPwd"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_gravity="right"
-                            app:layout_constraintBottom_toBottomOf="@+id/pwdEt"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/pwdEt">
-
-                            <ImageView
-                                android:id="@+id/pwtOpenIv"
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_pwd_close" />
-                        </FrameLayout>
-
-                    </FrameLayout>
-
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="DHCP"
-                            android:textColor="@color/color_666666"
-                            android:textSize="15sp"
-                            android:layout_gravity="center_vertical"
-                            app:layout_constraintBottom_toBottomOf="@+id/swichStatic"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/swichStatic" />
-
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/swichStatic"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="80dp"
-                            android:layout_gravity="center_vertical"
-                            android:checked="true"
-                            android:enabled="false"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/pwdEt" />
-
-                    </FrameLayout>
-
-
-
-                    <LinearLayout
-                        android:id="@+id/clStatic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/swichStatic">
-
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp">
+
                             <TextView
-                                android:id="@+id/staticTv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/static_ip"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/wifi_ssid"
                                 android:textColor="@color/color_666666"
                                 android:textSize="15sp"
-                                android:layout_gravity="center_vertical"
-                                app:layout_constraintBottom_toBottomOf="@+id/staticIpEt"
+                                app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/staticIpEt" />
+                                app:layout_constraintTop_toTopOf="@+id/ssidSpinner" />
 
-                            <EditText
-                                android:id="@+id/staticIpEt"
-                                android:layout_width="250dp"
+                            <TextView
+                                android:id="@+id/ssidSpinner"
+                                android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:layout_marginStart="80dp"
+                                android:layout_marginEnd="15dp"
                                 android:background="@drawable/stri_bg_gray_5dp"
-                                android:hint="@string/edit_hit"
-                                android:digits="0123456789."
-                                android:inputType="number|textNoSuggestions"
+                                android:gravity="center_vertical"
                                 android:paddingHorizontal="5dp"
                                 android:textColor="@color/color_1D1D1F"
                                 android:textSize="15sp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="right"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginEnd="17dp"
+                                android:src="@drawable/ic_inverted_triangle"
+                                app:layout_constraintBottom_toBottomOf="@+id/ssidSpinner"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/ssidSpinner" />
                         </FrameLayout>
 
 
@@ -356,277 +349,408 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/static_gw"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/wifi_pwd"
                                 android:textColor="@color/color_666666"
                                 android:textSize="15sp"
-                                android:layout_gravity="center_vertical"
-                                app:layout_constraintBottom_toBottomOf="@+id/gwEt"
+                                app:layout_constraintBottom_toBottomOf="@+id/pwdEt"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/gwEt" />
+                                app:layout_constraintTop_toTopOf="@+id/pwdEt" />
 
                             <EditText
-                                android:id="@+id/gwEt"
-                                android:layout_width="250dp"
+                                android:id="@+id/pwdEt"
+                                android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:layout_marginStart="80dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginEnd="15dp"
                                 android:background="@drawable/stri_bg_gray_5dp"
                                 android:hint="@string/edit_hit"
-                                android:digits="0123456789."
-                                android:inputType="number|textNoSuggestions"
+                                android:inputType="textPassword"
                                 android:paddingHorizontal="5dp"
                                 android:textColor="@color/color_1D1D1F"
+                                android:textColorHint="@color/color_999999"
                                 android:textSize="15sp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/staticIpEt" />
-                        </FrameLayout>
+                                app:layout_constraintTop_toBottomOf="@+id/ssidSpinner" />
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/static_mask"
-                                android:textColor="@color/color_666666"
-                                android:textSize="15sp"
-                                android:layout_gravity="center_vertical"
-                                app:layout_constraintBottom_toBottomOf="@+id/maskEt"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/maskEt" />
-
-                            <EditText
-                                android:id="@+id/maskEt"
-                                android:layout_width="250dp"
+                            <FrameLayout
+                                android:id="@+id/flPwd"
+                                android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:layout_marginStart="80dp"
+                                android:layout_gravity="right"
+                                android:layout_marginEnd="10dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/pwdEt"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/pwdEt">
 
-                                android:background="@drawable/stri_bg_gray_5dp"
-                                android:hint="@string/edit_hit"
-                                android:digits="0123456789."
-                                android:inputType="number|textNoSuggestions"
-                                android:paddingHorizontal="5dp"
-                                android:textColor="@color/color_1D1D1F"
-                                android:textSize="15sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/gwEt" />
+                                <ImageView
+                                    android:id="@+id/pwtOpenIv"
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_pwd_close" />
+                            </FrameLayout>
+
                         </FrameLayout>
 
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp">
+                            android:layout_marginTop="30dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/static_dns"
+                                android:layout_gravity="center_vertical"
+                                android:text="DHCP"
                                 android:textColor="@color/color_666666"
                                 android:textSize="15sp"
-                                android:layout_gravity="center_vertical"
-                                app:layout_constraintBottom_toBottomOf="@+id/dnsEt"
+                                app:layout_constraintBottom_toBottomOf="@+id/swichStatic"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/dnsEt" />
+                                app:layout_constraintTop_toTopOf="@+id/swichStatic" />
 
-                            <EditText
-                                android:id="@+id/dnsEt"
-                                android:layout_width="250dp"
-                                android:layout_height="40dp"
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/swichStatic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginStart="80dp"
-                                android:background="@drawable/stri_bg_gray_5dp"
-                                android:hint="@string/edit_hit"
-                                android:digits="0123456789."
-                                android:inputType="number|textNoSuggestions"
-                                android:paddingHorizontal="5dp"
-                                android:textColor="@color/color_1D1D1F"
-                                android:textSize="15sp"
+                                android:checked="true"
+                                android:enabled="false"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/maskEt" />
+                                app:layout_constraintTop_toBottomOf="@+id/pwdEt" />
+
                         </FrameLayout>
 
 
+                        <LinearLayout
+                            android:id="@+id/clStatic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/swichStatic">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/staticTv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/static_ip"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/staticIpEt"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/staticIpEt" />
+
+                                <EditText
+                                    android:id="@+id/staticIpEt"
+                                    android:layout_width="250dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="80dp"
+                                    android:background="@drawable/stri_bg_gray_5dp"
+                                    android:digits="0123456789."
+                                    android:hint="@string/edit_hit"
+                                    android:inputType="number|textNoSuggestions"
+                                    android:paddingHorizontal="5dp"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="15sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </FrameLayout>
+
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/static_gw"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/gwEt"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/gwEt" />
+
+                                <EditText
+                                    android:id="@+id/gwEt"
+                                    android:layout_width="250dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="80dp"
+                                    android:background="@drawable/stri_bg_gray_5dp"
+                                    android:digits="0123456789."
+                                    android:hint="@string/edit_hit"
+                                    android:inputType="number|textNoSuggestions"
+                                    android:paddingHorizontal="5dp"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="15sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/staticIpEt" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/static_mask"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/maskEt"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/maskEt" />
+
+                                <EditText
+                                    android:id="@+id/maskEt"
+                                    android:layout_width="250dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="80dp"
+
+                                    android:background="@drawable/stri_bg_gray_5dp"
+                                    android:digits="0123456789."
+                                    android:hint="@string/edit_hit"
+                                    android:inputType="number|textNoSuggestions"
+                                    android:paddingHorizontal="5dp"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="15sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/gwEt" />
+                            </FrameLayout>
+
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/static_dns"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/dnsEt"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/dnsEt" />
+
+                                <EditText
+                                    android:id="@+id/dnsEt"
+                                    android:layout_width="250dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="80dp"
+                                    android:background="@drawable/stri_bg_gray_5dp"
+                                    android:digits="0123456789."
+                                    android:hint="@string/edit_hit"
+                                    android:inputType="number|textNoSuggestions"
+                                    android:paddingHorizontal="5dp"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="15sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/maskEt" />
+                            </FrameLayout>
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/networkConfirmTv"
+                            android:layout_width="200dp"
+                            android:layout_height="42dp"
+                            android:layout_marginTop="30dp"
+                            android:alpha="0.5"
+                            android:background="@drawable/dra_green_corner_5"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="@string/start_connect_network"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/clStatic"
+
+                            />
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/networkConfirmTv"
-                        android:layout_width="200dp"
-                        android:layout_height="42dp"
-                        android:layout_marginTop="30dp"
-                        android:background="@drawable/dra_green_corner_5"
-                        android:gravity="center"
-                        android:text="@string/start_connect_network"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:enabled="false"
-                        android:alpha="0.5"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/clStatic"
-
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/clConnectIP"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginHorizontal="15dp"
-                    android:paddingVertical="30dp"
-                    android:visibility="visible">
-
-                    <FrameLayout
+                    <LinearLayout
+                        android:id="@+id/clConnectIP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:id="@+id/autoLy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_gravity="center_vertical"
-                            >
+                        android:layout_marginHorizontal="15dp"
+                        android:orientation="vertical"
+                        android:paddingVertical="30dp"
+                        android:visibility="visible">
 
-                            <ImageView
-                                android:id="@+id/autoConnectIv"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/ic_uncheck" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:text="@string/automatically_connect"
-                                android:textColor="@color/color_1D1D1F"
-                                android:textSize="15sp" />
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-                        <RelativeLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="130dp"
-                            android:layout_gravity="center_vertical"
-                            android:orientation="vertical">
-                            <TextView
-                                android:id="@+id/autoTips"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:gravity="center_vertical"
-                                android:paddingHorizontal="5dp"
-                                android:text="@string/connect_wifi_tips1"
-                                android:textColor="@color/text"
-                                android:textSize="15sp" />
+                            android:layout_marginTop="10dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/autoLy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical">
+
+                                <ImageView
+                                    android:id="@+id/autoConnectIv"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/ic_uncheck" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="@string/automatically_connect"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="15sp" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                            <LinearLayout
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="5dp"
-                                android:gravity="center_vertical"
-                                android:layout_below="@+id/autoTips">
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="130dp"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/getConnectIPTv"
-                                    android:layout_width="80dp"
-                                    android:layout_height="32dp"
-                                    android:background="@drawable/dra_blue_corner_5"
-                                    android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="@string/get_connect_ip"
-                                    android:textColor="@color/white"
-                                    android:textSize="10sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/baseIPTv"
+                                    android:id="@+id/autoTips"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingHorizontal="5dp"
+                                    android:text="@string/connect_wifi_tips1"
+                                    android:textColor="@color/text"
+                                    android:textSize="15sp" />
+
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="@string/status_ip"
-                                    android:visibility="invisible"
-                                    android:textColor="@color/color_1D1D1F"
-                                    android:textSize="13sp"
-                                    android:layout_toRightOf="@+id/getConnectIPTv"/>
-                            </LinearLayout>
+                                    android:layout_below="@+id/autoTips"
+                                    android:layout_marginTop="5dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/getConnectIPTv"
+                                        android:layout_width="80dp"
+                                        android:layout_height="32dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/dra_blue_corner_5"
+                                        android:gravity="center"
+                                        android:text="@string/get_connect_ip"
+                                        android:textColor="@color/white"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/baseIPTv"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_toRightOf="@+id/getConnectIPTv"
+                                        android:text="@string/status_ip"
+                                        android:textColor="@color/color_1D1D1F"
+                                        android:textSize="13sp"
+                                        android:visibility="invisible" />
+                                </LinearLayout>
 
 
-                        </RelativeLayout>
-                    </FrameLayout>
+                            </RelativeLayout>
+                        </FrameLayout>
 
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:id="@+id/ipLy"
-                            android:layout_width="wrap_content"
+                        <FrameLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_gravity="center_vertical">
+                            android:layout_marginTop="20dp">
 
-                            <ImageView
-                                android:id="@+id/ipIv"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/ic_uncheck" />
-
-                            <TextView
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/ipLy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:text="@string/active_connect"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical">
+
+                                <ImageView
+                                    android:id="@+id/ipIv"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/ic_uncheck" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="@string/active_connect"
+                                    android:textColor="@color/color_1D1D1F"
+                                    android:textSize="15sp" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <EditText
+                                android:id="@+id/ipEt"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="130dp"
+                                android:layout_marginLeft="20dp"
+                                android:background="@drawable/stri_bg_gray_5dp"
+                                android:digits="0123456789."
+                                android:hint="@string/edit_hit"
+                                android:inputType="number|textNoSuggestions"
+                                android:paddingHorizontal="5dp"
                                 android:textColor="@color/color_1D1D1F"
+                                android:textColorHint="@color/color_999999"
                                 android:textSize="15sp" />
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        <EditText
-                            android:id="@+id/ipEt"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="130dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/stri_bg_gray_5dp"
-                            android:digits="0123456789."
-                            android:hint="@string/edit_hit"
-                            android:inputType="number|textNoSuggestions"
-                            android:paddingHorizontal="5dp"
-                            android:textColor="@color/color_1D1D1F"
-                            android:textColorHint="@color/color_999999"
-                            android:textSize="15sp" />
-                    </FrameLayout>
+                        </FrameLayout>
 
 
-                    <TextView
-                        android:id="@+id/ipConfirmTv"
-                        android:layout_width="200dp"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="50dp"
-                        android:background="@drawable/dra_green_corner_5"
-                        android:gravity="center"
-                        android:enabled="false"
-                        android:alpha="0.5"
-                        android:text="@string/start_connect"
-                        android:textColor="@color/white"
-                        android:textSize="17sp" />
+                        <TextView
+                            android:id="@+id/ipConfirmTv"
+                            android:layout_width="200dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="50dp"
+                            android:alpha="0.5"
+                            android:background="@drawable/dra_green_corner_5"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="@string/start_connect"
+                            android:textColor="@color/white"
+                            android:textSize="17sp" />
 
-                </LinearLayout>
-            </FrameLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+<!--        </LinearLayout>-->
 
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

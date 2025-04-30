@@ -454,4 +454,13 @@
     <string name="toast_tips1">IP获取中，平板不能离开底座哦！</string>
     <string name="toast_tips2">连接过程中，注意：平板不能离开底座哦！</string>
     <string name="toast_tips3">配网过程中，注意：平板不能离开底座哦！</string>
+    <string name="wait_connect">待连接</string>
+    <string name="io_status">打印机状态:</string>
+    <string name="wifi_connected">已连接WIFI</string>
+    <string name="bt_connected">蓝牙已连接</string>
+    <string name="connect_bt">连接蓝牙</string>
+    <string name="connect_wifi">连接WIFI</string>
+    <string name="usb_connect_network">USB配网</string>
+    <string name="bt_connect_network">BT配网</string>
+    <string name="connected_to_print">连接并打印</string>
 </resources>

@@ -41,6 +41,7 @@ import com.imin.newprinter.demo.fragment.BtFragment;
 import com.imin.newprinter.demo.fragment.IminBaseFragment;
 import com.imin.newprinter.demo.fragment.WifiFragment;
 import com.imin.newprinter.demo.fragment.WirelessPrintingFragment;
+import com.imin.newprinter.demo.utils.BluetoothScanner;
 import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.NetworkUtils;
 import com.imin.newprinter.demo.utils.Utils;
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         initData();
     }
 
+    public boolean isGrantPermission = false;
     private void initView() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION
@@ -128,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
                     , Manifest.permission.BLUETOOTH
                     , Manifest.permission.BLUETOOTH_CONNECT}, requestPermissionCode);
 
+        }else {
+            Log.d(TAG, "已经申请权限: ");
+            isGrantPermission = true;
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
@@ -486,7 +491,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                startWifiScan();
-                Log.d(TAG, "startWifiScan: ");
+                isGrantPermission = true;
+                Log.d(TAG, "main startWifiScan: ");
             } else {
                 Toast.makeText(this, "Location permission required for WiFi scanning",
                         Toast.LENGTH_LONG).show();
