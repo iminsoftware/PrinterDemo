@@ -81,6 +81,7 @@
         android:id="@+id/srlBtRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
         android:layout_marginHorizontal="15dp"
@@ -191,7 +192,7 @@
                 android:id="@+id/lyEditNetWork"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -289,7 +290,7 @@
                         android:orientation="vertical"
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="20dp"
-                        android:visibility="invisible">
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -573,7 +574,7 @@
                         android:orientation="vertical"
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="30dp"
-                        android:visibility="visible">
+                        android:visibility="invisible">
 
                         <FrameLayout
                             android:layout_width="match_parent"
