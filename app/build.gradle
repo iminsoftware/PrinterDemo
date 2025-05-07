@@ -55,7 +55,7 @@ dependencies {
     implementation project(path: ':featureui')
 
 
-    implementation files('libs\\iMinPrinter_SDK2_V2.0.0.16_20250423.jar')
+    implementation files('libs\\iMinPrinter_SDK2_V2.0.0.16_20250506.jar')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

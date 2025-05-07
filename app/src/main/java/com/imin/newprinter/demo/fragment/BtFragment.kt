@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.os.RemoteException
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,11 +39,9 @@ import com.imin.newprinter.demo.callback.SwitchFragmentListener
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding
 import com.imin.newprinter.demo.utils.ExecutorServiceManager
 import com.imin.newprinter.demo.utils.LoadingDialogUtil
-import com.imin.printer.IWirelessPrintResult
+import com.imin.newprinter.demo.utils.WifiKeyName
+import com.imin.printer.INeoPrinterCallback
 import com.imin.printer.PrinterHelper
-import com.imin.printer.enums.ConnectType
-import com.imin.printer.enums.WirelessConfig
-import com.imin.printer.wireless.WirelessPrintStyle
 import java.util.*
 
 @SuppressLint("MissingPermission")
@@ -90,14 +89,23 @@ class BtFragment : BaseFragment() {
                 BluetoothDevice.ACTION_FOUND -> {
                     val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                     device?.let {
-                        if (it.bluetoothClass.majorDeviceClass != 1536 ||
-                            it.name?.contains("80mm Wireless") != true) return
+                        if (it.bluetoothClass.majorDeviceClass != 1536) return  /*||
+                            it.name?.contains("80mm Wireless") != true)*/
 
                         val bean = BluetoothBean().apply {
                             bluetoothName = it.name ?: "unKnow"
                             bluetoothMac = it.address
                             bluetoothStrength = "${intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, 0)}"
                         }
+
+                        Log.d(
+                            TAG, """
+     onReceive: 
+     BlueToothName:	${device.name}
+     MacAddress:	${device.address}
+     rssi:	${bean.bluetoothStrength}
+     """.trimIndent()
+                        )
 
                         mainHandler.sendMessage(Message.obtain().apply {
                             obj = bean
@@ -190,42 +198,62 @@ class BtFragment : BaseFragment() {
         MainActivity.connectAddress = mac
         MainActivity.btContent = mac
 
-        PrinterHelper.getInstance().apply {
-            setWirelessPrinterConfig(
-                WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                    .setConfig(ConnectType.BT.typeName),
-                object : IWirelessPrintResult.Stub() {
-                    override fun onResult(i: Int, s: String?) {}
-                    override fun onReturnString(s: String?) {}
+        PrinterHelper.getInstance().setPrinterAction(
+            WifiKeyName.WIRELESS_CONNECT_TYPE,
+            "BT",
+            object : INeoPrinterCallback() {
+                @Throws(RemoteException::class)
+                override fun onRunResult(b: Boolean) {
                 }
-            )
 
-            setWirelessPrinterConfig(
-                WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.BT_CONNECT_ADDR)
-                    .setConfig(mac),
-                object : IWirelessPrintResult.Stub() {
-                    override fun onResult(i: Int, s: String?) {
-                        Log.d(TAG, "WIFI_CONNECT=>$s  i=$i")
-                        activity?.runOnUiThread {
-                            if (i == 0) {
-                                MainActivity.connectType = "BT"
-                                MainActivity.connectContent = "$name\t$mac"
-                                switchFragment(4)
-                            } else {
-                                Toast.makeText(context, R.string.connect_fail, Toast.LENGTH_LONG).show()
-                            }
-                            LoadingDialogUtil.getInstance().hide()
+                @Throws(RemoteException::class)
+                override fun onReturnString(s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onRaiseException(i: Int, s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onPrintResult(i: Int, s: String) {
+                }
+            })
+        PrinterHelper.getInstance().setPrinterAction(
+            WifiKeyName.BT_CONNECT_MAC,
+            MainActivity.btContent,
+            object : INeoPrinterCallback() {
+                @Throws(RemoteException::class)
+                override fun onRunResult(b: Boolean) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onReturnString(s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onRaiseException(i: Int, s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onPrintResult(i: Int, s: String) {
+                    Log.d(TAG, "WIFI_CONNECT=>$s  i=$i")
+                    activity!!.runOnUiThread {
+                        if (i == 1) {
+                            MainActivity.connectType = "BT"
+                            MainActivity.connectContent = name + "\t" + mac
+                            switchFragment(4)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                getText(R.string.connect_fail), Toast.LENGTH_LONG
+                            ).show()
                         }
-                    }
-
-                    override fun onReturnString(s: String?) {
-                        Log.d(TAG, "WIFI_CONNECT =>$s")
+                        LoadingDialogUtil.getInstance().hide()
                     }
                 }
-            )
-        }
+            })
+
+
     }
 
     private fun initData() {
@@ -312,24 +340,34 @@ class BtFragment : BaseFragment() {
     }
 
     private fun disConnect() {
-        PrinterHelper.getInstance().setWirelessPrinterConfig(
-            WirelessPrintStyle.getWirelessPrintStyle()
-                .setWirelessStyle(WirelessConfig.DISCONNECT_BT),
-            object : IWirelessPrintResult.Stub() {
-                override fun onResult(i: Int, s: String?) {
-                    activity?.runOnUiThread {
-                        binding.btStatusTv.text = String.format(
-                            getString(R.string.status_wifi),
-                            "BT",
-                            getString(R.string.un_connected)
-                        )
+        PrinterHelper.getInstance()
+            .setPrinterAction(WifiKeyName.BT_DISCONNECT, "", object : INeoPrinterCallback() {
+                @Throws(RemoteException::class)
+                override fun onRunResult(b: Boolean) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onReturnString(s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onRaiseException(i: Int, s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onPrintResult(i: Int, s: String) {
+                    Log.d(TAG, "bt disconnect==:  $s   ,i=  $i")
+                    activity!!.runOnUiThread {
+                        binding.btStatusTv.text =
+                            String.format(
+                                getString(R.string.status_wifi),
+                                "BT",
+                                getString(R.string.un_connected)
+                            )
                         MainActivity.btContent = ""
                     }
                 }
-
-                override fun onReturnString(s: String?) {}
-            }
-        )
+            })
     }
 
     private fun checkBluetoothPermissions(): Boolean {

@@ -10,7 +10,7 @@ data class BluetoothDeviceInfo(
     val address: String,
     val rssiBle: Int,
     val rssiWifi: Int,
-    val wifiConnectStatus: Int,
+    val wifiConnectStatus: Int,//0 未连接  1连网  2 蓝牙  3 wifi+蓝牙
     val printerWorkingStatus: Int,
     val ioStatus: String,
     val ipAddress: String,

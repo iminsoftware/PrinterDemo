@@ -15,15 +15,9 @@ import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentWirelessPrintingBinding;
-import com.imin.newprinter.demo.utils.BytesUtils;
+import com.imin.newprinter.demo.utils.WifiKeyName;
 import com.imin.printer.INeoPrinterCallback;
-import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
-import com.imin.printer.enums.ConnectType;
-import com.imin.printer.enums.WirelessConfig;
-import com.imin.printer.wireless.WirelessPrintStyle;
-
-import java.util.ArrayList;
 
 public class WirelessPrintingFragment extends BaseFragment{
     private static final String TAG = "PrintDemo_WirelessPrintingFragment";
@@ -79,19 +73,29 @@ public class WirelessPrintingFragment extends BaseFragment{
         });
         binding.printTest1.setOnClickListener(view -> {
 
-            PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                    .setConfig(MainActivity.connectType.contains("WIFI")? ConnectType.WIFI.getTypeName():ConnectType.BT.getTypeName()), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
+            PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE
+                    , MainActivity.connectType.contains("WIFI") ? "WIFI" : "BT"
+                    , new INeoPrinterCallback() {
+                        @Override
+                        public void onRunResult(boolean b) throws RemoteException {
 
-                }
+                        }
 
-                @Override
-                public void onReturnString(String s) throws RemoteException {
+                        @Override
+                        public void onReturnString(String s) throws RemoteException {
 
-                }
-            });
+                        }
+
+                        @Override
+                        public void onRaiseException(int i, String s) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onPrintResult(int i, String s) throws RemoteException {
+
+                        }
+                    });
 
             PrinterHelper.getInstance().printerSelfChecking(new INeoPrinterCallback() {
                 @Override

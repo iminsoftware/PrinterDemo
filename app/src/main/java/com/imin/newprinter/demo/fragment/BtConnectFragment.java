@@ -20,40 +20,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.feature.tui.util.ToastUtil;
 import com.imin.newprinter.demo.MainActivity;
 import com.imin.newprinter.demo.R;
-import com.imin.newprinter.demo.adapter.BluetoothListAdapter;
 import com.imin.newprinter.demo.bean.BluetoothBean;
 import com.imin.newprinter.demo.callback.SwitchFragmentListener;
 import com.imin.newprinter.demo.databinding.FragmentBtConnectBinding;
-import com.imin.newprinter.demo.utils.BytesUtils;
 import com.imin.newprinter.demo.utils.ExecutorServiceManager;
 import com.imin.newprinter.demo.utils.LoadingDialogUtil;
 import com.imin.newprinter.demo.utils.Utils;
-import com.imin.printer.IWirelessPrintResult;
+import com.imin.newprinter.demo.utils.WifiKeyName;
+import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
-import com.imin.printer.enums.ConnectType;
-import com.imin.printer.enums.WirelessConfig;
-import com.imin.printer.wireless.WirelessPrintStyle;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
@@ -97,16 +86,16 @@ public class BtConnectFragment extends BaseFragment {
         }
     }
 
-    Handler mainHandler = new Handler(Looper.getMainLooper()){
+    Handler mainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            if (msg != null){
+            if (msg != null) {
                 BluetoothBean bean = (BluetoothBean) msg.obj;
-                if (bean != null){
-                    if (msg.what == 100){//未配对
+                if (bean != null) {
+                    if (msg.what == 100) {//未配对
                         addNewBlueTooth(bean);
-                    }else {//配对
+                    } else {//配对
                         updateBlueToothSignal(bean);
                     }
                 }
@@ -133,8 +122,8 @@ public class BtConnectFragment extends BaseFragment {
                         binding.srlRefresh.finishRefresh();
                         Log.e(TAG, "BlueTooth Turn Off\n");
 
-                        if (getActivity()!=null){
-                            ((MainActivity)getActivity()).disConnectWirelessPrint();
+                        if (getActivity() != null) {
+                            ((MainActivity) getActivity()).disConnectWirelessPrint();
                         }
 
                         disConnect();
@@ -150,7 +139,7 @@ public class BtConnectFragment extends BaseFragment {
             if (device.getBluetoothClass().getMajorDeviceClass() != 1536) {//只显示蓝牙打印机
                 return;
             }
-            if (device == null || Utils.isEmpty(device.getName()) ||!device.getName().contains("80mm Wireless")) {
+            if (device == null || Utils.isEmpty(device.getName()) /*|| !device.getName().contains("80mm Wireless")*/) {
                 return;
             }
 
@@ -171,7 +160,7 @@ public class BtConnectFragment extends BaseFragment {
             if (device.getBondState() != BluetoothDevice.BOND_BONDED) {//未配对
 //                addNewBlueTooth(bluetoothBean);
                 message.what = 100;
-            }else {
+            } else {
 //                updateBlueToothSignal(bluetoothBean);
                 message.what = 101;
             }
@@ -181,25 +170,39 @@ public class BtConnectFragment extends BaseFragment {
     };
 
     private void disConnect() {
-        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                .setWirelessStyle(WirelessConfig.DISCONNECT_BT), new IWirelessPrintResult.Stub() {
-            @Override
-            public void onResult(int i, String s) throws RemoteException {
-                getActivity().runOnUiThread(new Runnable() {
+        PrinterHelper.getInstance().setPrinterAction(WifiKeyName.BT_DISCONNECT
+                , ""
+                , new INeoPrinterCallback() {
                     @Override
-                    public void run() {
-                        binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
-                                , getString(R.string.un_connected)));
-                        MainActivity.btContent = "";
+                    public void onRunResult(boolean b) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onRaiseException(int i, String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onPrintResult(int i, String s) throws RemoteException {
+                        Log.d(TAG, "bt disconnect==:  " + s);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
+                                        , getString(R.string.un_connected)));
+                                MainActivity.btContent = "";
+                            }
+                        });
+
                     }
                 });
-            }
 
-            @Override
-            public void onReturnString(String s) throws RemoteException {
-
-            }
-        });
     }
 
     /**
@@ -234,7 +237,7 @@ public class BtConnectFragment extends BaseFragment {
                 isAdd = false;
             }
         }
-        if (isAdd){
+        if (isAdd) {
             newDevices.add(bluetoothBean);
         }
         Collections.sort(newDevices, new Signal());
@@ -261,16 +264,14 @@ public class BtConnectFragment extends BaseFragment {
             }
         }
 
-        if (isContain){
+        if (isContain) {
             pairedDevices.add(bluetoothBean);
         }
 
         adapter.replaceData(pairedDevices);
-        Log.d(TAG, "updateBlueToothSignal=>"+adapter.getData().size()+"  i "+isContain+"    "+pairedDevices.size());
+        Log.d(TAG, "updateBlueToothSignal=>" + adapter.getData().size() + "  i " + isContain + "    " + pairedDevices.size());
 
     }
-
-
 
 
     // 自定义比较器：按信号强度排序
@@ -299,7 +300,7 @@ public class BtConnectFragment extends BaseFragment {
         adapter = new BaseQuickAdapter<BluetoothBean, BaseViewHolder>(R.layout.bluetooth_list_item) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, BluetoothBean functionBean) {
-                Log.d(TAG, "convert: functionBean= " );
+                Log.d(TAG, "convert: functionBean= ");
                 if (functionBean != null) {
                     TextView tvName = (TextView) viewHolder.getView(R.id.b_name);
                     TextView tvMac = (TextView) viewHolder.getView(R.id.b_mac);
@@ -308,9 +309,9 @@ public class BtConnectFragment extends BaseFragment {
                     tvName.setText(functionBean.getBluetoothName());
                     tvMac.setText(functionBean.getBluetoothMac());
                     tvStrength.setText(functionBean.getBluetoothStrength());
-                    if (functionBean.getBluetoothMac().equals(MainActivity.btContent)){
+                    if (functionBean.getBluetoothMac().equals(MainActivity.btContent)) {
                         relativeLayout.setBackground(getResources().getDrawable(R.drawable.btn_green1_shap));
-                    }else {
+                    } else {
                         relativeLayout.setBackground(null);
                     }
 
@@ -321,7 +322,7 @@ public class BtConnectFragment extends BaseFragment {
         adapter2 = new BaseQuickAdapter<BluetoothBean, BaseViewHolder>(R.layout.bluetooth_list_item) {
             @Override
             protected void convert(@NonNull BaseViewHolder viewHolder, BluetoothBean functionBean) {
-                Log.d(TAG, "convert: functionBean= " );
+                Log.d(TAG, "convert: functionBean= ");
                 if (functionBean != null) {
                     TextView tvName = (TextView) viewHolder.getView(R.id.b_name);
                     TextView tvMac = (TextView) viewHolder.getView(R.id.b_mac);
@@ -330,14 +331,13 @@ public class BtConnectFragment extends BaseFragment {
                     tvName.setText(functionBean.getBluetoothName());
                     tvMac.setText(functionBean.getBluetoothMac());
                     tvStrength.setText(functionBean.getBluetoothStrength());
-                    if (functionBean.getBluetoothMac().equals(MainActivity.btContent)){
+                    if (functionBean.getBluetoothMac().equals(MainActivity.btContent)) {
                         relativeLayout.setBackground(getResources().getDrawable(R.drawable.btn_green1_shap));
-                    }else {
+                    } else {
                         relativeLayout.setBackground(null);
                     }
 
                 }
-
 
 
             }
@@ -350,8 +350,8 @@ public class BtConnectFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
 
-                if (pairedDevices.size() >0 && position<= pairedDevices.size()-1){
-                    if (mBluetoothAdapter != null){
+                if (pairedDevices.size() > 0 && position <= pairedDevices.size() - 1) {
+                    if (mBluetoothAdapter != null) {
                         mBluetoothAdapter.cancelDiscovery();
                     }
 
@@ -359,7 +359,7 @@ public class BtConnectFragment extends BaseFragment {
                     String name = pairedDevices.get(position).getBluetoothName();
 
 
-                    connectBt(mac,name);
+                    connectBt(mac, name);
                 }
 
             }
@@ -370,14 +370,14 @@ public class BtConnectFragment extends BaseFragment {
         adapter2.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                if (newDevices.size()>0 && position<= newDevices.size()){
-                    if (mBluetoothAdapter != null){
+                if (newDevices.size() > 0 && position <= newDevices.size()) {
+                    if (mBluetoothAdapter != null) {
                         mBluetoothAdapter.cancelDiscovery();
                     }
 
                     String mac = newDevices.get(position).getBluetoothMac();
                     String name = newDevices.get(position).getBluetoothName();
-                    connectBt(mac,name);
+                    connectBt(mac, name);
                 }
 
             }
@@ -411,60 +411,79 @@ public class BtConnectFragment extends BaseFragment {
 
     }
 
-    private void connectBt(String mac ,String name) {
+    private void connectBt(String mac, String name) {
         LoadingDialogUtil.getInstance().show(getContext(), "");
 
         MainActivity.connectAddress = mac;
         MainActivity.btContent = mac;
         Toast.makeText(getContext(), name + mac, Toast.LENGTH_SHORT).show();
 
-        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                .setConfig(ConnectType.BT.getTypeName()), new IWirelessPrintResult.Stub() {
-            @Override
-            public void onResult(int i, String s) throws RemoteException {
-
-            }
-
-            @Override
-            public void onReturnString(String s) throws RemoteException {
-
-            }
-        });
-
-        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                .setWirelessStyle(WirelessConfig.BT_CONNECT_ADDR)
-                .setConfig(MainActivity.btContent), new IWirelessPrintResult.Stub() {
-            @Override
-            public void onResult(int i, String s) throws RemoteException {
-                Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
-                getActivity().runOnUiThread(new Runnable() {
+        PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE
+                ,"BT"
+                , new INeoPrinterCallback() {
                     @Override
-                    public void run() {
-                        if (i == 0) {
-                            MainActivity.connectType = "BT";
-                            MainActivity.connectContent = name + "\t" + mac;
-                            switchFragment(4);
-                        } else {
-                            getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
-                                    getText(R.string.connect_fail), Toast.LENGTH_LONG).show());
-                        }
-                        LoadingDialogUtil.getInstance().hide();
+                    public void onRunResult(boolean b) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onRaiseException(int i, String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onPrintResult(int i, String s) throws RemoteException {
+
                     }
                 });
+        PrinterHelper.getInstance().setPrinterAction(WifiKeyName.BT_CONNECT_MAC
+                , MainActivity.btContent
+                , new INeoPrinterCallback() {
+                    @Override
+                    public void onRunResult(boolean b) throws RemoteException {
 
-            }
+                    }
 
-            @Override
-            public void onReturnString(String s) throws RemoteException {
-                Log.d(TAG, "WIFI_CONNECT =>" + s);
-            }
-        });
+                    @Override
+                    public void onReturnString(String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onRaiseException(int i, String s) throws RemoteException {
+
+                    }
+
+                    @Override
+                    public void onPrintResult(int i, String s) throws RemoteException {
+                        Log.d(TAG, "WIFI_CONNECT=>" + s + "  i=" + i);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (i == 1) {
+                                    MainActivity.connectType = "BT";
+                                    MainActivity.connectContent = name + "\t" + mac;
+                                    switchFragment(4);
+                                } else {
+                                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
+                                            getText(R.string.connect_fail), Toast.LENGTH_LONG).show());
+                                }
+                                LoadingDialogUtil.getInstance().hide();
+                            }
+                        });
+
+                    }
+                });
 
     }
 
     private void initData() {
-        Log.e(TAG, "Don't support BlueTooth  "+checkBluetoothPermissions());
+        Log.e(TAG, "Don't support BlueTooth  " + checkBluetoothPermissions());
         if (Utils.isEmpty(MainActivity.btContent)) {
             binding.btStatusTv.setText(String.format(getString(R.string.status_wifi), "BT"
                     , getString(R.string.un_connected)));
@@ -475,7 +494,7 @@ public class BtConnectFragment extends BaseFragment {
 
         Log.e(TAG, "Don't support BlueTooth" + binding.btStatusTv.getText());
 
-        if (checkBluetoothPermissions()){
+        if (checkBluetoothPermissions()) {
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBluetoothAdapter == null) {
                 Log.e(TAG, "Don't support BlueTooth");
@@ -496,8 +515,8 @@ public class BtConnectFragment extends BaseFragment {
 
     }
 
-    private void searchBtData(){
-        if (mBluetoothAdapter != null){
+    private void searchBtData() {
+        if (mBluetoothAdapter != null) {
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, OPEN_BLUETOOTH_REQUEST_CODE);
@@ -577,6 +596,7 @@ public class BtConnectFragment extends BaseFragment {
 
 
     boolean aBoolean = true;
+
     /**
      * 搜索设备
      */
@@ -610,7 +630,6 @@ public class BtConnectFragment extends BaseFragment {
         }
 
 
-
     }
 
 
@@ -641,7 +660,7 @@ public class BtConnectFragment extends BaseFragment {
     public synchronized void cancelSearchBlueTooth() {
         ExecutorServiceManager.getExecutorService().submit(() -> {
             try {
-                if (mBluetoothAdapter != null){
+                if (mBluetoothAdapter != null) {
                     if (mBluetoothAdapter.isDiscovering()) {
                         mBluetoothAdapter.cancelDiscovery();//取消搜索
                     }

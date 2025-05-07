@@ -1,6 +1,5 @@
 package com.imin.newprinter.demo.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -10,31 +9,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.feature.tui.util.XUiDisplayHelper;
-import com.imin.newprinter.demo.BR;
-import com.imin.newprinter.demo.IminApplication;
 import com.imin.newprinter.demo.R;
 import com.imin.newprinter.demo.adapter.AllTestAdapter;
 import com.imin.newprinter.demo.bean.FunctionTestBean;
 import com.imin.newprinter.demo.databinding.FragmentAllBinding;
-import com.imin.newprinter.demo.databinding.FragmentAllTestBinding;
-import com.imin.newprinter.demo.utils.BitmapUtils;
 import com.imin.newprinter.demo.utils.BytesUtils;
 import com.imin.newprinter.demo.utils.Utils;
-import com.imin.newprinter.demo.viewmodel.FragmentCommonViewModel;
+import com.imin.newprinter.demo.utils.WifiKeyName;
 import com.imin.printer.INeoPrinterCallback;
-import com.imin.printer.IWirelessPrintResult;
 import com.imin.printer.PrinterHelper;
-import com.imin.printer.enums.ConnectType;
-import com.imin.printer.enums.WirelessConfig;
-import com.imin.printer.wireless.WirelessPrintStyle;
 
 import java.util.ArrayList;
 
@@ -65,34 +53,55 @@ public class AllFragment extends BaseFragment {
         if (isVisibleToUser && isResumed()) {
             // 当 Fragment 对用户可见时执行操作（兼容旧版本）
             updatePrinterStatus(PrinterHelper.getInstance().getPrinterStatus());
-            PrinterHelper.getInstance().getWirelessPrinterInfo(WirelessPrintStyle.getWirelessPrintStyle()
-                    .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE), new IWirelessPrintResult.Stub() {
-                @Override
-                public void onResult(int i, String s) throws RemoteException {
 
-                }
+            PrinterHelper.getInstance().getPrinterInfo(WifiKeyName.WIRELESS_CONNECT_TYPE, new INeoPrinterCallback() {
+                        @Override
+                        public void onRunResult(boolean b) throws RemoteException {
 
-                @Override
-                public void onReturnString(String s) throws RemoteException {
-                    Log.d(TAG, "WIRELESS_CONNECT_TYPE: "+s);
+                        }
 
-                    if (!Utils.isEmpty(s) && !s.equals("0")){
-                        PrinterHelper.getInstance().setWirelessPrinterConfig(WirelessPrintStyle.getWirelessPrintStyle()
-                                .setWirelessStyle(WirelessConfig.WIRELESS_CONNECT_TYPE)
-                                .setConfig(ConnectType.USB.getTypeName()), new IWirelessPrintResult.Stub() {
-                            @Override
-                            public void onResult(int i, String s) throws RemoteException {
+                        @Override
+                        public void onReturnString(String s) throws RemoteException {
+                            Log.d(TAG, "WIRELESS_CONNECT_TYPE: "+s);
+                            if (!Utils.isEmpty(s) && !s.equals("0")){
+                                PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE
+                                        , "USB"
+                                        , new INeoPrinterCallback() {
+                                            @Override
+                                            public void onRunResult(boolean b) throws RemoteException {
 
+                                            }
+
+                                            @Override
+                                            public void onReturnString(String s) throws RemoteException {
+
+                                            }
+
+                                            @Override
+                                            public void onRaiseException(int i, String s) throws RemoteException {
+
+                                            }
+
+                                            @Override
+                                            public void onPrintResult(int i, String s) throws RemoteException {
+
+                                            }
+                                        });
                             }
+                        }
 
-                            @Override
-                            public void onReturnString(String s) throws RemoteException {
+                        @Override
+                        public void onRaiseException(int i, String s) throws RemoteException {
 
-                            }
-                        });
+                        }
+
+                        @Override
+                        public void onPrintResult(int i, String s) throws RemoteException {
+
+                        }
                     }
-                }
-            });
+            );
+
 
         }
     }
