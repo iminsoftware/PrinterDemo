@@ -171,7 +171,7 @@ public class BtConnectFragment extends BaseFragment {
 
     private void disConnect() {
         PrinterHelper.getInstance().setPrinterAction(WifiKeyName.BT_DISCONNECT
-                , ""
+                , MainActivity.btContent
                 , new INeoPrinterCallback() {
                     @Override
                     public void onRunResult(boolean b) throws RemoteException {

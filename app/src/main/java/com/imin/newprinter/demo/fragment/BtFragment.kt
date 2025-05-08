@@ -341,7 +341,7 @@ class BtFragment : BaseFragment() {
 
     private fun disConnect() {
         PrinterHelper.getInstance()
-            .setPrinterAction(WifiKeyName.BT_DISCONNECT, "", object : INeoPrinterCallback() {
+            .setPrinterAction(WifiKeyName.BT_DISCONNECT, MainActivity.btContent, object : INeoPrinterCallback() {
                 @Throws(RemoteException::class)
                 override fun onRunResult(b: Boolean) {
                 }

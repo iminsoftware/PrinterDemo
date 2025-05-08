@@ -22,9 +22,11 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import com.feature.tui.util.ToastUtil
 import com.imin.newprinter.demo.IminApplication
+import com.imin.newprinter.demo.MainActivity
 import com.imin.newprinter.demo.R
 import com.imin.newprinter.demo.adapter.ListAdapter
 import com.imin.newprinter.demo.databinding.DialogDistNetworkBinding
+import com.imin.newprinter.demo.fragment.BtConnectFragment
 import com.imin.newprinter.demo.utils.LoadingDialogUtil
 import com.imin.newprinter.demo.utils.NetworkValidator
 import com.imin.newprinter.demo.utils.Utils
@@ -204,6 +206,7 @@ class DistNetworkDialog @JvmOverloads constructor(
 
                 LoadingDialogUtil.getInstance()
                     .show(context, context.getString(R.string.toast_tips3))
+
                 PrinterHelper.getInstance().setPrinterAction(
                     WifiKeyName.WIRELESS_CONNECT_TYPE,
                     "BT",
@@ -222,35 +225,75 @@ class DistNetworkDialog @JvmOverloads constructor(
 
                         @Throws(RemoteException::class)
                         override fun onPrintResult(i: Int, s: String) {
+                            Log.d(TAG, "WIRELESS_CONNECT_TYPE=>$s  i=$i")
+
+                            if (i == 1){
+                                PrinterHelper.getInstance().setPrinterAction(WifiKeyName.BT_CONNECT_MAC
+                                    , macAddress
+                                    , object : INeoPrinterCallback() {
+                                        @Throws(RemoteException::class)
+                                        override fun onRunResult(b: Boolean) {
+                                        }
+
+                                        @Throws(RemoteException::class)
+                                        override fun onReturnString(s: String) {
+                                        }
+
+                                        @Throws(RemoteException::class)
+                                        override fun onRaiseException(i: Int, s: String) {
+                                        }
+
+                                        @Throws(RemoteException::class)
+                                        override fun onPrintResult(i: Int, s: String) {
+                                            Log.d(TAG, "BT_CONNECT_MAC=>$s  i=$i")
+                                            if (i == 1) {
+                                                val selectedWifi = binding?.ssidSpinnerEtDialog?.text.toString().trim()
+                                                if (selectedWifi.isNotEmpty()) {
+                                                    if (selectedWifi.contains(" (")) {
+                                                        val parts = selectedWifi.split(" \\(".toRegex())
+                                                        val ssid = parts[0]
+                                                        val bssid = parts[1].replace(")", "")
+                                                        var pwd = binding?.pwdEtDialog?.text.toString().trim()
+                                                        if (!bssid.contains("OPEN") && pwd.isEmpty()) {
+                                                            Toast.makeText(context, context.getString(R.string.toast1), Toast.LENGTH_SHORT)
+                                                                .show()
+                                                            LoadingDialogUtil.getInstance().hide()
+                                                            return
+                                                        }
+                                                        if (bssid.contains("OPEN")){
+                                                            pwd = ""
+                                                        }
+                                                        if (binding?.switchStaticDialog!!.isChecked) {
+                                                            connectToWifi("BT",ssid, pwd)
+                                                        }else{
+                                                            connectStaticWifi("BT",ssid, pwd)
+                                                        }
+                                                    }
+                                                } else {
+                                                    MainScope().launch {
+                                                        LoadingDialogUtil.getInstance().hide()
+                                                        Toast.makeText(context, context.getText(R.string.tips1), Toast.LENGTH_SHORT).show()
+                                                    }
+                                                }
+                                            } else {
+                                                MainScope().launch {
+                                                    //配网失败
+                                                    LoadingDialogUtil.getInstance().hide()
+                                                    ToastUtil.showShort(context, R.string.set_fail)
+                                                }
+                                            }
+                                        }
+                                    })
+                            }else{
+                                MainScope().launch {
+                                    //配网失败
+                                    LoadingDialogUtil.getInstance().hide()
+                                    ToastUtil.showShort(context, R.string.set_fail)
+                                }
+                            }
                         }
                     })
 
-                val selectedWifi = binding?.ssidSpinnerEtDialog?.text.toString().trim()
-                if (selectedWifi.isNotEmpty()) {
-                    if (selectedWifi.contains(" (")) {
-                        val parts = selectedWifi.split(" \\(".toRegex())
-                        val ssid = parts[0]
-                        val bssid = parts[1].replace(")", "")
-                        var pwd = binding?.pwdEtDialog?.text.toString().trim()
-                        if (!bssid.contains("OPEN") && pwd.isEmpty()) {
-                            Toast.makeText(context, context.getString(R.string.toast1), Toast.LENGTH_SHORT)
-                                .show()
-                            LoadingDialogUtil.getInstance().hide()
-                            return
-                        }
-                        if (bssid.contains("OPEN")){
-                            pwd = ""
-                        }
-                        if (binding?.switchStaticDialog!!.isChecked) {
-                            connectToWifi("BT",ssid, pwd)
-                        }else{
-                            connectStaticWifi("BT",ssid, pwd)
-                        }
-                    }
-                } else {
-                    LoadingDialogUtil.getInstance().hide()
-                    Toast.makeText(context, context.getText(R.string.tips1), Toast.LENGTH_SHORT).show()
-                }
             }
         })
 
@@ -279,7 +322,7 @@ class DistNetworkDialog @JvmOverloads constructor(
 
         val paramsList = mutableListOf(connectType,
             if (binding?.switchStaticDialog!!.isChecked) "DHCP" else "STATIC"
-            ,ssid, pwd,ip,gw,mask,dns)
+            ,ssid, pwd,macAddress,ip,gw,mask,dns)
 
         PrinterHelper.getInstance().setPrinterAction(
             WifiKeyName.WIFI_SETUP_NET_ALL,
@@ -319,12 +362,11 @@ class DistNetworkDialog @JvmOverloads constructor(
     //配网获取动态ip
     fun connectToWifi(connectType: String ,ssid: String, pwd: String) {
 
-        val paramsList = mutableListOf(connectType,
-            if (binding?.switchStaticDialog!!.isChecked) "DHCP" else "STATIC"
-            ,ssid, pwd)
+        val paramsList = mutableListOf(connectType
+            ,ssid, pwd,macAddress)
 
         PrinterHelper.getInstance().setPrinterAction(
-            WifiKeyName.WIFI_SETUP_NET_ALL,
+            WifiKeyName.WIFI_SETUP_NET,
             paramsList,
             object : INeoPrinterCallback() {
                 @Throws(RemoteException::class)
@@ -341,6 +383,7 @@ class DistNetworkDialog @JvmOverloads constructor(
 
                 @Throws(RemoteException::class)
                 override fun onPrintResult(i: Int, s: String) {
+                    Log.d(TAG, "WIFI_SETUP_NET i=> $i ,s=>$s")
                     if (i == 1){//下发成功 开始查询IP  查询连接状态，ip地址
                          //配网成功  获取ip
                         retry = 10
@@ -365,6 +408,7 @@ class DistNetworkDialog @JvmOverloads constructor(
                 }
 
                 override fun onReturnString(p0: String?) {
+                    Log.d(TAG, "WIRELESS_CONNECT_STATUS po=> $p0")
                     if (Utils.isEmpty(p0)){
                         MainScope().launch {
                             ToastUtil.showShort(context, R.string.get_fail)
@@ -406,7 +450,7 @@ class DistNetworkDialog @JvmOverloads constructor(
                                         }
 
                                         override fun onReturnString(s: String?) {
-                                            Log.d(TAG,"ip回调==: s= $s")
+                                            Log.d(TAG,"WIFI_IP==: s= $s")
                                             MainScope().launch {
                                                 if (!s.isNullOrEmpty() && s != "-1") {
                                                     //配网成功 回调/弹出是否直接打印的弹框 如果是 那就调用连接接口
@@ -503,6 +547,7 @@ class DistNetworkDialog @JvmOverloads constructor(
             showAsDropDown(view)
         }
     }
+
 
 
     override fun onBackPressed() {

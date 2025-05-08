@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
     public static int requestPermissionCode = 10;
     private WifiFragment wifiConnectFragment;
-    private BtFragment btConnectFragment;
+   // private BtFragment btConnectFragment;
     private com.imin.newprinter.demo.databinding.ActivityMainBinding binding;
     //    private WifiScannerSingleton wifiScanner;
     public static String connectType = "", connectContent = "", connectAddress = "", ipConnect = "", btContent = "";
@@ -143,9 +143,9 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
         wifiConnectFragment = new WifiFragment();
         wifiConnectFragment.setCallback(this);
         wifiConnectFragment.setUserVisibleHint(false);
-        btConnectFragment = new BtFragment();
-        btConnectFragment.setCallback(this);
-        btConnectFragment.setUserVisibleHint(false);
+//        btConnectFragment = new BtFragment();
+//        btConnectFragment.setCallback(this);
+//        btConnectFragment.setUserVisibleHint(false);
         wirelessPrintingFragment = new WirelessPrintingFragment();
         wirelessPrintingFragment.setCallback(this);
         wirelessPrintingFragment.setUserVisibleHint(false);
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
 
         fragmentList.add(allFragment);
         fragmentList.add(wifiConnectFragment);
-        fragmentList.add(btConnectFragment);
+//        fragmentList.add(btConnectFragment);
         fragmentList.add(wirelessPrintingFragment);
         MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager(), fragmentList);
         binding.vp.setAdapter(mainPageAdapter);
@@ -244,58 +244,60 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             @Override
             public void onSingleClick(View v) {
                 Log.d(TAG, "isWifiConnected  = " + NetworkUtils.isWifiConnected(v.getContext()));
-                if (btConnectFragment != null) {
-                    btConnectFragment.cancelSearchBlueTooth();
-                }
+//                if (btConnectFragment != null) {
+//                    btConnectFragment.cancelSearchBlueTooth();
+//                }
+                selectCurrentItem = 1;
+                binding.vp.setCurrentItem(selectCurrentItem);
 
-                PrinterHelper.getInstance().getPrinterInfo(WifiKeyName.WIFI_CURRENT_CONNECT_IP, new INeoPrinterCallback() {
-                    @Override
-                    public void onRunResult(boolean b) throws RemoteException {
+                binding.usbIv.setImageResource(R.drawable.ic_uncheck);
+                binding.wifiIv.setImageResource(R.drawable.ic_check);
+                binding.btIv.setImageResource(R.drawable.ic_uncheck);
 
-                    }
-
-                    @Override
-                    public void onReturnString(String s) throws RemoteException {
-                        Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + s + "    " + s);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!Utils.isEmpty(s)) {
-                                    ipConnect = s;
-                                    connectAddress = s;
-                                    connectType = "WIFI";
-                                    connectContent = s;
-                                    selectCurrentItem = 4;
-                                    wirelessPrintingFragment.updateStatus();
-
-                                } else {
-                                    ipConnect = "";
-                                    connectAddress = "";
-                                    connectType = "WIFI";
-                                    connectContent = "";
-                                    selectCurrentItem = 1;
-
-                                }
-                                binding.vp.setCurrentItem(selectCurrentItem);
-
-                                binding.usbIv.setImageResource(R.drawable.ic_uncheck);
-                                binding.wifiIv.setImageResource(R.drawable.ic_check);
-                                binding.btIv.setImageResource(R.drawable.ic_uncheck);
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onRaiseException(int i, String s) throws RemoteException {
-
-                    }
-
-                    @Override
-                    public void onPrintResult(int i, String s) throws RemoteException {
-
-                    }
-                });
+//                PrinterHelper.getInstance().getPrinterInfo(WifiKeyName.WIFI_CURRENT_CONNECT_IP, new INeoPrinterCallback() {
+//                    @Override
+//                    public void onRunResult(boolean b) throws RemoteException {
+//
+//                    }
+//
+//                    @Override
+//                    public void onReturnString(String s) throws RemoteException {
+//                        Log.d(TAG, "CURRENT_CONNECT_WIFI_IP  = " + s + "    " + s);
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                if (!Utils.isEmpty(s)) {
+//                                    ipConnect = s;
+//                                    connectAddress = s;
+//                                    connectType = "WIFI";
+//                                    connectContent = s;
+//                                    selectCurrentItem = 4;
+//                                    wirelessPrintingFragment.updateStatus();
+//
+//                                } else {
+//                                    ipConnect = "";
+//                                    connectAddress = "";
+//                                    connectType = "WIFI";
+//                                    connectContent = "";
+//                                    selectCurrentItem = 1;
+//
+//                                }
+//
+//                            }
+//                        });
+//
+//                    }
+//
+//                    @Override
+//                    public void onRaiseException(int i, String s) throws RemoteException {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPrintResult(int i, String s) throws RemoteException {
+//
+//                    }
+//                });
 
 
             }

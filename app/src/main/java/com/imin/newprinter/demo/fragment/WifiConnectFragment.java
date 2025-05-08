@@ -652,7 +652,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
         Log.d(TAG, "正在连接: " + ssid);
 
         PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIFI_DHCP
-                , binding.swichStatic.isChecked() ? "IpType" : "STATIC"
+                , binding.swichStatic.isChecked() ? "DHCP" : "STATIC"
                 , new INeoPrinterCallback() {
                     @Override
                     public void onRunResult(boolean b) throws RemoteException {
@@ -964,7 +964,7 @@ public class WifiConnectFragment extends BaseFragment implements WifiScannerSing
     public void disConnect() {
 
         PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIFI_DISCONNECT
-                , ""
+                , MainActivity.ipConnect
                 , new INeoPrinterCallback() {
                     @Override
                     public void onRunResult(boolean b) throws RemoteException {

@@ -38,6 +38,7 @@ import com.imin.newprinter.demo.R
 import com.imin.newprinter.demo.adapter.ListAdapter
 import com.imin.newprinter.demo.bean.BluetoothDeviceInfo
 import com.imin.newprinter.demo.callback.SwitchFragmentListener
+import com.imin.newprinter.demo.databinding.FragmentWifiBinding
 import com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding
 import com.imin.newprinter.demo.dialog.DistNetworkDialog
 import com.imin.newprinter.demo.utils.BluetoothScanner
@@ -56,11 +57,8 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     BluetoothScanner.BluetoothScanCallback {
 
     private val TAG = "PrintDemo_WifiFragment"
-    private lateinit var binding: FragmentWifiConnectBinding
+    private lateinit var binding: FragmentWifiBinding
     private var list = ArrayList<String>()
-    private var baseIp = ""
-    private var isOpenEasy = false
-    private var outoConnect = true
     private var isVisibleToView = false
     public lateinit var wifiScanner: WifiScannerSingleton
     private var checkWifi = 10
@@ -83,7 +81,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentWifiConnectBinding.inflate(inflater)
+        binding = FragmentWifiBinding.inflate(inflater)
         wifiScanner = WifiScannerSingleton.getInstance(requireContext())
         initView()
         initData()
@@ -112,15 +110,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
-        if (list.isNotEmpty()) {
-            binding.ssidSpinner.text = list[0]
-        }
-
-        binding.ssidSpinner.setOnClickListener { view ->
-            if (list.isNotEmpty()) {
-                showPopup(view.context, list, view)
-            }
-        }
 
         binding.rvWifiConnected.layoutManager = LinearLayoutManager(context)
         binding.rvBtConnected.layoutManager = LinearLayoutManager(context)
@@ -136,10 +125,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
             binding.rvBtConnected.addItemDecoration(itemDecoration)
         }
 
-        binding.autoConnectIv.setImageResource(R.drawable.ic_check)
-        binding.pwtOpenIv.setImageResource(R.drawable.ic_pwd_close)
-        binding.pwdEt.transformationMethod = PasswordTransformationMethod.getInstance()
-        binding.ipEt.isEnabled = false
 
 //        0 ~ -30 信号强
 //        -30 ~ -60 信号中
@@ -149,7 +134,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
             override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
 //                WiFi Status= 1, Printer Status= 0, IO Status= 1, IP Address= 192.171.1.6, rssiWifi= 56,
 //                WiFi Name= iMer, rssiBle= -78 , device.name80mm Printer-LE ,device.address DD:0D:30:70:05:D9
-                if (item != null){
+                if (item != null) {
                     holder.getView<TextView>(R.id.tvRvTitle).text = item.name
                     holder.getView<TextView>(R.id.tvRvMac).text = item.address
                     holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
@@ -160,26 +145,28 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
 
                     var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                    when(getSignalStrength(item.rssiWifi)){
-                        3->ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                        2->ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                        1->ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                        else->{
+                    when (getSignalStrength(item.rssiWifi)) {
+                        3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                        2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                        1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                        else -> {
                             ivWifi.setImageResource(R.drawable.ic_wifi_0)
                         }
                     }
                     var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                    ivPrinterTag.setImageResource(if (item.printerWorkingStatus==1)
-                        R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag)
+                    ivPrinterTag.setImageResource(
+                        if (item.printerWorkingStatus == 1)
+                            R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag
+                    )
 
 
                     var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
                     var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
 
-                    if (getPrinterStatus(item.ioStatus)!=0){
+                    if (getPrinterStatus(item.ioStatus) != 0) {
                         tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
                         tvPrinter.isEnabled = false
-                    }else{
+                    } else {
                         tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
                         tvPrinter.isEnabled = true
                     }
@@ -188,6 +175,43 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     }
 
 
+                }
+            }
+            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
+                if (payloads.isNotEmpty()) {
+                    for (payload in payloads) {
+                        if (payload is BluetoothDeviceInfo) {
+                            // 局部更新逻辑
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+
+                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                            when (getSignalStrength(payload.rssiWifi)) {
+                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
+
+                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                            ivPrinterTag.setImageResource(
+                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                else R.drawable.ic_printer_normal_tag
+                            )
+
+                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                            if (getPrinterStatus(payload.ioStatus)!=0){
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
+                                tvPrinter.isEnabled = false
+                            }else{
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
+                                tvPrinter.isEnabled = true
+                            }
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                        }
+
+                    }
+                } else {
+                    super.onBindViewHolder(holder, position, payloads)
                 }
             }
         }
@@ -251,6 +275,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                         tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
                         tvPrinter.isEnabled = true
                     }
+
                     tvDisconnectPrinter.setOnClickListener {
 
                     }
@@ -258,6 +283,44 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
                 }
 
+            }
+
+            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
+                if (payloads.isNotEmpty()) {
+                    for (payload in payloads) {
+                        if (payload is BluetoothDeviceInfo) {
+                            // 局部更新逻辑
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+
+                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                            when (getSignalStrength(payload.rssiWifi)) {
+                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
+
+                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                            ivPrinterTag.setImageResource(
+                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                else R.drawable.ic_printer_normal_tag
+                            )
+
+                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                            if (getPrinterStatus(payload.ioStatus)!=0){
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
+                                tvPrinter.isEnabled = false
+                            }else{
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
+                                tvPrinter.isEnabled = true
+                            }
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                        }
+
+                    }
+                } else {
+                    super.onBindViewHolder(holder, position, payloads)
+                }
             }
         }
 
@@ -271,6 +334,11 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     holder.getView<TextView>(R.id.tvRvIp).text = item.ipAddress
                     holder.getView<TextView>(R.id.tvRvWifiName).text = item.wifiName
                     var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+
+                    var tvRvWifiConnect = holder.getView<TextView>(R.id.tvRvWifiConnect)
+                    tvRvWifiConnect.text = getString(R.string.distribution_network)
+                    tvRvWifiConnect.visibility = View.VISIBLE
+
                     when(getSignalStrength(item.rssiWifi)){
                         3->ivWifi.setImageResource(R.drawable.ic_wifi_3)
                         2->ivWifi.setImageResource(R.drawable.ic_wifi_2)
@@ -287,20 +355,189 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
                     var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
                     tvDisconnectPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                    tvPrinter.text = getString(R.string.connect_bt)
-                    tvDisconnectPrinter.text = getString(R.string.connect_wifi)
+                    tvPrinter.text = getString(R.string.connect_wifi)
+                    tvDisconnectPrinter.text = getString(R.string.connect_bt)
 
                     tvPrinter.setOnClickListener {
                         //连接WiFi 打印
+                        disConnectWifi()
+
+                        PrinterHelper.getInstance().setPrinterAction(
+                            WifiKeyName.WIRELESS_CONNECT_TYPE,
+                            "WIFI",
+                            object : INeoPrinterCallback() {
+                                @Throws(RemoteException::class)
+                                override fun onRunResult(b: Boolean) {
+                                }
+
+                                @Throws(RemoteException::class)
+                                override fun onReturnString(s: String) {
+                                }
+
+                                @Throws(RemoteException::class)
+                                override fun onRaiseException(i: Int, s: String) {
+                                }
+
+                                @Throws(RemoteException::class)
+                                override fun onPrintResult(i: Int, s: String) {
+                                    Log.d(TAG, "WIRELESS_CONNECT_TYPE  WIFI =>$s  i=$i")
+                                    if (i == 1){
+                                        PrinterHelper.getInstance().setPrinterAction(
+                                            WifiKeyName.WIFI_CONNECT_IP,
+                                            item.ipAddress,
+                                            object : INeoPrinterCallback() {
+                                                @Throws(RemoteException::class)
+                                                override fun onRunResult(b: Boolean) {
+                                                }
+
+                                                @Throws(RemoteException::class)
+                                                override fun onReturnString(s: String) {
+                                                }
+
+                                                @Throws(RemoteException::class)
+                                                override fun onRaiseException(i: Int, s: String) {
+                                                }
+
+                                                @Throws(RemoteException::class)
+                                                override fun onPrintResult(i: Int, s: String) {
+                                                    Log.d(TAG, "WIFI_CONNECT=>$s  i=$i")
+                                                    activity!!.runOnUiThread {
+                                                        if (i == 1) {
+                                                            MainActivity.ipConnect = item.ipAddress
+                                                            MainActivity.connectType = "WIFI"
+                                                            MainActivity.connectContent = item.ipAddress
+                                                            switchFragment(4)
+                                                        } else {
+                                                            Toast.makeText(
+                                                                context,
+                                                                getText(R.string.connect_fail), Toast.LENGTH_LONG
+                                                            ).show()
+                                                        }
+                                                        LoadingDialogUtil.getInstance().hide()
+                                                    }
+                                                }
+                                            })
+                                    }
+                                }
+                            })
+
                     }
                     tvDisconnectPrinter.setOnClickListener {
-                        //连接wifi 打印
+                        //连接蓝牙 打印
+                        disConnectBt()
+
+                        PrinterHelper.getInstance().setPrinterAction(
+                            WifiKeyName.WIRELESS_CONNECT_TYPE,
+                            "BT",
+                            object : INeoPrinterCallback() {
+                                @Throws(RemoteException::class)
+                                override fun onRunResult(b: Boolean) {
+                                }
+
+                                @Throws(RemoteException::class)
+                                override fun onReturnString(s: String) {
+                                }
+
+                                @Throws(RemoteException::class)
+                                override fun onRaiseException(i: Int, s: String) {
+                                }
+
+                                @Throws(RemoteException::class)
+                                override fun onPrintResult(i: Int, s: String) {
+                                    Log.d(TAG, "WIRELESS_CONNECT_TYPE  BT =>$s  i=$i")
+                                    if (i == 1){
+                                        PrinterHelper.getInstance().setPrinterAction(
+                                            WifiKeyName.BT_CONNECT_MAC,
+                                            item.address,
+                                            object : INeoPrinterCallback() {
+                                                @Throws(RemoteException::class)
+                                                override fun onRunResult(b: Boolean) {
+                                                }
+
+                                                @Throws(RemoteException::class)
+                                                override fun onReturnString(s: String) {
+                                                }
+
+                                                @Throws(RemoteException::class)
+                                                override fun onRaiseException(i: Int, s: String) {
+                                                }
+
+                                                @Throws(RemoteException::class)
+                                                override fun onPrintResult(i: Int, s: String) {
+                                                    Log.d(TAG, "BT_CONNECT_MAC=>$s  i=$i")
+                                                    activity!!.runOnUiThread {
+                                                        if (i == 1) {
+                                                            MainActivity.btContent = item.address
+                                                            MainActivity.connectType = "BT"
+                                                            MainActivity.connectContent = item.name + "\t" + item.address
+                                                            switchFragment(4)
+                                                        } else {
+                                                            Toast.makeText(
+                                                                context,
+                                                                getText(R.string.connect_fail), Toast.LENGTH_LONG
+                                                            ).show()
+                                                        }
+                                                        LoadingDialogUtil.getInstance().hide()
+                                                    }
+                                                }
+                                            })
+                                    }
+                                }
+                            })
+
+
 
                     }
+                    tvRvWifiConnect.setOnClickListener {
+                        if (networkDialog != null){
+                            networkDialog?.dismiss()
+                            networkDialog = null;
+                        }
+                        networkDialog = DistNetworkDialog(context)
+                        networkDialog?.setPopList(list)
+                        networkDialog?.setMacAddress(item.address)
 
-
+                        networkDialog!!.show()
+                    }
                 }
 
+            }
+            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
+                if (payloads.isNotEmpty()) {
+                    for (payload in payloads) {
+                        if (payload is BluetoothDeviceInfo) {
+                            // 局部更新逻辑
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+
+                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                            when (getSignalStrength(payload.rssiWifi)) {
+                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
+
+                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                            ivPrinterTag.setImageResource(
+                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                else R.drawable.ic_printer_normal_tag
+                            )
+
+                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                            if (getPrinterStatus(payload.ioStatus)!=0){
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
+                                tvPrinter.isEnabled = false
+                            }else{
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
+                                tvPrinter.isEnabled = true
+                            }
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                        }
+
+                    }
+                } else {
+                    super.onBindViewHolder(holder, position, payloads)
+                }
             }
         }
 
@@ -350,523 +587,64 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                 }
 
             }
+            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
+                if (payloads.isNotEmpty()) {
+                    for (payload in payloads) {
+                        if (payload is BluetoothDeviceInfo) {
+                            // 局部更新逻辑
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+
+                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                            when (getSignalStrength(payload.rssiWifi)) {
+                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
+
+                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                            ivPrinterTag.setImageResource(
+                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                else R.drawable.ic_printer_normal_tag
+                            )
+
+                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                            if (getPrinterStatus(payload.ioStatus)!=0){
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
+                                tvPrinter.isEnabled = false
+                            }else{
+                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
+                                tvPrinter.isEnabled = true
+                            }
+                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                        }
+
+                    }
+                } else {
+                    super.onBindViewHolder(holder, position, payloads)
+                }
+            }
         }
-
-
 
         binding.rvWifiConnected.adapter = adapterWifiConnect
         binding.rvNotConnect.adapter = adapterUnConnect
         binding.rvWaitConnect.adapter = adapterUnWifi
         binding.rvBtConnected.adapter = adapterBtConnect
 
-        initTest()
-
-
-    }
-
-    private fun initTest() {
         adapterWifiConnect.replaceData(connectedWifiList)
         adapterBtConnect.replaceData(connectedBtList)
         adapterUnConnect.replaceData(unConnectList)
         adapterUnWifi.replaceData(unWifiList)
+
     }
+
+
 
     private fun initEvent() {
-        binding.connectNetworkTv.setOnClickListener {
-            binding.connectNetworkTv.background =
-                requireContext().getDrawable(R.drawable.dra_green60_corner_5)
-            binding.connectTv.background =
-                requireContext().getDrawable(R.drawable.dra_gray_corner_5)
-            binding.clConnectNetwork.visibility = View.VISIBLE
-            binding.clConnectIP.visibility = View.INVISIBLE
-        }
 
-        binding.connectTv.setOnClickListener {
-            binding.connectTv.background =
-                requireContext().getDrawable(R.drawable.dra_green60_corner_5)
-            binding.connectNetworkTv.background =
-                requireContext().getDrawable(R.drawable.dra_gray_corner_5)
-            binding.clConnectNetwork.visibility = View.INVISIBLE
-            binding.clConnectIP.visibility = View.VISIBLE
-        }
-
-        binding.autoLy.setOnClickListener {
-            binding.autoConnectIv.setImageResource(R.drawable.ic_check)
-            binding.ipIv.setImageResource(R.drawable.ic_uncheck)
-            binding.ipEt.isEnabled = false
-            outoConnect = true
-            binding.getConnectIPTv.isEnabled = true
-            binding.getConnectIPTv.background = resources.getDrawable(R.drawable.dra_blue_corner_5)
-        }
-
-        binding.ipLy.setOnClickListener {
-            binding.ipIv.setImageResource(R.drawable.ic_check)
-            binding.autoConnectIv.setImageResource(R.drawable.ic_uncheck)
-            binding.ipEt.isEnabled = true
-            outoConnect = false
-            binding.getConnectIPTv.isEnabled = false
-            binding.getConnectIPTv.background = resources.getDrawable(R.drawable.dra_gray_corner_5)
-        }
-
-        binding.flPwd.setOnClickListener {
-            isOpenEasy = !isOpenEasy
-            if (isOpenEasy) {
-                binding.pwtOpenIv.setImageResource(R.drawable.ic_pwd_open)
-                binding.pwdEt.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            } else {
-                binding.pwtOpenIv.setImageResource(R.drawable.ic_pwd_close)
-                binding.pwdEt.transformationMethod = PasswordTransformationMethod.getInstance()
-            }
-            binding.pwdEt.setSelection(binding.pwdEt.text.length)
-        }
-
-        binding.networkConfirmTv.setOnClickListener(object : OnSingleClickListener() {
-            override fun onSingleClick(v: View?) {
-                LoadingDialogUtil.getInstance()
-                    .show(requireContext(), getString(R.string.toast_tips3))
-
-                PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE,
-                    "USB",
-                    object : INeoPrinterCallback() {
-                        @Throws(RemoteException::class)
-                        override fun onRunResult(b: Boolean) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onReturnString(s: String) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onRaiseException(i: Int, s: String) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onPrintResult(i: Int, s: String) {
-                        }
-                    })
-
-                val selectedWifi = binding.ssidSpinner.text.toString().trim()
-                if (selectedWifi.isNotEmpty()) {
-                    if (selectedWifi.contains(" (")) {
-                        val parts = selectedWifi.split(" \\(".toRegex())
-                        val ssid = parts[0]
-                        val bssid = parts[1].replace(")", "")
-                        var pwd = binding.pwdEt.text.toString().trim()
-                        if (!bssid.contains("OPEN") && pwd.isEmpty()) {
-                            Toast.makeText(context, getString(R.string.toast1), Toast.LENGTH_SHORT)
-                                .show()
-                            LoadingDialogUtil.getInstance().hide()
-                            return
-                        }
-                        if (bssid.contains("OPEN")){
-                            pwd = ""
-                        }
-                        if (binding.swichStatic.isChecked) {
-
-                            connectToWifi(ssid, pwd)
-                        }
-                    }
-                } else {
-                    LoadingDialogUtil.getInstance().hide()
-                    Toast.makeText(context, getText(R.string.tips1), Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
-        binding.ipConfirmTv.setOnClickListener(object : OnSingleClickListener() {
-            override fun onSingleClick(v: View?) {
-                LoadingDialogUtil.getInstance()
-                    .show(requireContext(), getString(R.string.toast_tips2))
-                PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE,
-                    "USB",
-                    object : INeoPrinterCallback() {
-                        @Throws(RemoteException::class)
-                        override fun onRunResult(b: Boolean) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onReturnString(s: String) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onRaiseException(i: Int, s: String) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onPrintResult(i: Int, s: String) {
-                        }
-                    })
-                if (!outoConnect) {
-                    val ip = binding.ipEt.text.toString().trim()
-                    if (ip.isEmpty() || !NetworkValidator.validateIP(ip)) {
-                        Toast.makeText(context, getText(R.string.ip_tips), Toast.LENGTH_SHORT)
-                            .show()
-                        LoadingDialogUtil.getInstance().hide()
-                        return
-                    }
-
-                    PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIFI_CONNECT_IP,
-                        ip,
-                        object : INeoPrinterCallback() {
-                            @Throws(RemoteException::class)
-                            override fun onRunResult(b: Boolean) {
-                            }
-
-                            @Throws(RemoteException::class)
-                            override fun onReturnString(s: String) {
-                            }
-
-                            @Throws(RemoteException::class)
-                            override fun onRaiseException(i: Int, s: String) {
-                            }
-
-                            @Throws(RemoteException::class)
-                            override fun onPrintResult(i: Int, s: String) {
-                                Log.d(TAG, "WIFI_CONNECT => $s")
-                                activity?.runOnUiThread {
-                                    LoadingDialogUtil.getInstance().hide()
-                                    if (i == 1) {
-                                        MainActivity.connectAddress = s
-                                        MainActivity.ipConnect = s
-                                        MainActivity.connectType = "WIFI"
-                                        MainActivity.connectContent =
-                                            binding.wifiIPTv.text.toString().trim()
-                                        switchFragment(4)
-
-                                        PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE,
-                                            "WIFI",
-                                            object : INeoPrinterCallback() {
-                                                @Throws(RemoteException::class)
-                                                override fun onRunResult(b: Boolean) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onReturnString(s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onRaiseException(i: Int, s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onPrintResult(i: Int, s: String) {
-                                                }
-                                            })
-
-                                    } else {
-                                        ToastUtil.showShort(context, R.string.connect_fail)
-                                    }
-                                }
-                            }
-                        })
-
-                } else {
-                    if (!Utils.isEmpty(baseIp)) {
-                        MainActivity.connectAddress = baseIp
-                        MainActivity.ipConnect = baseIp
-                    }
-                    if (MainActivity.ipConnect.isEmpty()) {
-                        ToastUtil.showShort(context, R.string.connect_fail_tips)
-                        LoadingDialogUtil.getInstance().hide()
-                        return
-                    }
-
-                    PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIFI_CONNECT_IP,
-                        MainActivity.ipConnect,
-                        object : INeoPrinterCallback() {
-                            @Throws(RemoteException::class)
-                            override fun onRunResult(b: Boolean) {
-                            }
-
-                            @Throws(RemoteException::class)
-                            override fun onReturnString(s: String) {
-                            }
-
-                            @Throws(RemoteException::class)
-                            override fun onRaiseException(i: Int, s: String) {
-                            }
-
-                            @Throws(RemoteException::class)
-                            override fun onPrintResult(i: Int, s: String) {
-                                activity?.runOnUiThread {
-                                    LoadingDialogUtil.getInstance().hide()
-                                    if (i == 1) {
-                                        baseIp = ""
-                                        binding.baseIPTv.text = ""
-                                        binding.baseIPTv.visibility = View.INVISIBLE
-                                        MainActivity.connectAddress = s
-                                        MainActivity.ipConnect = s
-                                        MainActivity.connectType = "WIFI"
-                                        MainActivity.connectContent =
-                                            binding.wifiIPTv.text.toString().trim()
-                                        switchFragment(4)
-                                        PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE,
-                                            "WIFI",
-                                            object : INeoPrinterCallback() {
-                                                @Throws(RemoteException::class)
-                                                override fun onRunResult(b: Boolean) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onReturnString(s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onRaiseException(i: Int, s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onPrintResult(i: Int, s: String) {
-                                                }
-                                            })
-                                    } else {
-                                        Toast.makeText(context, s, Toast.LENGTH_LONG).show()
-                                    }
-                                }
-                            }
-                        })
-
-                }
-            }
-        })
-
-        binding.getConnectIPTv.setOnClickListener(object : OnSingleClickListener() {
-            override fun onSingleClick(v: View?) {
-                LoadingDialogUtil.getInstance()
-                    .show(requireContext(), getString(R.string.toast_tips1))
-
-                PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIRELESS_CONNECT_TYPE,
-                    "USB",
-                    object : INeoPrinterCallback() {
-                        @Throws(RemoteException::class)
-                        override fun onRunResult(b: Boolean) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onReturnString(s: String) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onRaiseException(i: Int, s: String) {
-                        }
-
-                        @Throws(RemoteException::class)
-                        override fun onPrintResult(i: Int, s: String) {
-                        }
-                    })
-                checkWifi = 10
-                baseIp = ""
-                binding.baseIPTv.text = ""
-                binding.baseIPTv.visibility = View.INVISIBLE
-                checkWifiConnect()
-            }
-        })
-
-        binding.viewTitle.setRightCallback { switchFragment(100) }
-        binding.btDisconnect.setOnClickListener(object : OnSingleClickListener() {
-            override fun onSingleClick(v: View?) {
-                disConnect()
-            }
-        })
-    }
-
-    private fun connectToWifi(ssid: String, pwd: String) {
-
-        PrinterHelper.getInstance().setPrinterAction(WifiKeyName.WIFI_DHCP,
-            if (binding.swichStatic.isChecked) "IpType" else "STATIC",
-            object : INeoPrinterCallback() {
-                @Throws(RemoteException::class)
-                override fun onRunResult(b: Boolean) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onReturnString(s: String) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onRaiseException(i: Int, s: String) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onPrintResult(i: Int, s: String) {
-                    Log.d(TAG, "WIFI_IP_TYPE =>$s  i=$i")
-                    activity!!.runOnUiThread {
-                        if (i < 1) {
-                            LoadingDialogUtil.getInstance().hide()
-                            ToastUtil.showShort(context, R.string.connect_fail)
-                        } else {
-                            val list1: MutableList<String> =
-                                java.util.ArrayList()
-                            list1.add("USB")
-                            list1.add(ssid)
-                            list1.add(pwd)
-                            PrinterHelper.getInstance().setPrinterAction(
-                                WifiKeyName.WIFI_SETUP_NET,
-                                list1,
-                                object : INeoPrinterCallback() {
-                                    @Throws(RemoteException::class)
-                                    override fun onRunResult(b: Boolean) {
-                                    }
-
-                                    @Throws(RemoteException::class)
-                                    override fun onReturnString(s: String) {
-                                    }
-
-                                    @Throws(RemoteException::class)
-                                    override fun onRaiseException(i: Int, s: String) {
-                                    }
-
-                                    @Throws(RemoteException::class)
-                                    override fun onPrintResult(i: Int, s: String) {
-                                        Log.d(TAG, "配网回调==: i= $i ,s=>$s")
-                                        if (i == 1) {
-                                            activity!!.runOnUiThread {
-                                                binding.wifiStatusTv.text = String.format(
-                                                    getString(R.string.status_wifi),
-                                                    "WIFI",
-                                                    getString(R.string.connected)
-                                                )
-                                            }
-                                            retry = 10
-                                            sendSsid()
-                                        } else {
-                                            //失败
-                                            activity!!.runOnUiThread {
-                                                LoadingDialogUtil.getInstance().hide()
-                                                binding.wifiStatusTv.text = String.format(
-                                                    getString(R.string.status_wifi),
-                                                    "WIFI",
-                                                    getString(R.string.un_connected)
-                                                )
-                                                ToastUtil.showShort(context, R.string.set_fail)
-                                            }
-                                        }
-                                    }
-                                })
-                        }
-                    }
-                }
-            })
-    }
-
-    private fun sendSsid() {
-        Log.d(TAG, "retry=> $retry")
-
-        PrinterHelper.getInstance()
-            .getPrinterInfo(WifiKeyName.WIRELESS_CONNECT_STATUS, object : INeoPrinterCallback() {
-                @Throws(RemoteException::class)
-                override fun onRunResult(b: Boolean) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onReturnString(s: String) {
-                    Log.d(TAG, "WIFI_CONNECT_STATUS==: s= $s")
-                    if (!Utils.isEmpty(s)) {
-                        if (s == "0" || s == "2") {
-                            retry--
-                            if (retry > 0) {
-                                SystemClock.sleep(1000)
-                                sendSsid()
-                            } else {
-                                activity!!.runOnUiThread {
-                                    binding.wifiStatusTv.text = String.format(
-                                        getString(R.string.status_wifi),
-                                        "WIFI",
-                                        getString(R.string.un_connected)
-                                    )
-                                    binding.wifiIPTv.text =
-                                        String.format(getString(R.string.status_ip), "------")
-                                    binding.connectNetworkTv.background =
-                                        context!!.resources.getDrawable(R.drawable.dra_green60_corner_5)
-                                    binding.connectTv.background =
-                                        context!!.resources.getDrawable(R.drawable.dra_gray_corner_5)
-                                    binding.clConnectNetwork.visibility = View.VISIBLE
-                                    binding.clConnectIP.visibility = View.INVISIBLE
-                                    LoadingDialogUtil.getInstance().hide()
-                                }
-                                retry = 10
-                            }
-                        } else if (s == "-1") {
-                            checkWifi = 10
-                            activity!!.runOnUiThread {
-                                LoadingDialogUtil.getInstance().hide()
-                                ToastUtil.showShort(context, R.string.get_fail)
-                            }
-                        } else {
-                            retry = 10
-                            activity!!.runOnUiThread {
-                                binding.wifiStatusTv.text =
-                                    String.format(
-                                        getString(R.string.status_wifi),
-                                        "WIFI",
-                                        getString(R.string.connected)
-                                    )
-                            }
-                            PrinterHelper.getInstance().getPrinterInfo(
-                                WifiKeyName.WIFI_IP,
-                                object : INeoPrinterCallback() {
-                                    @Throws(RemoteException::class)
-                                    override fun onRunResult(b: Boolean) {
-                                    }
-
-                                    @Throws(RemoteException::class)
-                                    override fun onReturnString(s: String) {
-                                        Log.d(TAG, "ip回调==: s= $s")
-                                        activity!!.runOnUiThread {
-                                            if (!Utils.isEmpty(s) && s != "-1") {
-                                                binding.baseIPTv.visibility = View.INVISIBLE
-                                                baseIp = ""
-                                                binding.baseIPTv.text = ""
-                                                MainActivity.ipConnect = s
-                                                MainActivity.connectAddress = s
-                                                binding.connectTv.background =
-                                                    context!!.resources.getDrawable(R.drawable.dra_green60_corner_5)
-                                                binding.connectNetworkTv.background =
-                                                    context!!.resources.getDrawable(R.drawable.dra_gray_corner_5)
-                                                binding.clConnectNetwork.visibility = View.INVISIBLE
-                                                binding.clConnectIP.visibility = View.VISIBLE
-                                                binding.wifiIPTv.text =
-                                                    String.format(getString(R.string.status_ip), s)
-                                                ToastUtil.showShort(
-                                                    context,
-                                                    R.string.connect_wifi_tips2
-                                                )
-                                            } else {
-                                                ToastUtil.showShort(
-                                                    context,
-                                                    R.string.connect_wifi_tips1
-                                                )
-                                            }
-                                            LoadingDialogUtil.getInstance().hide()
-                                        }
-                                    }
-
-                                    @Throws(RemoteException::class)
-                                    override fun onRaiseException(i: Int, s: String) {
-                                    }
-
-                                    @Throws(RemoteException::class)
-                                    override fun onPrintResult(i: Int, s: String) {
-                                    }
-                                })
-                        }
-                    }
-                }
-
-                @Throws(RemoteException::class)
-                override fun onRaiseException(i: Int, s: String) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onPrintResult(i: Int, s: String) {
-                }
-            })
     }
 
     private fun initData() {
-        baseIp = ""
-        binding.baseIPTv.text = ""
-        binding.baseIPTv.visibility = View.INVISIBLE
         // 使用 lifecycleScope 确保生命周期安全
         lifecycleScope.launchWhenResumed {
             try {
@@ -880,7 +658,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
             }
         }
 
-        if (MainActivity.ipConnect.isEmpty()) {
+        if (MainActivity.ipConnect.isEmpty() || MainActivity.btContent.isEmpty()) {
 
             //判断SDK 是否有连接
             PrinterHelper.getInstance().getPrinterInfo(
@@ -898,36 +676,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                         activity?.runOnUiThread {
                             if (!Utils.isEmpty(s)) {
                                 MainActivity.ipConnect = s
-                                MainActivity.connectAddress = s
-                                MainActivity.connectType = "WIFI"
-                                binding.wifiStatusTv.text = String.format(
-                                    getString(R.string.status_wifi),
-                                    "WIFI",
-                                    getString(R.string.connected)
-                                )
-                                binding.wifiIPTv.text =
-                                    String.format(getString(R.string.status_ip), s)
-                                LoadingDialogUtil.getInstance().hide()
-                                binding.connectTv.background =
-                                    requireContext().getDrawable(R.drawable.dra_green60_corner_5)
-                                binding.connectNetworkTv.background =
-                                    requireContext().getDrawable(R.drawable.dra_gray_corner_5)
-                                binding.clConnectNetwork.visibility = View.INVISIBLE
-                                binding.clConnectIP.visibility = View.VISIBLE
-                            } else {
-                                binding.wifiStatusTv.text = String.format(
-                                    getString(R.string.status_wifi),
-                                    "WIFI",
-                                    getString(R.string.un_connected)
-                                )
-                                binding.wifiIPTv.text =
-                                    String.format(getString(R.string.status_ip), "------")
-                                binding.connectNetworkTv.background =
-                                    requireContext().getDrawable(R.drawable.dra_green60_corner_5)
-                                binding.connectTv.background =
-                                    requireContext().getDrawable(R.drawable.dra_gray_corner_5)
-                                binding.clConnectNetwork.visibility = View.VISIBLE
-                                binding.clConnectIP.visibility = View.INVISIBLE
                             }
                         }
                     }
@@ -940,18 +688,46 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     override fun onPrintResult(i: Int, s: String) {
                     }
                 })
+
+            PrinterHelper.getInstance().getPrinterInfo(
+                WifiKeyName.BT_CURRENT_CONNECT_MAC,
+                object : INeoPrinterCallback() {
+                    @Throws(RemoteException::class)
+                    override fun onRunResult(b: Boolean) {
+                    }
+
+                    @Throws(RemoteException::class)
+                    override fun onReturnString(s: String) {
+                        Log.d(TAG,
+                            "initData==CURRENT_CONNECT_WIFI_IP: $s  "
+                        )
+                        activity?.runOnUiThread {
+                            if (!Utils.isEmpty(s)) {
+                                MainActivity.btContent = s
+                            }
+                        }
+                    }
+
+                    @Throws(RemoteException::class)
+                    override fun onRaiseException(i: Int, s: String) {
+                    }
+
+                    @Throws(RemoteException::class)
+                    override fun onPrintResult(i: Int, s: String) {
+                    }
+                })
+
         } else {
             updateUi()
         }
 
-//        updatePrinterStatus(PrinterHelper.getInstance().printerStatus)
     }
 
-    public fun startBleScan() {
+     fun startBleScan() {
         BluetoothScanner.startLeScanWithCoroutines(this,this)
     }
 
-    private fun disConnect() {
+    private fun disConnectWifi() {
         PrinterHelper.getInstance()
             .setPrinterAction(WifiKeyName.WIFI_DISCONNECT, MainActivity.ipConnect, object : INeoPrinterCallback() {
                 @Throws(RemoteException::class)
@@ -970,15 +746,39 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                 override fun onPrintResult(i: Int, s: String) {
                     Log.d(TAG, "DISCONNECT_WIFI==:  $s")
                     activity!!.runOnUiThread {
-                        binding.wifiStatusTv.text =
-                            String.format(
-                                getString(R.string.status_wifi),
-                                "WIFI",
-                                getString(R.string.un_connected)
-                            )
-                        binding.wifiIPTv.text =
-                            String.format(getString(R.string.status_ip), "-------")
+//                        binding.wifiStatusTv.text =
+//                            String.format(
+//                                getString(R.string.status_wifi),
+//                                "WIFI",
+//                                getString(R.string.un_connected)
+//                            )
+//                        binding.wifiIPTv.text =
+//                            String.format(getString(R.string.status_ip), "-------")
                         MainActivity.ipConnect = ""
+                    }
+                }
+            })
+    }
+    private fun disConnectBt() {
+        PrinterHelper.getInstance()
+            .setPrinterAction(WifiKeyName.BT_DISCONNECT, MainActivity.btContent, object : INeoPrinterCallback() {
+                @Throws(RemoteException::class)
+                override fun onRunResult(b: Boolean) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onReturnString(s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onRaiseException(i: Int, s: String) {
+                }
+
+                @Throws(RemoteException::class)
+                override fun onPrintResult(i: Int, s: String) {
+                    Log.d(TAG, "bt disconnect==:  $s   ,i=  $i")
+                    activity!!.runOnUiThread {
+                        MainActivity.btContent = ""
                     }
                 }
             })
@@ -993,140 +793,10 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
             )
             binding.wifiIPTv.text =
                 String.format(getString(R.string.status_ip), MainActivity.ipConnect)
-            binding.connectTv.background =
-                requireContext().getDrawable(R.drawable.dra_green60_corner_5)
-            binding.connectNetworkTv.background =
-                requireContext().getDrawable(R.drawable.dra_gray_corner_5)
-            binding.clConnectNetwork.visibility = View.INVISIBLE
-            binding.clConnectIP.visibility = View.VISIBLE
+
         }
     }
 
-    private fun checkWifiConnect() {
-
-        PrinterHelper.getInstance()
-            .getPrinterInfo(WifiKeyName.WIRELESS_CONNECT_STATUS, object : INeoPrinterCallback() {
-                @Throws(RemoteException::class)
-                override fun onRunResult(b: Boolean) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onReturnString(s: String) {
-                    Log.d(TAG, "WIFI_CONNECT_STATUS==: s= $s") //1已连接  0是没连接
-                    if (!Utils.isEmpty(s)) {
-                        when (s) {
-                            "0", "2" -> {
-                                if (checkWifi-- > 0) {
-                                    SystemClock.sleep(2000)
-                                    checkWifiConnect()
-                                } else {
-                                    activity?.runOnUiThread {
-                                        LoadingDialogUtil.getInstance().hide()
-                                        ToastUtil.showShort(context, R.string.get_fail)
-                                    }
-                                    checkWifi = 10
-                                }
-                            }
-
-                            "-1" -> {
-                                checkWifi = 10
-                                activity?.runOnUiThread {
-                                    ToastUtil.showShort(context, R.string.get_fail)
-                                    LoadingDialogUtil.getInstance().hide()
-                                }
-                            }
-
-                            else -> {
-                                checkWifi = 10
-                                activity?.runOnUiThread {
-                                    binding.wifiStatusTv.text = String.format(
-                                        getString(R.string.status_wifi),
-                                        "WIFI",
-                                        getString(R.string.connected)
-                                    )
-                                }
-
-                                PrinterHelper.getInstance().getPrinterInfo(
-                                    WifiKeyName.WIFI_IP,
-                                    object : INeoPrinterCallback() {
-                                        @Throws(RemoteException::class)
-                                        override fun onRunResult(b: Boolean) {
-                                        }
-
-                                        @Throws(RemoteException::class)
-                                        override fun onReturnString(s: String) {
-                                            Log.d(TAG, "ip回调==: s= $s")
-                                            activity!!.runOnUiThread {
-                                                LoadingDialogUtil.getInstance().hide()
-                                                if (!Utils.isEmpty(s) && s != "-1") {
-                                                    baseIp = s
-                                                    binding.baseIPTv.visibility = View.VISIBLE
-                                                    binding.baseIPTv.text =
-                                                        String.format(getString(R.string.status_ip), s)
-                                                } else {
-                                                    ToastUtil.showShort(
-                                                        context,
-                                                        R.string.connect_wifi_tips1
-                                                    )
-                                                }
-                                            }
-                                        }
-
-                                        @Throws(RemoteException::class)
-                                        override fun onRaiseException(i: Int, s: String) {
-                                        }
-
-                                        @Throws(RemoteException::class)
-                                        override fun onPrintResult(i: Int, s: String) {
-                                        }
-                                    })
-                                
-                                
-                            }
-                        }
-                        
-                    } else {
-                        checkWifi = 10
-                        activity!!.runOnUiThread {
-                            ToastUtil.showShort(context, R.string.get_fail)
-                            LoadingDialogUtil.getInstance().hide()
-                        }
-                    }
-                }
-
-                @Throws(RemoteException::class)
-                override fun onRaiseException(i: Int, s: String) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onPrintResult(i: Int, s: String) {
-                }
-            })
-    }
-
-    fun updatePrinterStatus(status: Int) {
-        if (::binding.isInitialized) {
-            if (status != 0) {
-                baseIp = ""
-                binding.baseIPTv.visibility = View.INVISIBLE
-                binding.baseIPTv.text = ""
-                binding.networkConfirmTv.isEnabled = false
-                binding.networkConfirmTv.alpha = 0.5f
-                binding.ipConfirmTv.isEnabled = false
-                binding.ipConfirmTv.alpha = 0.5f
-                binding.getConnectIPTv.isEnabled = false
-                binding.getConnectIPTv.alpha = 0.5f
-                LoadingDialogUtil.getInstance().hide()
-            } else {
-                binding.networkConfirmTv.isEnabled = true
-                binding.networkConfirmTv.alpha = 1f
-                binding.ipConfirmTv.isEnabled = true
-                binding.ipConfirmTv.alpha = 1f
-                binding.getConnectIPTv.isEnabled = true
-                binding.getConnectIPTv.alpha = 1f
-            }
-        }
-    }
 
     fun setCallback(listener: SwitchFragmentListener) {
         fragmentListener = listener
@@ -1138,9 +808,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
     fun setSpinnerData(wifiList: ArrayList<String>) {
         this.list = wifiList
-        if (list.isNotEmpty()) {
-            binding.ssidSpinner.text = list[0]
-        }
+
     }
 
     override fun onWifiListUpdated(list: ArrayList<String>) {
@@ -1171,7 +839,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     override fun onWifiConnectStatus(b: Boolean) {
         if (!b) {
             (activity as? MainActivity)?.disConnectWirelessPrint()
-            disConnect()
+            disConnectWifi()
         }
     }
 
@@ -1182,35 +850,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         super.onDestroyView()
     }
 
-    private fun showPopup(context: Context, mList: List<String>, view: View) {
-        popupWindow?.dismiss()
-        val popupView = LayoutInflater.from(context).inflate(R.layout.popup_list, null)
-        val listView = popupView.findViewById<ListView>(R.id.listView)
-        listView.adapter = ListAdapter(context, mList)
-
-        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            try {
-                if (position < mList.size) {
-                    binding.ssidSpinner.text = mList[position]
-                }
-            } catch (e: Exception) {
-                Log.d(TAG, " ${e.message}")
-            }
-            popupWindow?.dismiss()
-        }
-
-        popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            true
-        ).apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            isOutsideTouchable = true
-            animationStyle = android.R.style.Animation_Dialog
-            showAsDropDown(view)
-        }
-    }
 
     override fun onDeviceFound(deviceAddress: String, deviceName: String) {
 
@@ -1227,21 +866,26 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                         if (index != -1) {
                             // 替换旧设备信息为新设备信息
                             unConnectList[index] = deviceInfo
+                            adapterUnConnect.notifyItemChanged(index,deviceInfo)
                         } else {
                             println("No matching device found")
                             unConnectList.add(deviceInfo)
+                            adapterUnConnect.addData(deviceInfo)
                         }
                     }else{
                         unConnectList.add(deviceInfo)
+                        adapterUnConnect.addData(deviceInfo)
                     }
-                    adapterUnConnect.replaceData(unConnectList)
+//                    adapterUnConnect.notifyDataSetChanged()
 
                     if (unWifiList.isNotEmpty() && unWifiList.size>0){
                         val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
                         if (index != -1) {
                             unWifiList.removeAt(index)
+                            //adapterUnWifi.notifyDataSetChanged()
+                            adapterUnWifi.remove(index)
                         }
-                        adapterUnWifi.replaceData(unWifiList)
+                       // adapterUnWifi.replaceData(unWifiList)
                     }
 
 
@@ -1254,15 +898,19 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                         if (index != -1) {
                             // 替换旧设备信息为新设备信息
                             unWifiList[index] = deviceInfo
+                            adapterUnWifi.notifyItemChanged(index,deviceInfo)
                         } else {
                             println("No matching device found")
                             unWifiList.add(deviceInfo)
+                            adapterUnWifi.addData(deviceInfo)
                         }
                     }else{
                         unWifiList.add(deviceInfo)
+                        adapterUnWifi.addData(deviceInfo)
                     }
 
-                    adapterUnWifi.replaceData(unWifiList)
+
+//                    adapterUnWifi.replaceData(unWifiList)
                 }
             }
 
