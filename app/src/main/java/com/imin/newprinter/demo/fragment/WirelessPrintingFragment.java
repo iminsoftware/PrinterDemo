@@ -68,7 +68,7 @@ public class WirelessPrintingFragment extends BaseFragment{
         binding.connectNetworkTv.setOnClickListener(view -> {
             Log.d(TAG, "connectNetworkTv: "+"    "+MainActivity.connectType);
 
-            switchFragment(MainActivity.connectType.contains("WIFI")?1:2);
+            switchFragment(1);
 
         });
         binding.printTest1.setOnClickListener(view -> {

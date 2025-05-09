@@ -423,10 +423,11 @@
     <string name="wait_connect">To be connected</string>
     <string name="io_status">Printer status:</string>
     <string name="wifi_connected">Connected to WIFI</string>
-    <string name="bt_connected">Bluetooth is connected</string>
+    <string name="bt_connected">Bluetooth connected</string>
     <string name="connect_bt">Connect BT</string>
     <string name="connect_wifi">Connect WIFI</string>
     <string name="usb_connect_network">USB Provisioning</string>
     <string name="bt_connect_network">BT Provisioning</string>
     <string name="connected_to_print">Connected and Printing</string>
+    <string name="distributed_network">Distributed network</string>
 </resources>

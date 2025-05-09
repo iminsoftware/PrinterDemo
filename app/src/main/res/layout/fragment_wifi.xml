@@ -157,7 +157,7 @@
                             android:background="@drawable/dra_title_bg_corner_5"
                             android:paddingVertical="10dp"
                             android:textSize="14sp"
-                            android:text="@string/un_connected"
+                            android:text="@string/distributed_network"
                             android:textColor="@color/color_1D1D1F" />
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvWaitConnect"

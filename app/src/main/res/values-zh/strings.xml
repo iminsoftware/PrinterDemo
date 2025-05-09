@@ -457,10 +457,11 @@
     <string name="wait_connect">待连接</string>
     <string name="io_status">打印机状态:</string>
     <string name="wifi_connected">已连接WIFI</string>
-    <string name="bt_connected">蓝牙已连接</string>
+    <string name="bt_connected">已连接的蓝牙</string>
     <string name="connect_bt">连接蓝牙</string>
     <string name="connect_wifi">连接WIFI</string>
     <string name="usb_connect_network">USB配网</string>
     <string name="bt_connect_network">BT配网</string>
     <string name="connected_to_print">连接并打印</string>
+    <string name="distributed_network">已配网</string>
 </resources>

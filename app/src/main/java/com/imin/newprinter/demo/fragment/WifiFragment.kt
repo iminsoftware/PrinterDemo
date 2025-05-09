@@ -110,7 +110,8 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         binding.rvNotConnect.layoutManager = LinearLayoutManager(context)
         binding.rvWaitConnect.layoutManager = LinearLayoutManager(context)
 
-        val dividerDrawable = context?.let { ContextCompat.getDrawable(it, R.drawable.divider_drawable) }
+        val dividerDrawable =
+            context?.let { ContextCompat.getDrawable(it, R.drawable.divider_drawable) }
         if (dividerDrawable != null) {
             val itemDecoration = DividerItemDecoration(dividerDrawable)
             binding.rvWifiConnected.addItemDecoration(itemDecoration)
@@ -124,309 +125,174 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 //        -30 ~ -60 信号中
 //        -60 ~ -99 信号弱
         //WiFi已连接
-        adapterWifiConnect = object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
-            override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
-                if (item != null) {
-                    holder.getView<TextView>(R.id.tvRvTitle).text = item.name
-                    holder.getView<TextView>(R.id.tvRvMac).text = item.address
-                    holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
-                    holder.getView<TextView>(R.id.tvRvIp).text = item.ipAddress
-                    holder.getView<TextView>(R.id.tvRvWifiName).text = item.wifiName
-                    var tvRvBtConnect = holder.getView<TextView>(R.id.tvRvBtConnect)
-                    //判断是否蓝牙连接如果有匹配 连接的mac地址，匹配不上之后显示按钮
+        adapterWifiConnect =
+            object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
+                override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
+                    if (item != null) {
+                        holder.getView<TextView>(R.id.tvRvTitle).text = item.name
+                        holder.getView<TextView>(R.id.tvRvMac).text = item.address
+                        holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
+                        holder.getView<TextView>(R.id.tvRvIp).text = item.ipAddress
+                        holder.getView<TextView>(R.id.tvRvWifiName).text = item.wifiName
+                        var tvRvBtConnect = holder.getView<TextView>(R.id.tvRvBtConnect)
+                        //判断是否蓝牙连接如果有匹配 连接的mac地址，匹配不上之后显示按钮
 
 
-                    var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                    when (getSignalStrength(item.rssiWifi)) {
-                        3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                        2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                        1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                        else -> {
-                            ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                        var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                        when (getSignalStrength(item.rssiWifi)) {
+                            3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                            2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                            1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                            else -> {
+                                ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
                         }
+                        var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                        ivPrinterTag.setImageResource(
+                            if (item.printerWorkingStatus == 1)
+                                R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag
+                        )
+
+
+                        var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                        var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
+
+                        if (getPrinterStatus(item.ioStatus) != 0) {
+                            tvPrinter.background =
+                                resources.getDrawable(R.drawable.dra_red_corner_5)
+                            tvPrinter.isEnabled = false
+                        } else {
+                            tvPrinter.background =
+                                resources.getDrawable(R.drawable.dra_green_corner_5)
+                            tvPrinter.isEnabled = true
+                        }
+                        tvDisconnectPrinter.setOnClickListener {
+
+                        }
+
+
                     }
-                    var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                    ivPrinterTag.setImageResource(
-                        if (item.printerWorkingStatus == 1)
-                            R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag
-                    )
+                }
 
+                override fun onBindViewHolder(
+                    holder: BaseViewHolder,
+                    position: Int,
+                    payloads: MutableList<Any>
+                ) {
+                    if (payloads.isNotEmpty()) {
+                        for (payload in payloads) {
+                            if (payload is BluetoothDeviceInfo) {
+                                // 局部更新逻辑
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
 
-                    var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                    var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
+                                val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                                when (getSignalStrength(payload.rssiWifi)) {
+                                    3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                    2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                    1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                    else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                                }
 
-                    if (getPrinterStatus(item.ioStatus) != 0) {
-                        tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
-                        tvPrinter.isEnabled = false
+                                val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                                ivPrinterTag.setImageResource(
+                                    if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                    else R.drawable.ic_printer_normal_tag
+                                )
+
+                                var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                                if (getPrinterStatus(payload.ioStatus) != 0) {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_red_corner_5)
+                                    tvPrinter.isEnabled = false
+                                } else {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_green_corner_5)
+                                    tvPrinter.isEnabled = true
+                                }
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
+
+                                holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+                                holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
+                                holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
+                            }
+
+                        }
                     } else {
-                        tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                        tvPrinter.isEnabled = true
+                        super.onBindViewHolder(holder, position, payloads)
                     }
-                    tvDisconnectPrinter.setOnClickListener {
-
-                    }
-
-
                 }
             }
-            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
-                if (payloads.isNotEmpty()) {
-                    for (payload in payloads) {
-                        if (payload is BluetoothDeviceInfo) {
-                            // 局部更新逻辑
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-
-                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                            when (getSignalStrength(payload.rssiWifi)) {
-                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
-                            }
-
-                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                            ivPrinterTag.setImageResource(
-                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
-                                else R.drawable.ic_printer_normal_tag
-                            )
-
-                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                            if (getPrinterStatus(payload.ioStatus)!=0){
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
-                                tvPrinter.isEnabled = false
-                            }else{
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                                tvPrinter.isEnabled = true
-                            }
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-
-                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
-                            holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
-                            holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
-                        }
-
-                    }
-                } else {
-                    super.onBindViewHolder(holder, position, payloads)
-                }
-            }
-        }
 
         //蓝牙已连接
-        adapterBtConnect = object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
-            override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
-                if (item != null){
-                    holder.getView<TextView>(R.id.tvRvTitle).text = item.name
-                    holder.getView<TextView>(R.id.tvRvMac).text = item.address
-                    holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
-                    var tvIp = holder.getView<TextView>(R.id.tvRvIp)
-                    var tvWifiName = holder.getView<TextView>(R.id.tvRvWifiName)
-                    var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                    var tvRvWifiConnect = holder.getView<TextView>(R.id.tvRvWifiConnect)//如果WiFi没连上也显示
+        adapterBtConnect =
+            object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
+                override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
+                    if (item != null) {
+                        holder.getView<TextView>(R.id.tvRvTitle).text = item.name
+                        holder.getView<TextView>(R.id.tvRvMac).text = item.address
+                        holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
+                        var tvIp = holder.getView<TextView>(R.id.tvRvIp)
+                        var tvWifiName = holder.getView<TextView>(R.id.tvRvWifiName)
+                        var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                        var tvRvWifiConnect =
+                            holder.getView<TextView>(R.id.tvRvWifiConnect)//如果WiFi没连上也显示
 
-                    if (item.ipAddress.isNotEmpty()){
-                        tvIp.text = item.ipAddress
-                        tvWifiName.text = item.wifiName
-                        tvIp.visibility = View.VISIBLE
-                        tvWifiName.visibility = View.VISIBLE
-                        ivWifi.visibility = View.VISIBLE
-                        //如果WiFi没连接
-                        tvRvWifiConnect.visibility = View.VISIBLE
-                        tvRvWifiConnect.setOnClickListener {
-                            //连接WiFi
-                        }
-
-                    }else{
-                        tvIp.visibility = View.GONE
-                        tvWifiName.visibility = View.GONE
-                        ivWifi.visibility = View.GONE
-                        tvRvWifiConnect.visibility = View.VISIBLE
-                        tvRvWifiConnect.text = getString(R.string.distribution_network)
-                        tvRvWifiConnect.setOnClickListener {
-                            //去配网
-                        }
-                    }
-
-
-                    when(getSignalStrength(item.rssiWifi)){
-                        3->ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                        2->ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                        1->ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                        else->{
-                            ivWifi.setImageResource(R.drawable.ic_wifi_0)
-                        }
-                    }
-                    var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                    ivPrinterTag.setImageResource(if (item.printerWorkingStatus==1)
-                        R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag)
-
-
-                    var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                    var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
-
-                    if (getPrinterStatus(item.ioStatus)!=0){
-                        tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
-                        tvPrinter.isEnabled = false
-                    }else{
-                        tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                        tvPrinter.isEnabled = true
-                    }
-
-                    tvDisconnectPrinter.setOnClickListener {
-
-                    }
-
-
-                }
-
-            }
-
-            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
-                if (payloads.isNotEmpty()) {
-                    for (payload in payloads) {
-                        if (payload is BluetoothDeviceInfo) {
-                            // 局部更新逻辑
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-
-                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                            when (getSignalStrength(payload.rssiWifi)) {
-                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                        if (item.ipAddress.isNotEmpty()) {
+                            tvIp.text = item.ipAddress
+                            tvWifiName.text = item.wifiName
+                            tvIp.visibility = View.VISIBLE
+                            tvWifiName.visibility = View.VISIBLE
+                            ivWifi.visibility = View.VISIBLE
+                            //如果WiFi没连接
+                            tvRvWifiConnect.visibility = View.VISIBLE
+                            tvRvWifiConnect.text = getString(R.string.connect_wifi)
+                            tvRvWifiConnect.setOnClickListener {
+                                //连接WiFi
                             }
 
-                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                            ivPrinterTag.setImageResource(
-                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
-                                else R.drawable.ic_printer_normal_tag
-                            )
-
-                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                            if (getPrinterStatus(payload.ioStatus)!=0){
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
-                                tvPrinter.isEnabled = false
-                            }else{
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                                tvPrinter.isEnabled = true
+                        } else {
+                            tvIp.visibility = View.GONE
+                            tvWifiName.visibility = View.GONE
+                            ivWifi.visibility = View.GONE
+                            tvRvWifiConnect.visibility = View.VISIBLE
+                            tvRvWifiConnect.text = getString(R.string.distribution_network)
+                            tvRvWifiConnect.setOnClickListener {
+                                //去配网
                             }
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
-                            holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
-                            holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
                         }
 
-                    }
-                } else {
-                    super.onBindViewHolder(holder, position, payloads)
-                }
-            }
-        }
 
-        //待连接
-        adapterUnConnect = object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
-            override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
-                if (item != null){
-                    holder.getView<TextView>(R.id.tvRvTitle).text = item.name
-                    holder.getView<TextView>(R.id.tvRvMac).text = item.address
-                    holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
-                    holder.getView<TextView>(R.id.tvRvIp).text = item.ipAddress
-                    holder.getView<TextView>(R.id.tvRvWifiName).text = item.wifiName
-                    var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-
-                    var tvRvWifiConnect = holder.getView<TextView>(R.id.tvRvWifiConnect)
-                    tvRvWifiConnect.text = getString(R.string.distribution_network)
-                    tvRvWifiConnect.visibility = View.VISIBLE
-
-                    when(getSignalStrength(item.rssiWifi)){
-                        3->ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                        2->ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                        1->ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                        else->{
-                            ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                        when (getSignalStrength(item.rssiWifi)) {
+                            3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                            2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                            1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                            else -> {
+                                ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
                         }
-                    }
-                    var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                    ivPrinterTag.setImageResource(if (item.printerWorkingStatus==1)
-                        R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag)
+                        var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                        ivPrinterTag.setImageResource(
+                            if (item.printerWorkingStatus == 1)
+                                R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag
+                        )
 
 
-                    var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                    var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
-                    tvDisconnectPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                    tvPrinter.text = getString(R.string.connect_wifi)
-                    tvDisconnectPrinter.text = getString(R.string.connect_bt)
+                        var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                        var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
 
-                    tvPrinter.setOnClickListener {
-                        //连接WiFi 打印
-                        disConnectWifi()
+                        if (getPrinterStatus(item.ioStatus) != 0) {
+                            tvPrinter.background =
+                                resources.getDrawable(R.drawable.dra_red_corner_5)
+                            tvPrinter.isEnabled = false
+                        } else {
+                            tvPrinter.background =
+                                resources.getDrawable(R.drawable.dra_green_corner_5)
+                            tvPrinter.isEnabled = true
+                        }
 
-                        PrinterHelper.getInstance().setPrinterAction(
-                            WifiKeyName.WIRELESS_CONNECT_TYPE,
-                            "WIFI",
-                            object : INeoPrinterCallback() {
-                                @Throws(RemoteException::class)
-                                override fun onRunResult(b: Boolean) {
-                                }
-
-                                @Throws(RemoteException::class)
-                                override fun onReturnString(s: String) {
-                                }
-
-                                @Throws(RemoteException::class)
-                                override fun onRaiseException(i: Int, s: String) {
-                                }
-
-                                @Throws(RemoteException::class)
-                                override fun onPrintResult(i: Int, s: String) {
-                                    Log.d(TAG, "WIRELESS_CONNECT_TYPE  WIFI =>$s  i=$i")
-                                    if (i == 1){
-                                        PrinterHelper.getInstance().setPrinterAction(
-                                            WifiKeyName.WIFI_CONNECT_IP,
-                                            item.ipAddress,
-                                            object : INeoPrinterCallback() {
-                                                @Throws(RemoteException::class)
-                                                override fun onRunResult(b: Boolean) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onReturnString(s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onRaiseException(i: Int, s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onPrintResult(i: Int, s: String) {
-                                                    Log.d(TAG, "WIFI_CONNECT=>$s  i=$i")
-                                                    activity!!.runOnUiThread {
-                                                        if (i == 1) {
-                                                            MainActivity.ipConnect = item.ipAddress
-                                                            MainActivity.connectType = "WIFI"
-                                                            MainActivity.connectContent = item.ipAddress
-                                                            switchFragment(4)
-                                                        } else {
-                                                            Toast.makeText(
-                                                                context,
-                                                                getText(R.string.connect_fail), Toast.LENGTH_LONG
-                                                            ).show()
-                                                        }
-                                                        LoadingDialogUtil.getInstance().hide()
-                                                    }
-                                                }
-                                            })
-                                    }
-                                }
-                            })
-
-                    }
-                    tvDisconnectPrinter.setOnClickListener {
-                        //连接蓝牙 打印
-                        BluetoothScanner.stopLeScanCompletely()
-                        disConnectBt()
-
-                        CoroutineScope(Dispatchers.IO).launch {
+                        tvPrinter.setOnClickListener {
                             PrinterHelper.getInstance().setPrinterAction(
                                 WifiKeyName.WIRELESS_CONNECT_TYPE,
                                 "BT",
@@ -446,7 +312,218 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                     @Throws(RemoteException::class)
                                     override fun onPrintResult(i: Int, s: String) {
                                         Log.d(TAG, "WIRELESS_CONNECT_TYPE  BT =>$s  i=$i")
-                                        if (i == 1){
+                                        activity!!.runOnUiThread {
+                                            if (i == 1) {
+                                                MainActivity.btContent =
+                                                    item.address
+                                                MainActivity.connectType = "BT"
+                                                MainActivity.connectContent =
+                                                    item.name + "\t" + item.address
+                                                switchFragment(4)
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    getText(R.string.connect_fail),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                    }
+                                })
+                        }
+                        tvDisconnectPrinter.setOnClickListener {
+                            //断开蓝牙连接
+                            Log.d(TAG, "断开蓝牙连接")
+                            disConnectBt()
+                        }
+
+
+                    }
+
+                }
+
+                override fun onBindViewHolder(
+                    holder: BaseViewHolder,
+                    position: Int,
+                    payloads: MutableList<Any>
+                ) {
+                    if (payloads.isNotEmpty()) {
+                        for (payload in payloads) {
+                            if (payload is BluetoothDeviceInfo) {
+                                // 局部更新逻辑
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
+
+                                val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                                when (getSignalStrength(payload.rssiWifi)) {
+                                    3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                    2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                    1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                    else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                                }
+
+                                val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                                ivPrinterTag.setImageResource(
+                                    if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                    else R.drawable.ic_printer_normal_tag
+                                )
+
+                                var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                                if (getPrinterStatus(payload.ioStatus) != 0) {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_red_corner_5)
+                                    tvPrinter.isEnabled = false
+                                } else {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_green_corner_5)
+                                    tvPrinter.isEnabled = true
+                                }
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
+                                holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+                                holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
+                                holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
+                            }
+
+                        }
+                    } else {
+                        super.onBindViewHolder(holder, position, payloads)
+                    }
+                }
+            }
+
+        //待连接
+        adapterUnConnect =
+            object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
+                override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
+                    if (item != null) {
+                        holder.getView<TextView>(R.id.tvRvTitle).text = item.name
+                        holder.getView<TextView>(R.id.tvRvMac).text = item.address
+                        holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
+                        holder.getView<TextView>(R.id.tvRvIp).text = item.ipAddress
+                        holder.getView<TextView>(R.id.tvRvWifiName).text = item.wifiName
+                        var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+
+                        var tvRvWifiConnect = holder.getView<TextView>(R.id.tvRvWifiConnect)
+                        tvRvWifiConnect.text = getString(R.string.distribution_network)
+                        tvRvWifiConnect.visibility = View.VISIBLE
+
+                        when (getSignalStrength(item.rssiWifi)) {
+                            3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                            2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                            1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                            else -> {
+                                ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                            }
+                        }
+                        var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                        ivPrinterTag.setImageResource(
+                            if (item.printerWorkingStatus == 1)
+                                R.drawable.ic_printer_busy_tag else R.drawable.ic_printer_normal_tag
+                        )
+
+
+                        var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                        var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
+                        tvDisconnectPrinter.background =
+                            resources.getDrawable(R.drawable.dra_green_corner_5)
+                        tvPrinter.text = getString(R.string.connect_wifi)
+                        tvDisconnectPrinter.text = getString(R.string.connect_bt)
+
+                        tvPrinter.setOnClickListener {
+                            //连接WiFi 打印
+                            disConnectWifi()
+
+                            PrinterHelper.getInstance().setPrinterAction(
+                                WifiKeyName.WIRELESS_CONNECT_TYPE,
+                                "WIFI",
+                                object : INeoPrinterCallback() {
+                                    @Throws(RemoteException::class)
+                                    override fun onRunResult(b: Boolean) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onReturnString(s: String) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onRaiseException(i: Int, s: String) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onPrintResult(i: Int, s: String) {
+                                        Log.d(TAG, "WIRELESS_CONNECT_TYPE  WIFI =>$s  i=$i")
+                                        if (i == 1) {
+                                            PrinterHelper.getInstance().setPrinterAction(
+                                                WifiKeyName.WIFI_CONNECT_IP,
+                                                item.ipAddress,
+                                                object : INeoPrinterCallback() {
+                                                    @Throws(RemoteException::class)
+                                                    override fun onRunResult(b: Boolean) {
+                                                    }
+
+                                                    @Throws(RemoteException::class)
+                                                    override fun onReturnString(s: String) {
+                                                    }
+
+                                                    @Throws(RemoteException::class)
+                                                    override fun onRaiseException(
+                                                        i: Int,
+                                                        s: String
+                                                    ) {
+                                                    }
+
+                                                    @Throws(RemoteException::class)
+                                                    override fun onPrintResult(i: Int, s: String) {
+                                                        Log.d(TAG, "WIFI_CONNECT=>$s  i=$i")
+                                                        activity!!.runOnUiThread {
+                                                            if (i == 1) {
+                                                                MainActivity.ipConnect =
+                                                                    item.ipAddress
+                                                                MainActivity.connectType = "WIFI"
+                                                                MainActivity.connectContent =
+                                                                    item.ipAddress
+                                                                switchFragment(4)
+                                                            } else {
+                                                                Toast.makeText(
+                                                                    context,
+                                                                    getText(R.string.connect_fail),
+                                                                    Toast.LENGTH_LONG
+                                                                ).show()
+                                                            }
+                                                            LoadingDialogUtil.getInstance().hide()
+                                                        }
+                                                    }
+                                                })
+                                        }
+                                    }
+                                })
+
+                        }
+                        tvDisconnectPrinter.setOnClickListener {
+                            //连接 蓝牙 打印
+                            disConnectBt()
+
+                            PrinterHelper.getInstance().setPrinterAction(
+                                WifiKeyName.WIRELESS_CONNECT_TYPE,
+                                "BT",
+                                object : INeoPrinterCallback() {
+                                    @Throws(RemoteException::class)
+                                    override fun onRunResult(b: Boolean) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onReturnString(s: String) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onRaiseException(i: Int, s: String) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onPrintResult(i: Int, s: String) {
+                                        Log.d(TAG, "WIRELESS_CONNECT_TYPE  BT =>$s  i=$i")
+                                        if (i == 1) {
                                             PrinterHelper.getInstance().setPrinterAction(
                                                 WifiKeyName.BT_CONNECT_MAC,
                                                 item.address,
@@ -460,7 +537,10 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                                     }
 
                                                     @Throws(RemoteException::class)
-                                                    override fun onRaiseException(i: Int, s: String) {
+                                                    override fun onRaiseException(
+                                                        i: Int,
+                                                        s: String
+                                                    ) {
                                                     }
 
                                                     @Throws(RemoteException::class)
@@ -468,14 +548,26 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                                         Log.d(TAG, "BT_CONNECT_MAC=>$s  i=$i")
                                                         activity!!.runOnUiThread {
                                                             if (i == 1) {
-                                                                MainActivity.btContent = item.address
+                                                                MainActivity.btContent =
+                                                                    item.address
                                                                 MainActivity.connectType = "BT"
-                                                                MainActivity.connectContent = item.name + "\t" + item.address
+                                                                MainActivity.connectContent =
+                                                                    item.name + "\t" + item.address
                                                                 switchFragment(4)
+
+                                                                if (connectedBtList.isEmpty()) {
+                                                                    connectedBtList.add(item)
+                                                                    adapterBtConnect.replaceData(connectedBtList)
+                                                                } else {
+                                                                    connectedBtList.fill(item)
+                                                                    adapterBtConnect.notifyItemChanged(0, item)
+                                                                }
+
                                                             } else {
                                                                 Toast.makeText(
                                                                     context,
-                                                                    getText(R.string.connect_fail), Toast.LENGTH_LONG
+                                                                    getText(R.string.connect_fail),
+                                                                    Toast.LENGTH_LONG
                                                                 ).show()
                                                             }
                                                             LoadingDialogUtil.getInstance().hide()
@@ -486,152 +578,171 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                     }
                                 })
 
+
                         }
-
-                    }
-                    tvRvWifiConnect.setOnClickListener {
-                        if (networkDialog != null){
-                            networkDialog?.dismiss()
-                            networkDialog = null;
-                        }
-                        networkDialog = DistNetworkDialog(context).apply {
-                            setPopList(list)
-                            setMacAddress(item.address)
-                        }
-
-                        networkDialog!!.show()
-                    }
-                }
-
-            }
-            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
-                if (payloads.isNotEmpty()) {
-                    for (payload in payloads) {
-                        if (payload is BluetoothDeviceInfo) {
-                            // 局部更新逻辑
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-
-                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                            when (getSignalStrength(payload.rssiWifi)) {
-                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                        tvRvWifiConnect.setOnClickListener {
+                            if (networkDialog != null) {
+                                networkDialog?.dismiss()
+                                networkDialog = null;
+                            }
+                            networkDialog = DistNetworkDialog(context).apply {
+                                setPopList(list)
+                                setMacAddress(item.address)
                             }
 
-                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                            ivPrinterTag.setImageResource(
-                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
-                                else R.drawable.ic_printer_normal_tag
-                            )
-
-                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                            if (getPrinterStatus(payload.ioStatus)!=0){
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
-                                tvPrinter.isEnabled = false
-                            }else{
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                                tvPrinter.isEnabled = true
-                            }
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
-                            holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
-                            holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
+                            networkDialog!!.show()
                         }
-
                     }
-                } else {
-                    super.onBindViewHolder(holder, position, payloads)
+
+                }
+
+                override fun onBindViewHolder(
+                    holder: BaseViewHolder,
+                    position: Int,
+                    payloads: MutableList<Any>
+                ) {
+                    if (payloads.isNotEmpty()) {
+                        for (payload in payloads) {
+                            if (payload is BluetoothDeviceInfo) {
+                                // 局部更新逻辑
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
+
+                                val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                                when (getSignalStrength(payload.rssiWifi)) {
+                                    3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                    2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                    1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                    else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                                }
+
+                                val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                                ivPrinterTag.setImageResource(
+                                    if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                    else R.drawable.ic_printer_normal_tag
+                                )
+
+                                var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                                if (getPrinterStatus(payload.ioStatus) != 0) {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_red_corner_5)
+                                    tvPrinter.isEnabled = false
+                                } else {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_green_corner_5)
+                                    tvPrinter.isEnabled = true
+                                }
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
+                                holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+                                holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
+                                holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
+                            }
+
+                        }
+                    } else {
+                        super.onBindViewHolder(holder, position, payloads)
+                    }
                 }
             }
-        }
 
 
         //待配网 待连接
-        adapterUnWifi = object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
-            override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
-                if (item != null){
-                    holder.getView<TextView>(R.id.tvRvTitle).text = item.name
-                    holder.getView<TextView>(R.id.tvRvMac).text = item.address
-                    holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
-                    holder.getView<TextView>(R.id.tvRvIp).visibility = View.GONE
-                    holder.getView<TextView>(R.id.tvRvWifiName).visibility = View.GONE
+        adapterUnWifi =
+            object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
+                override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
+                    if (item != null) {
+                        holder.getView<TextView>(R.id.tvRvTitle).text = item.name
+                        holder.getView<TextView>(R.id.tvRvMac).text = item.address
+                        holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
+                        holder.getView<TextView>(R.id.tvRvIp).visibility = View.GONE
+                        holder.getView<TextView>(R.id.tvRvWifiName).visibility = View.GONE
 
-                    var icon = holder.getView<ImageView>(R.id.ivRvIcon)
-                    icon.setImageResource(R.drawable.ic_printer_unnormal)
+                        var icon = holder.getView<ImageView>(R.id.ivRvIcon)
+                        icon.setImageResource(R.drawable.ic_printer_unnormal)
 
-                    var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                    ivPrinterTag.setImageResource( R.drawable.ic_printer_un_connect_tag)
-                    var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                    ivWifi.visibility = View.GONE
+                        var ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                        ivPrinterTag.setImageResource(R.drawable.ic_printer_un_connect_tag)
+                        var ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                        ivWifi.visibility = View.GONE
 
-                    var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                    var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
-                    tvDisconnectPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                    tvPrinter.text = getString(R.string.connect_bt)
-                    tvDisconnectPrinter.text = getString(R.string.distribution_network)
+                        var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                        var tvDisconnectPrinter = holder.getView<TextView>(R.id.tvRvConnect)
+                        tvDisconnectPrinter.background =
+                            resources.getDrawable(R.drawable.dra_green_corner_5)
+                        tvPrinter.text = getString(R.string.connect_bt)
+                        tvDisconnectPrinter.text = getString(R.string.distribution_network)
 
-                    tvPrinter.setOnClickListener {
-                        //蓝牙连接
-                    }
-                    tvDisconnectPrinter.setOnClickListener {
-                        //WiFi配网
-                        if (networkDialog != null){
-                            networkDialog?.dismiss()
-                            networkDialog = null;
+                        tvPrinter.setOnClickListener {
+                            //蓝牙连接
                         }
-                        networkDialog = DistNetworkDialog(context).apply {
-                            setPopList(list)
-                            setMacAddress(item.address)
+                        tvDisconnectPrinter.setOnClickListener {
+                            //WiFi配网
+                            if (networkDialog != null) {
+                                networkDialog?.dismiss()
+                                networkDialog = null;
+                            }
+                            networkDialog = DistNetworkDialog(context).apply {
+                                setPopList(list)
+                                setMacAddress(item.address)
+                            }
+
+                            networkDialog!!.show()
                         }
 
-                        networkDialog!!.show()
-                    }
 
+                    }
 
                 }
 
-            }
-            override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
-                if (payloads.isNotEmpty()) {
-                    for (payload in payloads) {
-                        if (payload is BluetoothDeviceInfo) {
-                            // 局部更新逻辑
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                override fun onBindViewHolder(
+                    holder: BaseViewHolder,
+                    position: Int,
+                    payloads: MutableList<Any>
+                ) {
+                    if (payloads.isNotEmpty()) {
+                        for (payload in payloads) {
+                            if (payload is BluetoothDeviceInfo) {
+                                // 局部更新逻辑
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
 
-                            val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
-                            when (getSignalStrength(payload.rssiWifi)) {
-                                3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
-                                2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
-                                1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
-                                else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                                val ivWifi = holder.getView<ImageView>(R.id.ivRvWifi)
+                                when (getSignalStrength(payload.rssiWifi)) {
+                                    3 -> ivWifi.setImageResource(R.drawable.ic_wifi_3)
+                                    2 -> ivWifi.setImageResource(R.drawable.ic_wifi_2)
+                                    1 -> ivWifi.setImageResource(R.drawable.ic_wifi_1)
+                                    else -> ivWifi.setImageResource(R.drawable.ic_wifi_0)
+                                }
+
+                                val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
+                                ivPrinterTag.setImageResource(
+                                    if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
+                                    else R.drawable.ic_printer_normal_tag
+                                )
+
+                                var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
+                                if (getPrinterStatus(payload.ioStatus) != 0) {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_red_corner_5)
+                                    tvPrinter.isEnabled = false
+                                } else {
+                                    tvPrinter.background =
+                                        resources.getDrawable(R.drawable.dra_green_corner_5)
+                                    tvPrinter.isEnabled = true
+                                }
+                                holder.getView<TextView>(R.id.tvRvBtRssi).text =
+                                    payload.rssiBle.toString()
+                                holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+
                             }
-
-                            val ivPrinterTag = holder.getView<ImageView>(R.id.ivRvTag)
-                            ivPrinterTag.setImageResource(
-                                if (payload.printerWorkingStatus == 1) R.drawable.ic_printer_busy_tag
-                                else R.drawable.ic_printer_normal_tag
-                            )
-
-                            var tvPrinter = holder.getView<TextView>(R.id.tvRvPrint)
-                            if (getPrinterStatus(payload.ioStatus)!=0){
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_red_corner_5)
-                                tvPrinter.isEnabled = false
-                            }else{
-                                tvPrinter.background = resources.getDrawable(R.drawable.dra_green_corner_5)
-                                tvPrinter.isEnabled = true
-                            }
-                            holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
-                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
 
                         }
-
+                    } else {
+                        super.onBindViewHolder(holder, position, payloads)
                     }
-                } else {
-                    super.onBindViewHolder(holder, position, payloads)
                 }
             }
-        }
 
         binding.rvWifiConnected.adapter = adapterWifiConnect
         binding.rvNotConnect.adapter = adapterUnConnect
@@ -644,7 +755,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         adapterUnWifi.replaceData(unWifiList)
 
     }
-
 
 
     private fun initEvent() {
@@ -677,7 +787,8 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
                     @Throws(RemoteException::class)
                     override fun onReturnString(s: String) {
-                        Log.d(TAG,
+                        Log.d(
+                            TAG,
                             "initData==CURRENT_CONNECT_WIFI_IP: $s  "
                         )
                         activity?.runOnUiThread {
@@ -705,8 +816,9 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
                     @Throws(RemoteException::class)
                     override fun onReturnString(s: String) {
-                        Log.d(TAG,
-                            "initData==CURRENT_CONNECT_WIFI_IP: $s  "
+                        Log.d(
+                            TAG,
+                            "initData==BT_CURRENT_CONNECT_MAC: $s  "
                         )
                         activity?.runOnUiThread {
                             if (!Utils.isEmpty(s)) {
@@ -730,29 +842,32 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
     }
 
-     fun startBleScan() {
-        BluetoothScanner.startLeScanWithCoroutines(this,this)
+    fun startBleScan() {
+        BluetoothScanner.startLeScanWithCoroutines(this, this)
     }
 
     private fun disConnectWifi() {
         PrinterHelper.getInstance()
-            .setPrinterAction(WifiKeyName.WIFI_DISCONNECT, MainActivity.ipConnect, object : INeoPrinterCallback() {
-                @Throws(RemoteException::class)
-                override fun onRunResult(b: Boolean) {
-                }
+            .setPrinterAction(
+                WifiKeyName.WIFI_DISCONNECT,
+                MainActivity.ipConnect,
+                object : INeoPrinterCallback() {
+                    @Throws(RemoteException::class)
+                    override fun onRunResult(b: Boolean) {
+                    }
 
-                @Throws(RemoteException::class)
-                override fun onReturnString(s: String) {
-                }
+                    @Throws(RemoteException::class)
+                    override fun onReturnString(s: String) {
+                    }
 
-                @Throws(RemoteException::class)
-                override fun onRaiseException(i: Int, s: String) {
-                }
+                    @Throws(RemoteException::class)
+                    override fun onRaiseException(i: Int, s: String) {
+                    }
 
-                @Throws(RemoteException::class)
-                override fun onPrintResult(i: Int, s: String) {
-                    Log.d(TAG, "DISCONNECT_WIFI==:  $s")
-                    activity!!.runOnUiThread {
+                    @Throws(RemoteException::class)
+                    override fun onPrintResult(i: Int, s: String) {
+                        Log.d(TAG, "DISCONNECT_WIFI==:  $s")
+                        activity!!.runOnUiThread {
 //                        binding.wifiStatusTv.text =
 //                            String.format(
 //                                getString(R.string.status_wifi),
@@ -761,34 +876,45 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 //                            )
 //                        binding.wifiIPTv.text =
 //                            String.format(getString(R.string.status_ip), "-------")
-                        MainActivity.ipConnect = ""
+                            MainActivity.ipConnect = ""
+                        }
                     }
-                }
-            })
+                })
     }
+
     private fun disConnectBt() {
         PrinterHelper.getInstance()
-            .setPrinterAction(WifiKeyName.BT_DISCONNECT, MainActivity.btContent, object : INeoPrinterCallback() {
-                @Throws(RemoteException::class)
-                override fun onRunResult(b: Boolean) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onReturnString(s: String) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onRaiseException(i: Int, s: String) {
-                }
-
-                @Throws(RemoteException::class)
-                override fun onPrintResult(i: Int, s: String) {
-                    Log.d(TAG, "bt disconnect==:  $s   ,i=  $i")
-                    activity!!.runOnUiThread {
-                        MainActivity.btContent = ""
+            .setPrinterAction(
+                WifiKeyName.BT_DISCONNECT,
+                MainActivity.btContent,
+                object : INeoPrinterCallback() {
+                    @Throws(RemoteException::class)
+                    override fun onRunResult(b: Boolean) {
                     }
-                }
-            })
+
+                    @Throws(RemoteException::class)
+                    override fun onReturnString(s: String) {
+                        Log.d(TAG, "bt disconnect==:  $s  ")
+                    }
+
+                    @Throws(RemoteException::class)
+                    override fun onRaiseException(i: Int, s: String) {
+                    }
+
+                    @Throws(RemoteException::class)
+                    override fun onPrintResult(i: Int, s: String) {
+                        Log.d(TAG, "bt disconnect==:  $s   ,i=  $i")
+                        activity!!.runOnUiThread {
+                            // 查找第一个匹配设备地址的索引
+                            val targetIndex = connectedBtList.indexOfFirst { it.address == MainActivity.btContent }  //:ml-citation{ref="7" data="citationList"}
+                            if (targetIndex != -1) {
+                                adapterBtConnect.removeAt(targetIndex)  // 精准移除特定设备条目:ml-citation{ref="7,8" data="citationList"}
+                                connectedBtList.removeAt(targetIndex)
+                            }
+                            MainActivity.btContent = ""
+                        }
+                    }
+                })
     }
 
     public fun updateUi() {
@@ -863,55 +989,57 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     }
 
     override fun onManufacturerDataParsed(deviceInfo: BluetoothDeviceInfo) {
-        if (deviceInfo != null){
-            when (deviceInfo.wifiConnectStatus){
-                1->{//已经配网
-                    if (unConnectList.isNotEmpty() && unConnectList.size>0){
+        if (deviceInfo != null) {
+            when (deviceInfo.wifiConnectStatus) {
+                1 -> {//已经配网
+                    if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
                         // 查找匹配的设备索引
                         val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
 
                         if (index != -1) {
                             // 替换旧设备信息为新设备信息
                             unConnectList[index] = deviceInfo
-                            adapterUnConnect.notifyItemChanged(index,deviceInfo)
+                            adapterUnConnect.notifyItemChanged(index, deviceInfo)
                         } else {
                             println("No matching device found")
                             unConnectList.add(deviceInfo)
                             adapterUnConnect.addData(deviceInfo)
                         }
-                    }else{
+                    } else {
+
                         unConnectList.add(deviceInfo)
                         adapterUnConnect.addData(deviceInfo)
                     }
 //                    adapterUnConnect.notifyDataSetChanged()
 
-                    if (unWifiList.isNotEmpty() && unWifiList.size>0){
+                    if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
                         val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
                         if (index != -1) {
                             unWifiList.removeAt(index)
                             //adapterUnWifi.notifyDataSetChanged()
                             adapterUnWifi.remove(index)
                         }
-                       // adapterUnWifi.replaceData(unWifiList)
+                        // adapterUnWifi.replaceData(unWifiList)
                     }
 
 
                 }
-                0->{//没有配网
-                    if (unWifiList.isNotEmpty() && unWifiList.size>0){
+
+                0 -> {//没有配网
+                    if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
                         // 查找匹配的设备索引
                         val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
 
                         if (index != -1) {
                             // 替换旧设备信息为新设备信息
                             unWifiList[index] = deviceInfo
-                            adapterUnWifi.notifyItemChanged(index,deviceInfo)
+                            adapterUnWifi.notifyItemChanged(index, deviceInfo)
                         } else {
                             println("No matching device found")
                             unWifiList.add(deviceInfo)
                             adapterUnWifi.addData(deviceInfo)
                         }
-                    }else{
+                    } else {
                         unWifiList.add(deviceInfo)
                         adapterUnWifi.addData(deviceInfo)
                     }
@@ -921,8 +1049,19 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                 }
             }
 
+            if (MainActivity.btContent == deviceInfo.address) {
+                if (connectedBtList.isEmpty()) {
+                    connectedBtList.add(deviceInfo)
+                    adapterBtConnect.replaceData(connectedBtList)
+                } else {
+                    connectedBtList.fill(deviceInfo)
+                    adapterBtConnect.notifyItemChanged(0, deviceInfo)
+                }
+
+            }
+
+
             adapterWifiConnect.replaceData(connectedWifiList)
-            adapterBtConnect.replaceData(connectedBtList)
 
 
         }
