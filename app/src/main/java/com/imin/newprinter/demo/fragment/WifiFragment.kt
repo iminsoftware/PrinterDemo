@@ -8,21 +8,16 @@ package com.imin.newprinter.demo.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.os.Bundle
 import android.os.RemoteException
 import android.os.SystemClock
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
-import android.widget.ListView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -32,26 +27,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.feature.tui.util.ToastUtil
 import com.imin.newprinter.demo.MainActivity
 import com.imin.newprinter.demo.R
-import com.imin.newprinter.demo.adapter.ListAdapter
 import com.imin.newprinter.demo.bean.BluetoothDeviceInfo
 import com.imin.newprinter.demo.callback.SwitchFragmentListener
 import com.imin.newprinter.demo.databinding.FragmentWifiBinding
-import com.imin.newprinter.demo.databinding.FragmentWifiConnectBinding
 import com.imin.newprinter.demo.dialog.DistNetworkDialog
 import com.imin.newprinter.demo.utils.BluetoothScanner
 import com.imin.newprinter.demo.utils.ExecutorServiceManager
 import com.imin.newprinter.demo.utils.LoadingDialogUtil
-import com.imin.newprinter.demo.utils.NetworkValidator
 import com.imin.newprinter.demo.utils.Utils
 import com.imin.newprinter.demo.utils.WifiKeyName
 import com.imin.newprinter.demo.utils.WifiScannerSingleton
 import com.imin.newprinter.demo.view.DividerItemDecoration
-import com.imin.newprinter.demo.view.OnSingleClickListener
 import com.imin.printer.INeoPrinterCallback
 import com.imin.printer.PrinterHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     BluetoothScanner.BluetoothScanCallback {
@@ -101,6 +94,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ${isVisible}")
+
     }
 
     private fun startWifiScan() {
@@ -132,8 +126,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         //WiFi已连接
         adapterWifiConnect = object : BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>(R.layout.item_wifi_rv) {
             override fun convert(holder: BaseViewHolder, item: BluetoothDeviceInfo) {
-//                WiFi Status= 1, Printer Status= 0, IO Status= 1, IP Address= 192.171.1.6, rssiWifi= 56,
-//                WiFi Name= iMer, rssiBle= -78 , device.name80mm Printer-LE ,device.address DD:0D:30:70:05:D9
                 if (item != null) {
                     holder.getView<TextView>(R.id.tvRvTitle).text = item.name
                     holder.getView<TextView>(R.id.tvRvMac).text = item.address
@@ -207,6 +199,10 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                 tvPrinter.isEnabled = true
                             }
                             holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+
+                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+                            holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
+                            holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
                         }
 
                     }
@@ -315,6 +311,9 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                 tvPrinter.isEnabled = true
                             }
                             holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+                            holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
+                            holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
                         }
 
                     }
@@ -424,68 +423,70 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     }
                     tvDisconnectPrinter.setOnClickListener {
                         //连接蓝牙 打印
+                        BluetoothScanner.stopLeScanCompletely()
                         disConnectBt()
 
-                        PrinterHelper.getInstance().setPrinterAction(
-                            WifiKeyName.WIRELESS_CONNECT_TYPE,
-                            "BT",
-                            object : INeoPrinterCallback() {
-                                @Throws(RemoteException::class)
-                                override fun onRunResult(b: Boolean) {
-                                }
-
-                                @Throws(RemoteException::class)
-                                override fun onReturnString(s: String) {
-                                }
-
-                                @Throws(RemoteException::class)
-                                override fun onRaiseException(i: Int, s: String) {
-                                }
-
-                                @Throws(RemoteException::class)
-                                override fun onPrintResult(i: Int, s: String) {
-                                    Log.d(TAG, "WIRELESS_CONNECT_TYPE  BT =>$s  i=$i")
-                                    if (i == 1){
-                                        PrinterHelper.getInstance().setPrinterAction(
-                                            WifiKeyName.BT_CONNECT_MAC,
-                                            item.address,
-                                            object : INeoPrinterCallback() {
-                                                @Throws(RemoteException::class)
-                                                override fun onRunResult(b: Boolean) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onReturnString(s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onRaiseException(i: Int, s: String) {
-                                                }
-
-                                                @Throws(RemoteException::class)
-                                                override fun onPrintResult(i: Int, s: String) {
-                                                    Log.d(TAG, "BT_CONNECT_MAC=>$s  i=$i")
-                                                    activity!!.runOnUiThread {
-                                                        if (i == 1) {
-                                                            MainActivity.btContent = item.address
-                                                            MainActivity.connectType = "BT"
-                                                            MainActivity.connectContent = item.name + "\t" + item.address
-                                                            switchFragment(4)
-                                                        } else {
-                                                            Toast.makeText(
-                                                                context,
-                                                                getText(R.string.connect_fail), Toast.LENGTH_LONG
-                                                            ).show()
-                                                        }
-                                                        LoadingDialogUtil.getInstance().hide()
-                                                    }
-                                                }
-                                            })
+                        CoroutineScope(Dispatchers.IO).launch {
+                            PrinterHelper.getInstance().setPrinterAction(
+                                WifiKeyName.WIRELESS_CONNECT_TYPE,
+                                "BT",
+                                object : INeoPrinterCallback() {
+                                    @Throws(RemoteException::class)
+                                    override fun onRunResult(b: Boolean) {
                                     }
-                                }
-                            })
 
+                                    @Throws(RemoteException::class)
+                                    override fun onReturnString(s: String) {
+                                    }
 
+                                    @Throws(RemoteException::class)
+                                    override fun onRaiseException(i: Int, s: String) {
+                                    }
+
+                                    @Throws(RemoteException::class)
+                                    override fun onPrintResult(i: Int, s: String) {
+                                        Log.d(TAG, "WIRELESS_CONNECT_TYPE  BT =>$s  i=$i")
+                                        if (i == 1){
+                                            PrinterHelper.getInstance().setPrinterAction(
+                                                WifiKeyName.BT_CONNECT_MAC,
+                                                item.address,
+                                                object : INeoPrinterCallback() {
+                                                    @Throws(RemoteException::class)
+                                                    override fun onRunResult(b: Boolean) {
+                                                    }
+
+                                                    @Throws(RemoteException::class)
+                                                    override fun onReturnString(s: String) {
+                                                    }
+
+                                                    @Throws(RemoteException::class)
+                                                    override fun onRaiseException(i: Int, s: String) {
+                                                    }
+
+                                                    @Throws(RemoteException::class)
+                                                    override fun onPrintResult(i: Int, s: String) {
+                                                        Log.d(TAG, "BT_CONNECT_MAC=>$s  i=$i")
+                                                        activity!!.runOnUiThread {
+                                                            if (i == 1) {
+                                                                MainActivity.btContent = item.address
+                                                                MainActivity.connectType = "BT"
+                                                                MainActivity.connectContent = item.name + "\t" + item.address
+                                                                switchFragment(4)
+                                                            } else {
+                                                                Toast.makeText(
+                                                                    context,
+                                                                    getText(R.string.connect_fail), Toast.LENGTH_LONG
+                                                                ).show()
+                                                            }
+                                                            LoadingDialogUtil.getInstance().hide()
+                                                        }
+                                                    }
+                                                })
+                                        }
+                                    }
+                                })
+
+                        }
 
                     }
                     tvRvWifiConnect.setOnClickListener {
@@ -493,9 +494,10 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                             networkDialog?.dismiss()
                             networkDialog = null;
                         }
-                        networkDialog = DistNetworkDialog(context)
-                        networkDialog?.setPopList(list)
-                        networkDialog?.setMacAddress(item.address)
+                        networkDialog = DistNetworkDialog(context).apply {
+                            setPopList(list)
+                            setMacAddress(item.address)
+                        }
 
                         networkDialog!!.show()
                     }
@@ -532,6 +534,9 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                 tvPrinter.isEnabled = true
                             }
                             holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+                            holder.getView<TextView>(R.id.tvRvIp).text = payload.ipAddress
+                            holder.getView<TextView>(R.id.tvRvWifiName).text = payload.wifiName
                         }
 
                     }
@@ -549,7 +554,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     holder.getView<TextView>(R.id.tvRvTitle).text = item.name
                     holder.getView<TextView>(R.id.tvRvMac).text = item.address
                     holder.getView<TextView>(R.id.tvRvBtRssi).text = item.rssiBle.toString()
-                    holder.getView<TextView>(R.id.tvRvIp).visibility = View.GONE
                     holder.getView<TextView>(R.id.tvRvIp).visibility = View.GONE
                     holder.getView<TextView>(R.id.tvRvWifiName).visibility = View.GONE
 
@@ -576,9 +580,10 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                             networkDialog?.dismiss()
                             networkDialog = null;
                         }
-                        networkDialog = DistNetworkDialog(context)
-                        networkDialog?.setPopList(list)
-                        networkDialog?.setMacAddress(item.address)
+                        networkDialog = DistNetworkDialog(context).apply {
+                            setPopList(list)
+                            setMacAddress(item.address)
+                        }
 
                         networkDialog!!.show()
                     }
@@ -617,6 +622,8 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                 tvPrinter.isEnabled = true
                             }
                             holder.getView<TextView>(R.id.tvRvBtRssi).text = payload.rssiBle.toString()
+                            holder.getView<TextView>(R.id.tvRvTitle).text = payload.name
+
                         }
 
                     }

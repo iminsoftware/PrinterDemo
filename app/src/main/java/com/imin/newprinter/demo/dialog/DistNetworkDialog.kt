@@ -205,7 +205,7 @@ class DistNetworkDialog @JvmOverloads constructor(
             override fun onSingleClick(v: View?) {
 
                 LoadingDialogUtil.getInstance()
-                    .show(context, context.getString(R.string.toast_tips3))
+                    .show(context, "")
 
                 PrinterHelper.getInstance().setPrinterAction(
                     WifiKeyName.WIRELESS_CONNECT_TYPE,
@@ -226,7 +226,6 @@ class DistNetworkDialog @JvmOverloads constructor(
                         @Throws(RemoteException::class)
                         override fun onPrintResult(i: Int, s: String) {
                             Log.d(TAG, "WIRELESS_CONNECT_TYPE=>$s  i=$i")
-
                             if (i == 1){
                                 PrinterHelper.getInstance().setPrinterAction(WifiKeyName.BT_CONNECT_MAC
                                     , macAddress
@@ -320,9 +319,14 @@ class DistNetworkDialog @JvmOverloads constructor(
             return
         }
 
-        val paramsList = mutableListOf(connectType,
-            if (binding?.switchStaticDialog!!.isChecked) "DHCP" else "STATIC"
-            ,ssid, pwd,macAddress,ip,gw,mask,dns)
+        val paramsList = mutableListOf<String>().apply {
+            add(connectType)
+            add(if (binding?.switchStaticDialog!!.isChecked) "DHCP" else "STATIC")
+            add(ssid)
+            add(pwd)
+            if (connectType == "BT") add(macAddress)  // 仅 BT 类型添加 MAC 地址:ml-citation{ref="6" data="citationList"}
+            addAll(listOf(ip, gw, mask, dns))         // 公共参数统一添加:ml-citation{ref="5" data="citationList"}
+        }
 
         PrinterHelper.getInstance().setPrinterAction(
             WifiKeyName.WIFI_SETUP_NET_ALL,
@@ -363,10 +367,11 @@ class DistNetworkDialog @JvmOverloads constructor(
     fun connectToWifi(connectType: String ,ssid: String, pwd: String) {
 
         val paramsList = mutableListOf(connectType
+            ,if (binding?.switchStaticDialog!!.isChecked) "DHCP" else "STATIC"
             ,ssid, pwd,macAddress)
 
         PrinterHelper.getInstance().setPrinterAction(
-            WifiKeyName.WIFI_SETUP_NET,
+            WifiKeyName.WIFI_SETUP_NET_ALL,
             paramsList,
             object : INeoPrinterCallback() {
                 @Throws(RemoteException::class)
@@ -459,6 +464,7 @@ class DistNetworkDialog @JvmOverloads constructor(
                                                         context,
                                                         R.string.connect_wifi_tips2
                                                     )
+                                                    dismiss()
                                                 } else {
                                                     //IP获取失败
                                                     ToastUtil.showShort(

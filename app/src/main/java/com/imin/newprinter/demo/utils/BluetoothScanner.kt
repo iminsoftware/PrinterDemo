@@ -19,8 +19,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
+import android.os.ParcelUuid
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -154,6 +153,7 @@ object BluetoothScanner {
     private fun startBleScan() {
         Log.d(TAG, "Attempting to start BLE scan, isScanning=$isScanning")
         // 取消之前的扫描任务
+//        scanPeriod = 5000
         scanJob?.cancel()
         scanJob = null
         scanJob = coroutineScope.launch {
@@ -262,6 +262,7 @@ object BluetoothScanner {
         coroutineScope.coroutineContext.cancelChildren()
         discoveredDevices.clear()
         callback = null
+      //  scanPeriod = 0
         Log.d(TAG, "Completely stopped and resources cleaned")
     }
 
@@ -378,7 +379,7 @@ object BluetoothScanner {
                                         ", rssiBle= $rssiBle , device.name=${device.name} ,device.address= ${device.address} ")
             val deviceInfo = BluetoothDeviceInfo(
                 name = device.name ?: "Unknown",
-                address = device.address,
+                address = "DC" + device.address.substring(2) ,
                 rssiBle = rssiBle,
                 rssiWifi = rssiWifi,
                 wifiConnectStatus = wifiStatus,
