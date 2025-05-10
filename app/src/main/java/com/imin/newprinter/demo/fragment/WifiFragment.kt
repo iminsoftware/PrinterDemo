@@ -887,44 +887,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         serviceHelper.startDiscovery("_http._tcp.local.", "_printer._tcp.local.")
     }
 
-    private fun discoverMdnsServices() {
-        try {
-            // 获取设备的所有网络接口
-            val networkInterfaces = NetworkInterface.getNetworkInterfaces().asSequence().toList()
-
-            for (networkInterface in networkInterfaces) {
-                for (inetAddress in networkInterface.inetAddresses) {
-                    if (!inetAddress.isLoopbackAddress && inetAddress is InetAddress) {
-                        JmDNS.create(inetAddress).use { jmdns ->
-                            // 添加服务监听器
-                            jmdns.addServiceListener("_http._tcp.local.", object : ServiceListener {
-                                override fun serviceAdded(event: ServiceEvent) {
-                                    Log.d(TAG, "Service added: ${event.info}")
-                                }
-
-                                override fun serviceRemoved(event: ServiceEvent) {
-                                    Log.d(TAG, "Service removed: ${event.info}")
-                                }
-
-                                override fun serviceResolved(event: ServiceEvent) {
-                                    Log.d(TAG, "Service resolved: ${event.info}")
-                                    val serviceInfo: ServiceInfo = event.info
-                                    Log.d(TAG, "Service info: $serviceInfo")
-                                }
-                            })
-
-                            // 保持监听一段时间，比如10秒钟
-                            Thread.sleep(10000)
-                        }
-                    }
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-    }
 
     fun startBleScan() {
         BluetoothScanner.startLeScanWithCoroutines(this, this)
@@ -1079,35 +1041,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
             when (deviceInfo.wifiConnectStatus) {
                 1 -> {//已经配网
 
-                    if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
-                        // 查找匹配的设备索引
-                        val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
-
-                        if (index != -1) {
-                            // 替换旧设备信息为新设备信息
-                            unConnectList[index] = deviceInfo
-                            adapterUnConnect.notifyItemChanged(index, deviceInfo)
-                        } else {
-                            println("No matching device found")
-                            unConnectList.add(deviceInfo)
-                            adapterUnConnect.addData(deviceInfo)
-                        }
-                    } else {
-
-                        unConnectList.add(deviceInfo)
-                        adapterUnConnect.addData(deviceInfo)
-                    }
-//                    adapterUnConnect.notifyDataSetChanged()
-
-                    if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
-                        val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
-                        if (index != -1) {
-                            unWifiList.removeAt(index)
-                            //adapterUnWifi.notifyDataSetChanged()
-                            adapterUnWifi.remove(index)
-                        }
-                    }
-
                     ipConnectList = PrinterHelper.getInstance().getPrinterInfoList(WifiKeyName.WIFI_ALL_CONNECT_IP)
 
                     if (ipConnectList != null && ipConnectList!!.isNotEmpty()){
@@ -1139,6 +1072,62 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                                 // 替换现有设备信息
                                 connectedWifiList.removeAt(targetIndex)
                                 adapterWifiConnect.remove(targetIndex)
+                            }
+
+                            if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
+                                // 查找匹配的设备索引
+                                val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
+
+                                if (index != -1) {
+                                    // 替换旧设备信息为新设备信息
+                                    unConnectList[index] = deviceInfo
+                                    adapterUnConnect.notifyItemChanged(index, deviceInfo)
+                                } else {
+                                    println("No matching device found")
+                                    unConnectList.add(deviceInfo)
+                                    adapterUnConnect.addData(deviceInfo)
+                                }
+                            } else {
+
+                                unConnectList.add(deviceInfo)
+                                adapterUnConnect.addData(deviceInfo)
+                            }
+
+                            if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
+                                val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
+                                if (index != -1) {
+                                    unWifiList.removeAt(index)
+                                    //adapterUnWifi.notifyDataSetChanged()
+                                    adapterUnWifi.remove(index)
+                                }
+                            }
+                        }
+                    }else{
+                        if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
+                            // 查找匹配的设备索引
+                            val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
+
+                            if (index != -1) {
+                                // 替换旧设备信息为新设备信息
+                                unConnectList[index] = deviceInfo
+                                adapterUnConnect.notifyItemChanged(index, deviceInfo)
+                            } else {
+                                println("No matching device found")
+                                unConnectList.add(deviceInfo)
+                                adapterUnConnect.addData(deviceInfo)
+                            }
+                        } else {
+
+                            unConnectList.add(deviceInfo)
+                            adapterUnConnect.addData(deviceInfo)
+                        }
+
+                        if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
+                            val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
+                            if (index != -1) {
+                                unWifiList.removeAt(index)
+                                //adapterUnWifi.notifyDataSetChanged()
+                                adapterUnWifi.remove(index)
                             }
                         }
                     }

@@ -378,7 +378,7 @@ object BluetoothScanner {
                                         "Printer Status= $printerStatus, IO Status= $ioBits, IP Address= $ipAddress, rssiWifi= $rssiWifi, WiFi Name= $wifiName" +
                                         ", rssiBle= $rssiBle , device.name=${device.name} ,device.address= ${device.address} ")
             val deviceInfo = BluetoothDeviceInfo(
-                name = device.name ?: "Unknown",
+                name = device.name?.replace(" LE", "")?: "Unknown",
                 address = "DC" + device.address.substring(2) ,
                 rssiBle = rssiBle,
                 rssiWifi = rssiWifi,
