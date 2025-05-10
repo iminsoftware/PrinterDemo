@@ -33,8 +33,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_9
+        targetCompatibility JavaVersion.VERSION_1_9
     }
 
     dataBinding {
@@ -76,7 +76,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.4.2'
     implementation  'io.github.scwang90:refresh-layout-kernel:3.0.0-alpha'      //核心必须依赖
     implementation  'io.github.scwang90:refresh-header-material:3.0.0-alpha'    //谷歌刷新头
-
+    implementation 'org.jmdns:jmdns:3.5.8'// mDNS
+    implementation 'commons-net:commons-net:3.9.0'
 //    implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.15'
 
 }

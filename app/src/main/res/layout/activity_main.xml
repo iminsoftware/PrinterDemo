@@ -376,7 +376,7 @@
                         android:textSize="16dp"
                         android:layout_marginLeft="10dp"
                         android:textColor="@color/color_1D1D1F"
-                        android:text="WIFI"/>
+                        android:text="Wireless"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -6,7 +6,7 @@
   <path
       android:pathData="M32,0L32,0A32,32 0,0 1,64 32L64,32A32,32 0,0 1,32 64L32,64A32,32 0,0 1,0 32L0,32A32,32 0,0 1,32 0z"
       android:strokeWidth="1"
-      android:fillColor="#45CB7F"
+      android:fillColor="#CC45CB7F"
       android:fillType="evenOdd"
       android:strokeColor="#00000000"/>
   <path
@@ -34,7 +34,7 @@
   <path
       android:pathData="M24,28.444C23.509,28.444 23.111,28.842 23.111,29.333C23.111,29.824 23.509,30.222 24,30.222L27.556,30.222C28.046,30.222 28.444,29.824 28.444,29.333C28.444,28.842 28.046,28.444 27.556,28.444L24,28.444L24,28.444Z"
       android:strokeWidth="1"
-      android:fillColor="#45CB7F"
+      android:fillColor="#FFFFFF"
       android:fillType="nonZero"
       android:strokeColor="#00000000"/>
 </vector>

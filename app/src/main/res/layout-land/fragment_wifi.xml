@@ -21,53 +21,52 @@
         app:title="@string/print_test" />
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/wifiStatusTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:text="@string/status_wifi"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/wifiIPTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/wifiStatusTv"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/status_ip"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wifiStatusTv" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/wifiStatusTv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15dp"
-                    android:text="@string/status_wifi"
-                    android:textColor="@color/color_1D1D1F"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/wifiIPTv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/wifiStatusTv"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/status_ip"
-                    android:textColor="@color/color_1D1D1F"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/wifiStatusTv" />
-
-
-            </RelativeLayout>
+    </RelativeLayout>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srlBtRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
-        android:layout_marginHorizontal="15dp"
-        android:background="@drawable/btn_white_shape">
+        android:background="@drawable/btn_white_shape"
+        android:visibility="visible">
 
         <com.scwang.smart.refresh.header.MaterialHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -79,99 +78,102 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_white_shape"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tvConnectWifiTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/dra_title_bg_corner_5"
                     android:gravity="center|left"
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="10dp"
-                    android:textSize="14sp"
                     android:text="@string/wifi_connected"
-                    android:background="@drawable/dra_title_bg_corner_5"
-                    android:textColor="@color/color_1D1D1F" />
+                    android:textColor="@color/color_1D1D1F"
+                    android:textSize="14sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvWifiConnected"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="15dp"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:listSelector="@drawable/btn_white_selector"
                     android:nestedScrollingEnabled="false"
-                    android:listSelector="@drawable/btn_white_selector" />
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <TextView
                     android:id="@+id/tvConnectBtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/dra_title_bg_corner_5"
                     android:gravity="center|left"
                     android:paddingHorizontal="15dp"
-                    android:background="@drawable/dra_title_bg_corner_5"
                     android:paddingVertical="10dp"
-                    android:textSize="14sp"
                     android:text="@string/bt_connected"
-                    android:textColor="@color/color_1D1D1F" />
+                    android:textColor="@color/color_1D1D1F"
+                    android:textSize="14sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvBtConnected"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="15dp"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:listSelector="@drawable/btn_white_selector"
                     android:nestedScrollingEnabled="false"
-                    android:listSelector="@drawable/btn_white_selector" />
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <TextView
                     android:id="@+id/tvNoConnectTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/dra_title_bg_corner_5"
                     android:gravity="center|left"
                     android:paddingHorizontal="15dp"
-                    android:background="@drawable/dra_title_bg_corner_5"
                     android:paddingVertical="10dp"
-                    android:textSize="14sp"
                     android:text="@string/un_connected"
-                    android:textColor="@color/color_1D1D1F" />
+                    android:textColor="@color/color_1D1D1F"
+                    android:textSize="14sp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvNotConnect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:listSelector="@drawable/btn_white_selector"
                     android:nestedScrollingEnabled="false"
-                    android:listSelector="@drawable/btn_white_selector" />
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/dra_title_bg_corner_5"
                     android:gravity="center|left"
                     android:paddingHorizontal="15dp"
-                    android:background="@drawable/dra_title_bg_corner_5"
                     android:paddingVertical="10dp"
-                    android:textSize="14sp"
                     android:text="@string/wait_connect"
-                    android:textColor="@color/color_1D1D1F" />
+                    android:textColor="@color/color_1D1D1F"
+                    android:textSize="14sp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvWaitConnect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:listSelector="@drawable/btn_white_selector"
                     android:nestedScrollingEnabled="false"
-                    android:listSelector="@drawable/btn_white_selector" />
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 
+    <!--        </LinearLayout>-->
 
-<!--        </LinearLayout>-->
-
-<!--    </androidx.core.widget.NestedScrollView>-->
+    <!--    </androidx.core.widget.NestedScrollView>-->
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

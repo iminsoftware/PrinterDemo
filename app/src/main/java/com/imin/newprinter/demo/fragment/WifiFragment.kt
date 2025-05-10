@@ -8,11 +8,8 @@ package com.imin.newprinter.demo.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.os.Bundle
 import android.os.RemoteException
-import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,15 +33,24 @@ import com.imin.newprinter.demo.dialog.DistNetworkDialog
 import com.imin.newprinter.demo.utils.BluetoothScanner
 import com.imin.newprinter.demo.utils.ExecutorServiceManager
 import com.imin.newprinter.demo.utils.LoadingDialogUtil
+import com.imin.newprinter.demo.utils.MdnsDiscovery
+import com.imin.newprinter.demo.utils.NetworkServiceHelper
 import com.imin.newprinter.demo.utils.Utils
 import com.imin.newprinter.demo.utils.WifiKeyName
 import com.imin.newprinter.demo.utils.WifiScannerSingleton
 import com.imin.newprinter.demo.view.DividerItemDecoration
 import com.imin.printer.INeoPrinterCallback
 import com.imin.printer.PrinterHelper
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.InetAddress
+import java.net.NetworkInterface
+import javax.jmdns.JmDNS
+import javax.jmdns.ServiceEvent
+import javax.jmdns.ServiceInfo
+import javax.jmdns.ServiceListener
 
 class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     BluetoothScanner.BluetoothScanCallback {
@@ -62,11 +68,13 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     private lateinit var adapterBtConnect: BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>//已连接
     private lateinit var adapterUnConnect: BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>//未连接
     private lateinit var adapterUnWifi: BaseQuickAdapter<BluetoothDeviceInfo, BaseViewHolder>//没有配网
-    private val connectedWifiList = java.util.ArrayList<BluetoothDeviceInfo>()
-    private val connectedBtList = java.util.ArrayList<BluetoothDeviceInfo>()
-    private val unConnectList = java.util.ArrayList<BluetoothDeviceInfo>()
-    private val unWifiList = java.util.ArrayList<BluetoothDeviceInfo>()
+    private var connectedWifiList = java.util.ArrayList<BluetoothDeviceInfo>()
+    private var connectedBtList = java.util.ArrayList<BluetoothDeviceInfo>()
+    private var unConnectList = java.util.ArrayList<BluetoothDeviceInfo>()
+    private var unWifiList = java.util.ArrayList<BluetoothDeviceInfo>()
+    private var ipConnectList: List<String>? =null
     var networkDialog: DistNetworkDialog? = null
+    private lateinit var serviceHelper: NetworkServiceHelper
 
 
     override fun onCreateView(
@@ -104,6 +112,11 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
+
+        // 设置发现回调（必须在主线程）
+        serviceHelper = context?.let { NetworkServiceHelper(it) }!!
+
+
 
         binding.rvWifiConnected.layoutManager = LinearLayoutManager(context)
         binding.rvBtConnected.layoutManager = LinearLayoutManager(context)
@@ -165,6 +178,9 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                             tvPrinter.background =
                                 resources.getDrawable(R.drawable.dra_green_corner_5)
                             tvPrinter.isEnabled = true
+                        }
+                        tvPrinter.setOnClickListener {
+
                         }
                         tvDisconnectPrinter.setOnClickListener {
 
@@ -432,7 +448,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
                         tvPrinter.setOnClickListener {
                             //连接WiFi 打印
-                            disConnectWifi()
+                           // disConnectWifi()
 
                             PrinterHelper.getInstance().setPrinterAction(
                                 WifiKeyName.WIRELESS_CONNECT_TYPE,
@@ -756,7 +772,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
     }
 
-
     private fun initEvent() {
 
     }
@@ -769,6 +784,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                 startWifiScan()
                 Log.e(TAG, "startLeScanWithCoroutines 开始}")
                 startBleScan()
+                startDnsScan()
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error starting wifi scan: ${e.message}")
@@ -778,34 +794,40 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         if (MainActivity.ipConnect.isEmpty() || MainActivity.btContent.isEmpty()) {
 
             //判断SDK 是否有连接
-            PrinterHelper.getInstance().getPrinterInfo(
-                WifiKeyName.WIFI_CURRENT_CONNECT_IP,
-                object : INeoPrinterCallback() {
-                    @Throws(RemoteException::class)
-                    override fun onRunResult(b: Boolean) {
-                    }
 
-                    @Throws(RemoteException::class)
-                    override fun onReturnString(s: String) {
-                        Log.d(
-                            TAG,
-                            "initData==CURRENT_CONNECT_WIFI_IP: $s  "
-                        )
-                        activity?.runOnUiThread {
-                            if (!Utils.isEmpty(s)) {
-                                MainActivity.ipConnect = s
-                            }
-                        }
-                    }
-
-                    @Throws(RemoteException::class)
-                    override fun onRaiseException(i: Int, s: String) {
-                    }
-
-                    @Throws(RemoteException::class)
-                    override fun onPrintResult(i: Int, s: String) {
-                    }
-                })
+            ipConnectList = PrinterHelper.getInstance().getPrinterInfoList(WifiKeyName.WIFI_ALL_CONNECT_IP)
+            Log.d(
+                TAG,
+                "initData==ipConnectList: ${ipConnectList?.size}  "
+            )
+//            PrinterHelper.getInstance().getPrinterInfo(
+//                WifiKeyName.WIFI_ALL_CONNECT_IP,
+//                object : INeoPrinterCallback() {
+//                    @Throws(RemoteException::class)
+//                    override fun onRunResult(b: Boolean) {
+//                    }
+//
+//                    @Throws(RemoteException::class)
+//                    override fun onReturnString(s: String) {
+//                        Log.d(
+//                            TAG,
+//                            "initData==CURRENT_CONNECT_WIFI_IP: $s  "
+//                        )
+//                        activity?.runOnUiThread {
+//                            if (!Utils.isEmpty(s)) {
+//                                MainActivity.ipConnect = s
+//                            }
+//                        }
+//                    }
+//
+//                    @Throws(RemoteException::class)
+//                    override fun onRaiseException(i: Int, s: String) {
+//                    }
+//
+//                    @Throws(RemoteException::class)
+//                    override fun onPrintResult(i: Int, s: String) {
+//                    }
+//                })
 
             PrinterHelper.getInstance().getPrinterInfo(
                 WifiKeyName.BT_CURRENT_CONNECT_MAC,
@@ -840,6 +862,68 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
             updateUi()
         }
 
+    }
+
+    private suspend fun startDnsScan() {
+//        MdnsDiscovery.startDiscovery("_ipp._tcp.")
+//        MdnsDiscovery.discoveryEvents.collect { event ->
+//            when (event) {
+//                is MdnsDiscovery.DiscoveryEvent.ServiceFound -> {
+//                    val device = event.device
+//                    Log.d(TAG,
+//                        "发现设备：名称：${device.serviceName}  " +
+//                                "IP：${device.hostAddress} 端口：${device.port} " +
+//                                "类型：${device.serviceType} " +
+//                                "TXT：${device.txtRecords}")
+//
+//                }
+//                // 其他事件处理...
+//                else -> {
+//
+//                }
+//            }
+//        }
+        // 监听 HTTP 和打印机服务
+        serviceHelper.startDiscovery("_http._tcp.local.", "_printer._tcp.local.")
+    }
+
+    private fun discoverMdnsServices() {
+        try {
+            // 获取设备的所有网络接口
+            val networkInterfaces = NetworkInterface.getNetworkInterfaces().asSequence().toList()
+
+            for (networkInterface in networkInterfaces) {
+                for (inetAddress in networkInterface.inetAddresses) {
+                    if (!inetAddress.isLoopbackAddress && inetAddress is InetAddress) {
+                        JmDNS.create(inetAddress).use { jmdns ->
+                            // 添加服务监听器
+                            jmdns.addServiceListener("_http._tcp.local.", object : ServiceListener {
+                                override fun serviceAdded(event: ServiceEvent) {
+                                    Log.d(TAG, "Service added: ${event.info}")
+                                }
+
+                                override fun serviceRemoved(event: ServiceEvent) {
+                                    Log.d(TAG, "Service removed: ${event.info}")
+                                }
+
+                                override fun serviceResolved(event: ServiceEvent) {
+                                    Log.d(TAG, "Service resolved: ${event.info}")
+                                    val serviceInfo: ServiceInfo = event.info
+                                    Log.d(TAG, "Service info: $serviceInfo")
+                                }
+                            })
+
+                            // 保持监听一段时间，比如10秒钟
+                            Thread.sleep(10000)
+                        }
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
     fun startBleScan() {
@@ -980,6 +1064,8 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         wifiScanner.release()
         ExecutorServiceManager.shutdownExecutorService()
         BluetoothScanner.stopLeScanCompletely()
+        MdnsDiscovery.destroy()
+        serviceHelper.cleanup()
         super.onDestroyView()
     }
 
@@ -992,6 +1078,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         if (deviceInfo != null) {
             when (deviceInfo.wifiConnectStatus) {
                 1 -> {//已经配网
+
                     if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
                         // 查找匹配的设备索引
                         val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
@@ -1019,10 +1106,42 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                             //adapterUnWifi.notifyDataSetChanged()
                             adapterUnWifi.remove(index)
                         }
-                        // adapterUnWifi.replaceData(unWifiList)
                     }
 
+                    ipConnectList = PrinterHelper.getInstance().getPrinterInfoList(WifiKeyName.WIFI_ALL_CONNECT_IP)
 
+                    if (ipConnectList != null && ipConnectList!!.isNotEmpty()){
+                        if (ipConnectList!!.contains(deviceInfo.ipAddress)){
+                            val targetIndex = connectedWifiList.indexOfFirst { it.address == deviceInfo.address }
+                            if (targetIndex != -1) {
+                                // 替换现有设备信息
+                                connectedWifiList[targetIndex] = deviceInfo
+                                adapterWifiConnect.notifyItemChanged(targetIndex,deviceInfo)
+                            } else {
+                                // 新增设备（支持列表为空时的首次添加）
+                                connectedWifiList.add(deviceInfo)
+                                adapterWifiConnect.addData(deviceInfo)
+                            }
+
+                            //更新已配网的数据列表
+                            if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
+                                val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
+                                if (index != -1) {
+                                    unConnectList.removeAt(index)
+                                    adapterUnConnect.remove(index)
+                                }
+                            }
+
+
+                        }else{
+                            val targetIndex = connectedWifiList.indexOfFirst { it.address == deviceInfo.address }
+                            if (targetIndex != -1) {
+                                // 替换现有设备信息
+                                connectedWifiList.removeAt(targetIndex)
+                                adapterWifiConnect.remove(targetIndex)
+                            }
+                        }
+                    }
                 }
 
                 0 -> {//没有配网
@@ -1045,7 +1164,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     }
 
 
-//                    adapterUnWifi.replaceData(unWifiList)
                 }
             }
 
@@ -1059,9 +1177,6 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                 }
 
             }
-
-
-            adapterWifiConnect.replaceData(connectedWifiList)
 
 
         }

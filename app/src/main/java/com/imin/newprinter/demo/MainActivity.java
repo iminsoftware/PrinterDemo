@@ -125,7 +125,9 @@ public class MainActivity extends AppCompatActivity implements SwitchFragmentLis
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION
                     , Manifest.permission.BLUETOOTH_SCAN
                     , Manifest.permission.BLUETOOTH
-                    , Manifest.permission.BLUETOOTH_CONNECT}, requestPermissionCode);
+                    , Manifest.permission.BLUETOOTH_CONNECT
+            ,Manifest.permission.CHANGE_WIFI_MULTICAST_STATE
+            }, requestPermissionCode);
 
         } else {
             Log.d(TAG, "已经申请权限: ");

@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="WIFI"
+                        android:text="Wireless"
                         android:textColor="@color/color_1D1D1F"
                         android:textSize="16dp" />
 
