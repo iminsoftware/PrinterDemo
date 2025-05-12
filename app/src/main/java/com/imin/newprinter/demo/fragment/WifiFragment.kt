@@ -41,6 +41,8 @@ import com.imin.newprinter.demo.utils.WifiScannerSingleton
 import com.imin.newprinter.demo.view.DividerItemDecoration
 import com.imin.printer.INeoPrinterCallback
 import com.imin.printer.PrinterHelper
+import io.reactivex.Completable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -148,6 +150,9 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                         holder.getView<TextView>(R.id.tvRvIp).text = item.ipAddress
                         holder.getView<TextView>(R.id.tvRvWifiName).text = item.wifiName
                         var tvRvBtConnect = holder.getView<TextView>(R.id.tvRvBtConnect)
+                        var tvRvWifiConnect = holder.getView<TextView>(R.id.tvRvWifiConnect)
+                        tvRvWifiConnect.visibility = View.VISIBLE
+
                         //判断是否蓝牙连接如果有匹配 连接的mac地址，匹配不上之后显示按钮
 
 
@@ -183,6 +188,10 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
                         }
                         tvDisconnectPrinter.setOnClickListener {
+                            disConnectWifi(item.ipAddress)
+                        }
+
+                        tvRvWifiConnect.setOnClickListener {
 
                         }
 
@@ -892,11 +901,11 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
         BluetoothScanner.startLeScanWithCoroutines(this, this)
     }
 
-    private fun disConnectWifi() {
+    private fun disConnectWifi(ip:String) {
         PrinterHelper.getInstance()
             .setPrinterAction(
                 WifiKeyName.WIFI_DISCONNECT,
-                MainActivity.ipConnect,
+                ip,
                 object : INeoPrinterCallback() {
                     @Throws(RemoteException::class)
                     override fun onRunResult(b: Boolean) {
@@ -1018,7 +1027,7 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
     override fun onWifiConnectStatus(b: Boolean) {
         if (!b) {
             (activity as? MainActivity)?.disConnectWirelessPrint()
-            disConnectWifi()
+           // disConnectWifi()
         }
     }
 
@@ -1077,15 +1086,23 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                             if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
                                 // 查找匹配的设备索引
                                 val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
+                                val indexBt = unConnectList.indexOfFirst { it.address == MainActivity.btContent }
 
-                                if (index != -1) {
+
+                                if (index != -1 && indexBt == -1) {
                                     // 替换旧设备信息为新设备信息
                                     unConnectList[index] = deviceInfo
                                     adapterUnConnect.notifyItemChanged(index, deviceInfo)
                                 } else {
                                     println("No matching device found")
-                                    unConnectList.add(deviceInfo)
-                                    adapterUnConnect.addData(deviceInfo)
+                                    if (indexBt == -1){
+                                        unConnectList.add(deviceInfo)
+                                        adapterUnConnect.addData(deviceInfo)
+                                    }else{
+                                        unConnectList.removeAt(indexBt)
+                                        adapterUnConnect.remove(indexBt)
+                                    }
+
                                 }
                             } else {
 
@@ -1095,41 +1112,61 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
 
                             if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
                                 val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
-                                if (index != -1) {
+                                val indexBt = unWifiList.indexOfFirst { it.address == MainActivity.btContent }
+                                if (index != -1 || indexBt != -1) {
                                     unWifiList.removeAt(index)
                                     //adapterUnWifi.notifyDataSetChanged()
                                     adapterUnWifi.remove(index)
                                 }
                             }
+
                         }
                     }else{
+                        val targetIndex = connectedWifiList.indexOfFirst { it.address == deviceInfo.address }
+                        if (targetIndex != -1) {
+                            // 替换现有设备信息
+                            connectedWifiList.removeAt(targetIndex)
+                            adapterWifiConnect.remove(targetIndex)
+                        }
+
                         if (unConnectList.isNotEmpty() && unConnectList.size > 0) {
                             // 查找匹配的设备索引
                             val index = unConnectList.indexOfFirst { it.address == deviceInfo.address }
+                            val indexBt = unConnectList.indexOfFirst { it.address == MainActivity.btContent }
 
-                            if (index != -1) {
+
+                            if (index != -1 && indexBt == -1) {
                                 // 替换旧设备信息为新设备信息
                                 unConnectList[index] = deviceInfo
                                 adapterUnConnect.notifyItemChanged(index, deviceInfo)
                             } else {
                                 println("No matching device found")
-                                unConnectList.add(deviceInfo)
-                                adapterUnConnect.addData(deviceInfo)
+                                if (indexBt == -1){
+                                    unConnectList.add(deviceInfo)
+                                    adapterUnConnect.addData(deviceInfo)
+                                }else{
+                                    unConnectList.removeAt(indexBt)
+                                    adapterUnConnect.remove(indexBt)
+                                }
+
                             }
                         } else {
 
-                            unConnectList.add(deviceInfo)
-                            adapterUnConnect.addData(deviceInfo)
+                            if (MainActivity.btContent != deviceInfo.address){
+                                unConnectList.add(deviceInfo)
+                                adapterUnConnect.addData(deviceInfo)
+                            }
                         }
 
                         if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
                             val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
-                            if (index != -1) {
+                            val indexBt = unWifiList.indexOfFirst { it.address == MainActivity.btContent }
+                            if (index != -1 || indexBt != -1) {
                                 unWifiList.removeAt(index)
-                                //adapterUnWifi.notifyDataSetChanged()
                                 adapterUnWifi.remove(index)
                             }
                         }
+
                     }
                 }
 
@@ -1137,36 +1174,79 @@ class WifiFragment : BaseFragment(), WifiScannerSingleton.WifiListListener,
                     if (unWifiList.isNotEmpty() && unWifiList.size > 0) {
                         // 查找匹配的设备索引
                         val index = unWifiList.indexOfFirst { it.address == deviceInfo.address }
-
-                        if (index != -1) {
+                        val indexBt = unWifiList.indexOfFirst { it.address == MainActivity.btContent }
+                        if (index != -1 && indexBt == -1) {
                             // 替换旧设备信息为新设备信息
                             unWifiList[index] = deviceInfo
                             adapterUnWifi.notifyItemChanged(index, deviceInfo)
                         } else {
                             println("No matching device found")
+                            if (indexBt == -1){
+                                unWifiList.add(deviceInfo)
+                                adapterUnWifi.addData(deviceInfo)
+                            }else{
+                                unWifiList.removeAt(indexBt)
+                                adapterUnWifi.remove(indexBt)
+                            }
+
+                        }
+                    } else {
+                        if (MainActivity.btContent != deviceInfo.address){
                             unWifiList.add(deviceInfo)
                             adapterUnWifi.addData(deviceInfo)
                         }
-                    } else {
-                        unWifiList.add(deviceInfo)
-                        adapterUnWifi.addData(deviceInfo)
+
                     }
 
 
                 }
             }
 
-            if (MainActivity.btContent == deviceInfo.address) {
-                if (connectedBtList.isEmpty()) {
-                    connectedBtList.add(deviceInfo)
-                    adapterBtConnect.replaceData(connectedBtList)
-                } else {
-                    connectedBtList.fill(deviceInfo)
-                    adapterBtConnect.notifyItemChanged(0, deviceInfo)
-                }
+            CoroutineScope(Dispatchers.IO).launch  {
+                PrinterHelper.getInstance().getPrinterInfo(
+                    WifiKeyName.BT_CURRENT_CONNECT_MAC,
+                    object : INeoPrinterCallback() {
+                        @Throws(RemoteException::class)
+                        override fun onRunResult(b: Boolean) {
+                        }
 
+                        @Throws(RemoteException::class)
+                        override fun onReturnString(s: String) {
+                            activity?.runOnUiThread {
+                                if (!Utils.isEmpty(s)) {
+                                    if (MainActivity.btContent.isEmpty()){
+                                        MainActivity.btContent = s
+                                    }else{
+
+                                        if (!MainActivity.btContent.contentEquals(s)){
+                                            MainActivity.btContent = s
+                                        }
+
+                                    }
+                                    if (MainActivity.btContent == deviceInfo.address) {
+                                        if (connectedBtList.isEmpty()) {
+                                            connectedBtList.add(deviceInfo)
+                                            adapterBtConnect.replaceData(connectedBtList)
+                                        } else {
+                                            connectedBtList.fill(deviceInfo)
+                                            adapterBtConnect.notifyItemChanged(0, deviceInfo)
+                                        }
+
+                                    }
+
+                                }
+                            }
+                        }
+
+                        @Throws(RemoteException::class)
+                        override fun onRaiseException(i: Int, s: String) {
+                        }
+
+                        @Throws(RemoteException::class)
+                        override fun onPrintResult(i: Int, s: String) {
+                        }
+                    })
             }
-
 
         }
 
