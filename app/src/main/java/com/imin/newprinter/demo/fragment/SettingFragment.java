@@ -74,12 +74,10 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
         int screenWidth = XUiDisplayHelper.getScreenWidth(getContext());
         int screenHeight = XUiDisplayHelper.getScreenHeight(getContext());
 
-        printType = PrinterHelper.getInstance().getPrinterSupportConnectType();
-        Log.d(TAG, "printType: " + printType);
         if (screenWidth > screenHeight) {
-            contentList = getResources().getStringArray(printType ==2?R.array.settings_list_wifi_land:R.array.settings_list_land);
+            contentList = getResources().getStringArray(R.array.settings_list_land);
         } else {
-            contentList = getResources().getStringArray(printType ==2?R.array.settings_wifi_list:R.array.settings_list);
+            contentList = getResources().getStringArray(R.array.settings_list);
         }
         super.initData();
 

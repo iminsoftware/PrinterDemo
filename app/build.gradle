@@ -72,6 +72,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.4.2'
     implementation 'androidx.navigation:navigation-ui:2.4.2'
 
-    implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.15'
+    implementation 'com.github.iminsoftware:IminPrinterLibrary:V2.0.0.16'
 
 }

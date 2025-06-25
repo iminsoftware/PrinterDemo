@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             app:leftTitleVisible="true"
             app:leftTitle="@string/print_test"
-
+            android:layout_marginTop="20dp"
             app:back="true"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -66,49 +66,19 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_function_test"
-                android:layout_width="wrap_content"
-                android:layout_height="59dp"
-                android:layout_marginStart="10dp"
-                android:drawablePadding="10dp"
-                android:gravity="center"
-                android:text="@string/function_test"
-                android:textColor="@color/color_1D1D1F"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:drawableEndCompat="@drawable/ic_point" />
+        <TextView
+            android:id="@+id/tv_function_test"
+            android:layout_width="wrap_content"
+            android:layout_height="59dp"
+            android:layout_marginStart="10dp"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="@string/function_test"
+            android:textColor="@color/color_1D1D1F"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_point" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tvPrintMethodTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="59dp"
-                    android:layout_marginStart="10dp"
-                    android:drawablePadding="10dp"
-                    android:gravity="center"
-                    android:text="@string/function_printMethod"
-                    android:textColor="@color/color_1D1D1F"
-                    android:textSize="15sp"/>
-                <TextView
-                    android:id="@+id/tvPrintMethod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="59dp"
-                    android:layout_marginStart="10dp"
-                    android:drawablePadding="10dp"
-                    android:gravity="center"
-                    android:textColor="@color/color_1D1D1F"
-                    android:textSize="15sp"/>
-            </LinearLayout>
-
-        </RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
