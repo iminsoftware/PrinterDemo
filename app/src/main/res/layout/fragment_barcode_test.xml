@@ -41,7 +41,7 @@
             android:id="@+id/print"
             android:layout_width="@dimen/dp_240"
             android:layout_height="@dimen/dp_44"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="60dp"
             android:background="@drawable/button_08c5ac_solid_selector"
             app:bv_text_content="@string/print"
             app:bv_icon_visibility="false"

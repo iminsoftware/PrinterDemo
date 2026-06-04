@@ -265,6 +265,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         if (fragmentManager.getBackStackEntryCount() <= 0) {
             finish();
         } else {
+            PrinterHelper.getInstance().exitPrinterBuffer(true);
             getSupportFragmentManager().popBackStack();
         }
 

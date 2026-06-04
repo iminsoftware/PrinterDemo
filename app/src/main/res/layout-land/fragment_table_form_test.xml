@@ -137,7 +137,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="60dp"
             android:background="@drawable/button_08c5ac_solid_selector"
             app:bv_icon_visibility="false"
             app:bv_text_content="@string/print"

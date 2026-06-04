@@ -46,6 +46,7 @@ public class TitleLayout extends LinearLayout {
     private boolean isRightVisible = false;
     private boolean isLeftVisible = true;
     private boolean isLeftTitleVisible = false;
+    private boolean isCenterTitleVisible = false;
 
     private void init(Context context) {
         flyLeft = view.findViewById(R.id.flyLeft);
@@ -68,6 +69,7 @@ public class TitleLayout extends LinearLayout {
             isRightVisible = typedArray.getBoolean(R.styleable.TitleLayout_rightVisible, false);
             isLeftVisible = typedArray.getBoolean(R.styleable.TitleLayout_leftVisible, false);
             isLeftTitleVisible = typedArray.getBoolean(R.styleable.TitleLayout_leftTitleVisible, false);
+            isCenterTitleVisible = typedArray.getBoolean(R.styleable.TitleLayout_centerTitleVisible, false);
             typedArray.recycle();
         }
         flyRight.setVisibility(isRightVisible ? VISIBLE : GONE);

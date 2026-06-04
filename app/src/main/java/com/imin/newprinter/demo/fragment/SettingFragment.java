@@ -142,12 +142,13 @@ public class SettingFragment extends BaseListFragment<FragmentPictureTestBinding
                         }
                     }
 
-                } else if (item.getTitle().equals(contentList[3])) {
+                } else if (contentList.length > 3 && item.getTitle().equals(contentList[3])) {
 
                     showAgreementDialog(item);
                 }else if (item.getTitle().equals(contentList[2])) {//打印机连接方式
 
-                    showPrintTypeDialog(item,tvValue);
+//                    showPrintTypeDialog(item,tvValue);
+                    showAgreementDialog(item);
                 }
 
             }
